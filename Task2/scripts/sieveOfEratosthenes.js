@@ -27,25 +27,25 @@ var generatePrimes = (boundaryNumber) => {
 var generatePrimesOptimized = (boundaryNumber) => {
 	var booleanArray = [], outputArray = [], loopLimit = Math.sqrt(boundaryNumber);
 
-    for (var i = 0; i < boundaryNumber; i++) {
-        booleanArray.push(true);
-    }
+	for (var i = 0; i < boundaryNumber; i++) {
+		booleanArray.push(true);
+	}
 
-    for (var i = 2; i <= loopLimit; 2*i++) {
-        if (booleanArray[i]) {
-            for (var j = i * i; j < boundaryNumber; j += i) {
-                booleanArray[j] = false;
-            }
-        }
-    }
+	for (var i = 2; i <= loopLimit; 2 * i++) {
+		if (booleanArray[i]) {
+			for (var j = i * i; j < boundaryNumber; j += i) {
+				booleanArray[j] = false;
+			}
+		}
+	}
 
-    for (var i = 2; i < boundaryNumber; i++) {
-        if(booleanArray[i]) {
-            outputArray.push(i);
-        }
-    }
+	for (var i = 2; i < boundaryNumber; i++) {
+		if (booleanArray[i]) {
+			outputArray.push(i);
+		}
+	}
 
-    return outputArray;
+	return outputArray;
 };
 
 console.log(generatePrimesOptimized(1000000));
