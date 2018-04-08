@@ -1,4 +1,4 @@
-var siftNumbers = (boundaryNumber) => {
+var generatePrimes = (boundaryNumber) => {
 	var array = [];
 	var i = 0;
 
@@ -19,4 +19,4 @@ var siftNumbers = (boundaryNumber) => {
 	return array;
 };
 
-console.log(siftNumbers(127));
+console.log(generatePrimes(127));
