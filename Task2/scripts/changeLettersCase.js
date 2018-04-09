@@ -1,4 +1,4 @@
-var changeLettersCase = (string) => {
+let changeLettersCase = (string) => {
 	return string.split("").map((letter) => {
 		return letter === letter.toUpperCase()
 		? letter.toLowerCase()

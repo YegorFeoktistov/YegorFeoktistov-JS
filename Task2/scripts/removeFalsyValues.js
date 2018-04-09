@@ -1,4 +1,4 @@
-var removeFalsyValues = (array) => {
+let removeFalsyValues = (array) => {
 	return array.filter((element) => {
 		return !!element;
 	});

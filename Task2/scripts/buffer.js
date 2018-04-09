@@ -1,12 +1,12 @@
 function makeBuffer() {
-	var data = "";
+	let data = "";
 	return function(value) {
 		value !== undefined ? data += value : data;
 		return data;
 	}
 }
 
-var buffer = makeBuffer();
+let buffer = makeBuffer();
 
 buffer("Замыкание");
 buffer(" Использовать");
@@ -14,7 +14,7 @@ buffer(" Нужно!");
 console.log(buffer());
 
 
-var buffer = makeBuffer();
+buffer = makeBuffer();
 
 buffer("0");
 buffer("1");
