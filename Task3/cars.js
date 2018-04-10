@@ -159,6 +159,7 @@ PassengersCar.constructor = function(model, number, owner, weight, maxSpeed, mil
 	Car.constructor.apply(this, arguments);
 	this._passengersSeatsAmount = passengersSeatsAmount || 0;
 	lockAllFields(this);
+	Object.seal(this);
 	return this;
 };
 
@@ -184,6 +185,7 @@ Autotruck.constructor = function(model, number, owner, weight, maxSpeed, mileage
 	Car.constructor.apply(this, arguments);
 	this._maxCargoWeight = maxCargoWeight || 0;
 	lockAllFields(this);
+	Object.seal(this);
 	return this;
 };
 
@@ -209,6 +211,7 @@ SportCar.constructor = function(model, number, owner, weight, maxSpeed, mileage,
 	Car.constructor.apply(this, arguments);
 	this._racingType = racingType || "unknown racing type";
 	lockAllFields(this);
+	Object.seal(this);
 	return this;
 };
 
@@ -231,15 +234,15 @@ SportCar.about = function() {
 	Objects declaration
 */
 
-let uazik = Object.create(PassengersCar).constructor("UAZ");
+let uazik = Object.create(PassengersCar).constructor("UAZ", "0000PB5", "Old Bobby", 3500, 160, 15000, 4, 1970, 5);
 uazik.beep();
 console.log(uazik.about());
 
-let truck = Object.create(Autotruck).constructor("Mersedes");
+let truck = Object.create(Autotruck).constructor("Mersedes", "0550PB4", "Bobby Singer", 10000, 130, 75000, 10, 2012, 10000);
 truck.beep();
 console.log(truck.about());
 
-let paganiZondaF = Object.create(SportCar).constructor("Pagani");
+let paganiZondaF = Object.create(SportCar).constructor("Pagani", "6666PB6", "Gachimuchi", 2000, 400, 3000, 4, 2015, "LeMan");
 paganiZondaF.beep();
 console.log(paganiZondaF.about());
 
