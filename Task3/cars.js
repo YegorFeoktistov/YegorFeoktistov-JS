@@ -52,7 +52,7 @@ function unlockObjectField(object, field) {
 	Validation function
 */
 
-const isNumeric = (n) => { return (!isNaN(parseFloat(n)) && isFinite(n)); };
+const isNumeric = (n) => !isNaN(parseFloat(n)) && isFinite(n);
 
 /*
 	Custom exceptions declaration
