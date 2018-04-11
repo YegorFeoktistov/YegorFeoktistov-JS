@@ -55,7 +55,7 @@ function unlockObjectField(object, field) {
 const isNumeric = (n) => !isNaN(parseFloat(n)) && isFinite(n);
 
 /*
-	Custom exceptions declaration
+	Exceptions declaration
 */
 
 const InvalidNumberError = new Error("Numeric value is expected. Number must be greater than 0.");
@@ -77,14 +77,14 @@ const Car = {
 		wheelsAmount,
 		yearOfAssembly
 	) {
-		this._model = model /* || "unknown model" */;
-		this._number = number/*  || "unknown number" */;
-		this._owner = owner/*  || "unknown owner" */;
-		this._weight = weight/*  || 0 */;
-		this._maxSpeed = maxSpeed/*  || 0 */;
-		this._mileage = mileage/*  || 0 */;
-		this._wheelsAmount =  wheelsAmount/*  || 0 */;
-		this._yearOfAssembly = yearOfAssembly/*  || "unknown year" */;
+		this._model = model;
+		this._number = number;
+		this._owner = owner;
+		this._weight = weight;
+		this._maxSpeed = maxSpeed;
+		this._mileage = mileage;
+		this._wheelsAmount =  wheelsAmount;
+		this._yearOfAssembly = yearOfAssembly;
 		return this;
 	},
 
@@ -415,18 +415,6 @@ console.log(pagani.getAbout());
 let unknownCar = CarFactory();
 console.log(unknownCar.getSignal());
 console.log(unknownCar.getAbout());
-
-// let uazik = Object.create(PassengersCar).constructor("UAZ", "0000PB5", "Old Bobby", 3500, 160, 15000, 4, 1970, 5);
-// console.log(uazik.getSignal());
-// console.log(uazik.getAbout());
-
-// let truck = Object.create(Autotruck).constructor("Mersedes", "0550PB4", "Bobby Singer", 10000, 130, 75000, 10, 2012, 10000);
-// console.log(truck.getSignal());
-// console.log(truck.getAbout());
-
-// let paganiZondaF = Object.create(SportCar).constructor("Pagani", "6666PB6", "Gachimuchi", 2000, 400, 3000, 4, 2015, "Le Man");
-// console.log(paganiZondaF.getSignal());
-// console.log(paganiZondaF.getAbout());
 
 //----------TESTING-----------
 // uazik.model = "awd";
