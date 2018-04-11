@@ -230,7 +230,7 @@ PassengersCar.constructor = function(
 	passengersSeatsAmount
 ) {
 	Car.constructor.apply(this, arguments);
-	this._passengersSeatsAmount = passengersSeatsAmount || 0;
+	this._passengersSeatsAmount = passengersSeatsAmount;
 	lockAllFields(this);
 	return this;
 };
@@ -270,7 +270,7 @@ Autotruck.constructor = function(
 	maxCargoWeight
 ) {
 	Car.constructor.apply(this, arguments);
-	this._maxCargoWeight = maxCargoWeight || 0;
+	this._maxCargoWeight = maxCargoWeight;
 	lockAllFields(this);
 	return this;
 };
@@ -310,7 +310,7 @@ SportCar.constructor = function(
 	racingType
 ) {
 	Car.constructor.apply(this, arguments);
-	this._racingType = racingType || "unknown racing type";
+	this._racingType = racingType;
 	lockAllFields(this);
 	return this;
 };
