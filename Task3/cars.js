@@ -77,14 +77,14 @@ const Car = {
 		wheelsAmount,
 		yearOfAssembly
 	) {
-		this._model = model || "unknown model";
-		this._number = number || "unknown number";
-		this._owner = owner || "unknown owner";
-		this._weight = weight || 0;
-		this._maxSpeed = maxSpeed || 0;
-		this._mileage = mileage || 0;
-		this._wheelsAmount =  wheelsAmount || 0;
-		this._yearOfAssembly = yearOfAssembly || "unknown year";
+		this._model = model /* || "unknown model" */;
+		this._number = number/*  || "unknown number" */;
+		this._owner = owner/*  || "unknown owner" */;
+		this._weight = weight/*  || 0 */;
+		this._maxSpeed = maxSpeed/*  || 0 */;
+		this._mileage = mileage/*  || 0 */;
+		this._wheelsAmount =  wheelsAmount/*  || 0 */;
+		this._yearOfAssembly = yearOfAssembly/*  || "unknown year" */;
 		return this;
 	},
 
@@ -298,7 +298,17 @@ Autotruck.getAbout = function() {
 /* SportCar */
 
 const SportCar = Object.create(Car);
-SportCar.constructor = function(model, number, owner, weight, maxSpeed, mileage, wheelsAmount, yearOfAssembly, racingType) {
+SportCar.constructor = function(
+	model,
+	number,
+	owner,
+	weight,
+	maxSpeed,
+	mileage,
+	wheelsAmount,
+	yearOfAssembly,
+	racingType
+) {
 	Car.constructor.apply(this, arguments);
 	this._racingType = racingType || "unknown racing type";
 	lockAllFields(this);
@@ -324,23 +334,99 @@ Object.defineProperty(SportCar, "racingType", {
 SportCar.getAbout = function() {
 	return Car.getAbout.call(this) + "\tRacing type - " + this._racingType + "\n";
 };
+
+const CarFactory = function(car) {
+	switch (car) {
+		case "Passengers car": {
+			return Object.create(PassengersCar).constructor(
+				arguments[1],
+				arguments[2],
+				arguments[3],
+				arguments[4],
+				arguments[5],
+				arguments[6],
+				arguments[7],
+				arguments[8],
+				arguments[9]
+			);
+			break;
+		}
+		case "Autotruck": {
+			return Object.create(Autotruck).constructor(
+				arguments[1],
+				arguments[2],
+				arguments[3],
+				arguments[4],
+				arguments[5],
+				arguments[6],
+				arguments[7],
+				arguments[8],
+				arguments[9]
+			);
+			break;
+		}
+		case "Sport car": {
+			return Object.create(SportCar).constructor(
+				arguments[1],
+				arguments[2],
+				arguments[3],
+				arguments[4],
+				arguments[5],
+				arguments[6],
+				arguments[7],
+				arguments[8],
+				arguments[9]
+			);
+			break;
+		}
+		default: {
+			return Object.create(Car).constructor(
+				"unknown model",
+				"unknown number",
+				"unknown owner",
+				0,
+				0,
+				0,
+				0,
+				"unknown year"
+			);
+			break;
+		}
+	}
+};
 //#endregion
 
 /*
 	Objects declaration
 */
 
-let uazik = Object.create(PassengersCar).constructor("UAZ", "0000PB5", "Old Bobby", 3500, 160, 15000, 4, 1970, 5);
+let uazik = CarFactory("Passengers car", "UAZ", "0000PB5", "Old Bobby", 3500, 160, 15000, 4, 1970, 5);
 console.log(uazik.getSignal());
 console.log(uazik.getAbout());
 
-let truck = Object.create(Autotruck).constructor("Mersedes", "0550PB4", "Bobby Singer", 10000, 130, 75000, 10, 2012, 10000);
+let truck = CarFactory("Autotruck", "Mersedes", "0550PB4", "Bobby Singer", 10000, 130, 75000, 10, 2012, 10000);
 console.log(truck.getSignal());
 console.log(truck.getAbout());
 
-let paganiZondaF = Object.create(SportCar).constructor("Pagani", "6666PB6", "Gachimuchi", 2000, 400, 3000, 4, 2015, "Le Man");
-console.log(paganiZondaF.getSignal());
-console.log(paganiZondaF.getAbout());
+let pagani = CarFactory("Sport car", "Pagani", "6666PB6", "Gachimuchi", 2000, 400, 3000, 4, 2015, "Le Man");
+console.log(pagani.getSignal());
+console.log(pagani.getAbout());
+
+let unknownCar = CarFactory();
+console.log(unknownCar.getSignal());
+console.log(unknownCar.getAbout());
+
+// let uazik = Object.create(PassengersCar).constructor("UAZ", "0000PB5", "Old Bobby", 3500, 160, 15000, 4, 1970, 5);
+// console.log(uazik.getSignal());
+// console.log(uazik.getAbout());
+
+// let truck = Object.create(Autotruck).constructor("Mersedes", "0550PB4", "Bobby Singer", 10000, 130, 75000, 10, 2012, 10000);
+// console.log(truck.getSignal());
+// console.log(truck.getAbout());
+
+// let paganiZondaF = Object.create(SportCar).constructor("Pagani", "6666PB6", "Gachimuchi", 2000, 400, 3000, 4, 2015, "Le Man");
+// console.log(paganiZondaF.getSignal());
+// console.log(paganiZondaF.getAbout());
 
 //----------TESTING-----------
 // uazik.model = "awd";
@@ -361,26 +447,3 @@ console.log(paganiZondaF.getAbout());
 // console.log(uazik.yearOfAssembly);
 // uazik.passengersSeatsAmount = 5;
 // console.log(uazik.passengersSeatsAmount);
-
-/* НЕПОНЯТНАЯ (уже более или менее понятная) ХРЕНЬ!!! В одном месте getSignal не считается функцией, в другом считается */
-
-/* let Car = {
-	constructor: (model, owner) => {
-		this.model = model;
-		this.owner = owner;
-		return this;
-	},
-	getSignal: () => { return this.model + " BEEP!"; }
-};
-
-let ef = Object.create(Car).constructor();
-// console.log(ef.getSignal());
-
-let LightCar = Object.create(Car);
-LightCar.constructor = function(model, owner) {
-	Car.constructor.apply(this, arguments);
-	return this;
-};
-
-let carObject = Object.create(LightCar).constructor("Mers", "John");
-console.log(carObject.getSignal()); */
