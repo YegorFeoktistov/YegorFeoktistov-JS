@@ -335,6 +335,38 @@ SportCar.getAbout = function() {
 	return Car.getAbout.call(this) + "\tRacing type - " + this._racingType + "\n";
 };
 
+/**
+ * Factory method for creating Car objects
+ * @param {*} car
+ * car type
+ * @param {*} model
+ * car model
+ * @param {*} number
+ * car number
+ * @param {*} owner
+ * car owner
+ * @param {*} weight
+ * car weight
+ * @param {*} maxSpeed
+ * car maximum speed
+ * @param {*} mileage
+ * car total mileage
+ * @param {*} wheelsAmount
+ * amount of wheels
+ * @param {*} yearOfAssembly
+ * year of car assembly
+ * @param {*} other
+ * specific parameters of needed type of car
+ *{
+ *
+ * 	PassengersCar : passengers seats amount
+ *
+ * 	Autotruck : maximum cargo weight
+ *
+ * 	PassengersCar : racing type
+ *
+ * }
+ */
 const CarFactory = function(car) {
 	switch (car) {
 		case "Passengers car": {
