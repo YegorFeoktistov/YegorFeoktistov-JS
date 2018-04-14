@@ -337,23 +337,23 @@ SportCar.getAbout = function() {
 
 /**
  * Factory method for creating Car objects
- * @param {*} car
+ * @param {string} car
  * car type
- * @param {*} model
+ * @param {string} model
  * car model
- * @param {*} number
+ * @param {string} number
  * car number
- * @param {*} owner
+ * @param {string} owner
  * car owner
- * @param {*} weight
+ * @param {number} weight
  * car weight
- * @param {*} maxSpeed
+ * @param {number} maxSpeed
  * car maximum speed
- * @param {*} mileage
+ * @param {number} mileage
  * car total mileage
- * @param {*} wheelsAmount
+ * @param {number} wheelsAmount
  * amount of wheels
- * @param {*} yearOfAssembly
+ * @param {number} yearOfAssembly
  * year of car assembly
  * @param {*} other
  * specific parameters of needed type of car
