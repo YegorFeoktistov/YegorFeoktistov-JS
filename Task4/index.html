@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Task 4</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<form id="visitor-subscribe-form" class="subscribe-form" action="" method="post">
+		<div class="subscribe-form__content">
+			<div class="subscribe-form__header-section">
+				<h1 class="subscribe-form__header">Form Action</h1>
+				<div class="subscribe-form__form-action-data">_mc4wp-action</div>
+			</div>
+			<div class="subscribe-form__description">This field will allow your visitors to choose whether they would like to subscribe or unsubscribe</div>
+			<div class="subscribe-form__text-input-section">
+				<label for="form-action-text-input" class="subscribe-form__input-label">Field Label</label>
+				<input type="text" id="form-action-text-input" class="text-input" value="">
+			</div>
+			<div class="subscribe-form__select-input-section">
+				<label for="choice-type-select-input" class="subscribe-form__input-label">Choice Type</label>
+				<select name="Choice Type" id="choice-type-select-input" class="select-input" size="1" multiple form="visitor-subscribe-form">
+					<option value="Radio Buttons">Radio Buttons</option>
+					<option value="Something Else">Something Else</option>
+				</select>
+			</div><div class="subscribe-form__radiobutton-input-section">
+				<label for="subscribe-radiobutton-input" class="subscribe-form__input-label">Choices</label>
+				<input type="radio" name="choices" value="Subscribe" id="subscribe-radiobutton-input" class="radiobutton-input">Subscribe
+				<input type="radio" name="choices" value="Unsubscribe" id="unsubscribe-radiobutton-input" class="radiobutton-input">Unsubscribe
+			</div>
+			<div class="subscribe-form__checkbox-input-section">
+				<input type="checkbox" id="paragraph-checkbox-input" class="checkbox-input">
+				<label for="paragraph-checkbox-input" class="subscribe-form__input-label">Wrap in paragraph tags?</label>
+			</div>
+			<div class="subscribe-form__submit-button-section">
+				<input type="submit" class="submit-button">
+			</div>
+		</div>
+	</form>
+	<script src="./main.js"></script>
+</body>
+</html>
