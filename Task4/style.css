@@ -59,6 +59,10 @@
 	font-size: 16px;
 }
 
+.text-input::selection {
+	background-color: #ccc;
+}
+
 .text-input_with-border-style {
 	padding: 3px 5px;
 	box-sizing: border-box;
