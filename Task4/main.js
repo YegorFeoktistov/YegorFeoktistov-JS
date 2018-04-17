@@ -5,16 +5,40 @@ const radiobuttonsContainer = document.querySelector(".subscribe-form__radiobutt
 const paragraphCheckboxInput = document.getElementById("paragraph-checkbox-input");
 const formActionData = document.querySelector(".subscribe-form__form-action-data");
 
-formActionTextInput.addEventListener("change", function (e) {
+const clearRadiobutton = (function(){
+	const radiobuttonClearElements = document.querySelectorAll(".subscribe-form__radiobutton-clear");
+
+	for (let i = 0; i < radiobuttonClearElements.length; i++){
+		radiobuttonClearElements[i].addEventListener("click", clear);
+	}
+
+	function clear(){
+		const input = document.getElementById(this.getAttribute("for"));
+		input.checked = false;
+	}
+}());
+
+const submitBehavior = (function() {
+	const form = document.getElementById("visitor-subscribe-form");
+
+	form.addEventListener("submit", function(e){
+		e.preventDefault();
+
+		clearState();
+		alert("Data has been sent!");
+	});
+}());
+
+formActionTextInput.addEventListener("change", function(e) {
 	localStorage.setItem("formActionTextInputValue", formActionTextInput.value);
 	formActionData.innerHTML = formActionTextInput.value;
 });
 
-choiceTypeSelectInput.addEventListener("change", function (e) {
+choiceTypeSelectInput.addEventListener("change", function(e) {
 	localStorage.setItem("choiceTypeSelectInputValue", choiceTypeSelectInput.value);
 });
 
-radiobuttonsContainer.addEventListener("click", function (e) {
+radiobuttonsContainer.addEventListener("click", function(e) {
 	for (let i = 0; i < radiobuttons.length; i++) {
 		if (radiobuttons[i].checked) {
 			localStorage.setItem("radiobuttonValue", radiobuttons[i].value);
@@ -22,18 +46,18 @@ radiobuttonsContainer.addEventListener("click", function (e) {
 	}
 });
 
-paragraphCheckboxInput.addEventListener("change", function (e) {
+paragraphCheckboxInput.addEventListener("change", function(e) {
 	localStorage.setItem("paragraphCheckboxInputIsChecked", paragraphCheckboxInput.checked);
 });
 
-const clearState = function () {
+const clearState = function() {
 	localStorage.removeItem("formActionTextInputValue");
 	localStorage.removeItem("choiceTypeSelectInputValue");
 	localStorage.removeItem("radiobuttonValue");
 	localStorage.removeItem("paragraphCheckboxInputIsChecked");
 };
 
-const updateState = function () {
+const updateState = function() {
 	if (performance.navigation.type === 1) {
 		clearState();
 	}
@@ -45,29 +69,3 @@ const updateState = function () {
 };
 
 window.addEventListener("load", updateState());
-
-function clearRadiobutton(){
-	const radiobuttonClearElements = document.querySelectorAll(".subscribe-form__radiobutton-clear");
-
-	for (let i = 0; i < radiobuttonClearElements.length; i++){
-		radiobuttonClearElements[i].addEventListener("click", clear);
-	}
-
-	function clear(){
-		const input = document.getElementById(this.getAttribute("for"));
-		input.checked = false;
-	}
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-	clearRadiobutton();
-
-	const form = document.getElementById("visitor-subscribe-form");
-
-	form.addEventListener("submit", function(e){
-		e.preventDefault();
-
-		clearState();
-		alert("Data has been sent!");
-	});
-});
