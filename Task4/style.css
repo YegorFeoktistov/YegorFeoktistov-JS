@@ -3,6 +3,11 @@
 	padding: 0;
 }
 
+::selection {
+	background: transparent;
+	text-shadow: #000 0 0 2px;
+}
+
 .subscribe-form {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
@@ -62,6 +67,7 @@
 
 .select-input {
 	font-size: 16px;
+	outline: none;
 }
 
 .select-input_with-border-style {
@@ -74,6 +80,7 @@
 .select-input__option {
 	padding: 2px 2px 2px 8px;
 	box-sizing: border-box;
+	border-radius: 6px;
 }
 
 .subscribe-form__radiobutton-container {
