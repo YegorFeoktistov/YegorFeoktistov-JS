@@ -57,6 +57,15 @@ const clearState = function() {
 	localStorage.removeItem("paragraphCheckboxInputIsChecked");
 };
 
+const updateRadiobuttonValue = function(item, value) {
+	if (!item || value === undefined) {
+		return;
+	}
+	else {
+		document.querySelector("input[value=" + item + "]").checked = value;
+	}
+};
+
 const updateState = function() {
 	if (performance.navigation.type === 1) {
 		clearState();
@@ -64,7 +73,7 @@ const updateState = function() {
 	formActionTextInput.value = localStorage.getItem("formActionTextInputValue") || "";
 	formActionData.innerHTML = localStorage.getItem("formActionTextInputValue") || "";
 	choiceTypeSelectInput.value = localStorage.getItem("choiceTypeSelectInputValue");
-	document.querySelector("input[value=" + localStorage.getItem("radiobuttonValue") + "]").checked = true;
+	updateRadiobuttonValue(localStorage.getItem("radiobuttonValue"), true);
 	paragraphCheckboxInput.checked = localStorage.getItem("paragraphCheckboxInputIsChecked") === "true" ? true : false;
 };
 
