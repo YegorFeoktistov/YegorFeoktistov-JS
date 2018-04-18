@@ -1,0 +1,132 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.calendar *, .calendar *:before, .calendar *:after {
+	box-sizing: border-box;
+}
+
+.calendar-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 420px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+}
+
+.calendar {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #fff;
+}
+
+.calendar_border-style {
+	border-radius: 3px;
+	border: 1px solid #aaa;
+}
+
+.calendar__content {
+	margin: 4px;
+}
+
+.calendar__months {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 0;
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	background-color: #eee;
+	border-radius: inherit;
+	border: 1px solid #ccc;
+}
+
+.calendar__month-of-year-container {
+	display: inline-block;
+}
+
+.calendar__month-name {
+	margin-right: 8px;
+}
+
+.calendar__left-arrow, .calendar__right-arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background-color: #555;
+	cursor: pointer;
+}
+.calendar__left-arrow:hover, .calendar__right-arrow:hover {
+	background-color: #417BF1;
+}
+.calendar__left-arrow {
+	margin-left: 15px;
+}
+.calendar__right-arrow {
+	margin-right: 15px;
+}
+.calendar__left-arrow:before, .calendar__right-arrow:before {
+	content: '';
+	border-color: transparent;
+	border-style: solid;
+}
+.calendar__left-arrow:before {
+	margin-left: -2px;
+	border-width: 5px 5px 5px 0;
+	border-right-color: #fff;
+}
+.calendar__right-arrow:before {
+	margin-right: -1.9px;
+	border-width: 5px 0 5px 5px;
+	border-left-color: #fff;
+}
+
+.calendar__days-of-week {
+	display: flex;
+	margin: 10px 0;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.calendar__day-of-week {
+	width: 62px;
+	text-align: center;
+}
+
+.calendar__days-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.calendar__day {
+	width: 57px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	padding: 4px 6px;
+	text-align: right;
+	font-size: 20px;
+	border: 1px solid #ccc;
+	background-color: #F6F6F6;
+	cursor: pointer;
+	user-select: none;
+}
+.calendar__day:nth-child(7n) {
+	margin-right: 0;
+}
+.calendar__day:hover {
+	background-color: rgb(73, 117, 206);
+	color: #fff;
+}
+
+.calendar__day_current {
+	background-color: rgb(150, 245, 87);
+}
