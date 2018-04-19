@@ -3,6 +3,8 @@ const View = {
 
 	months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 
+	currentDateInfo: {},
+
 	renderDays: function() {
 		this.daysContainerElement = document.createElement("div");
 		this.daysContainerElement.className = "calendar__days-container";
@@ -84,23 +86,41 @@ const View = {
 
 		this.daysContainerElement.innerHTML = "";
 		const firstDayIndex = customDate.firstDayOfWeek === 0 ? 6 : customDate.firstDayOfWeek - 1;
-
 		for (let i = 0; i < customDate.totalDays + firstDayIndex; i++) {
+			const dayElement = document.createElement("span");
+			dayElement.className = "calendar__day";
+
 			if (i < firstDayIndex) {
-				const dayElement = document.createElement("span");
-				dayElement.className = "calendar__day calendar__day_hidden";
+				dayElement.classList.add("calendar__day_hidden");
 				dayElement.textContent = 0;
-				this.daysContainerElement.appendChild(dayElement);
 			}
 			else {
-				const dayElement = document.createElement("span");
-				dayElement.className = "calendar__day";
-				if (customDate.currentDate - 1 === i) {
+				if (customDate.currentDate - 1 === i - firstDayIndex) {
 					dayElement.classList.add("calendar__day_current");
+					currentDateInfo = {
+						day: i - firstDayIndex + 1,
+						month: customDate.month,
+						year: customDate.year
+					};
 				}
 				dayElement.textContent = i - firstDayIndex + 1;
-				this.daysContainerElement.appendChild(dayElement);
+				dayElement.addEventListener("click", function (e) {
+					const selectedDate = new Date(customDate.year, customDate.month, dayElement.textContent);
+					const currentDate = new Date(currentDateInfo.year, currentDateInfo.month, currentDateInfo.day);
+
+					const timelineMessage = selectedDate < currentDate
+					? "Hello there from the past, " : selectedDate > currentDate
+					? "Hello there from the future, " : "Hello there from now, ";
+
+					const message = "you've juct clicked on the "
+					+  dayElement.textContent + " of " + View.months[customDate.month]
+					+ ", " + customDate.year;
+
+					alert(timelineMessage + message);
+				});
 			}
+
+			this.daysContainerElement.appendChild(dayElement);
 		}
 	}
 };
