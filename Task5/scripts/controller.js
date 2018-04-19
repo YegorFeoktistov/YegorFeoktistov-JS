@@ -19,15 +19,15 @@ const Controller = {
 	},
 
 	updateView: function() {
-		const year = Model.getYear();
-		const month = Model.getMonth();
+		const year = Model.getShiftedYear();
+		const month = Model.getShiftedMonth();
 
 		View.fillData({
 			year: year,
 			month: month,
 			firstDayOfWeek: Model.getFirstDayOfWeek(),
 			currentDate: Model.getCurrentDate(),
-			totalDays: new Date(year, month, 0).getDate()
+			totalDays: new Date(year, month + 1, 0).getDate()
 		});
 	}
 };

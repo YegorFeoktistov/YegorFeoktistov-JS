@@ -17,19 +17,19 @@ const Model = {
 		return this.currentDate.getFullYear();
 	},
 
-	getDate: function() {
+	getShiftedDate: function() {
 		return new Date(this.getCurrentYear(), this.getCurrentMonth() + this.monthShift);
 	},
 
-	getMonth: function() {
-		return this.getDate().getMonth();
+	getShiftedMonth: function() {
+		return this.getShiftedDate().getMonth();
 	},
 
-	getYear: function() {
-		return this.getDate().getFullYear();
+	getShiftedYear: function() {
+		return this.getShiftedDate().getFullYear();
 	},
 
 	getFirstDayOfWeek: function() {
-		return this.getDate().getDay();
+		return this.getShiftedDate().getDay();
 	}
 };

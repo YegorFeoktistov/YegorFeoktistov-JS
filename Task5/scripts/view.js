@@ -55,7 +55,6 @@ const View = {
 		this.calendar = document.createElement("div");
 		this.calendar.className = "calendar";
 		this.calendar.classList.add("calendar_border-style");
-		this.calendar.addEventListener("click", (e) => e.stopPropagation());
 
 		this.calendarContent = document.createElement("div");
 		this.calendarContent.className = "calendar__content";
@@ -75,23 +74,33 @@ const View = {
 		document.body.appendChild(this.wrapper);
 	},
 
-	fillData: function(date) {
+	fillData: function(customDate) {
 		for (let i = 0; i < this.daysOfWeekElementsArray.length; i++) {
 			this.daysOfWeekElementsArray[i].textContent = this.daysOfWeek[i];
 		}
 
-		this.monthElement.textContent = this.months[date.month];
-		this.yearElement.textContent = date.year;
+		this.monthElement.textContent = this.months[customDate.month];
+		this.yearElement.textContent = customDate.year;
 
 		this.daysContainerElement.innerHTML = "";
-		for (let i = 0; i < date.totalDays; i++) {
-			const dayElement = document.createElement("span");
-			dayElement.className = "calendar__day";
-			if (date.currentDate - 1 === i) {
-				dayElement.classList.add("calendar__day_current");
+		const firstDayIndex = customDate.firstDayOfWeek === 0 ? 6 : customDate.firstDayOfWeek - 1;
+
+		for (let i = 0; i < customDate.totalDays + firstDayIndex; i++) {
+			if (i < firstDayIndex) {
+				const dayElement = document.createElement("span");
+				dayElement.className = "calendar__day calendar__day_hidden";
+				dayElement.textContent = 0;
+				this.daysContainerElement.appendChild(dayElement);
 			}
-			dayElement.textContent = i + 1;
-			this.daysContainerElement.appendChild(dayElement);
+			else {
+				const dayElement = document.createElement("span");
+				dayElement.className = "calendar__day";
+				if (customDate.currentDate - 1 === i) {
+					dayElement.classList.add("calendar__day_current");
+				}
+				dayElement.textContent = i - firstDayIndex + 1;
+				this.daysContainerElement.appendChild(dayElement);
+			}
 		}
 	}
 };

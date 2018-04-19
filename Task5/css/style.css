@@ -65,25 +65,31 @@
 	background-color: #555;
 	cursor: pointer;
 }
+
 .calendar__left-arrow:hover, .calendar__right-arrow:hover {
 	background-color: #417BF1;
 }
+
 .calendar__left-arrow {
 	margin-left: 15px;
 }
+
 .calendar__right-arrow {
 	margin-right: 15px;
 }
+
 .calendar__left-arrow:before, .calendar__right-arrow:before {
 	content: '';
 	border-color: transparent;
 	border-style: solid;
 }
+
 .calendar__left-arrow:before {
 	margin-left: -2px;
 	border-width: 5px 5px 5px 0;
 	border-right-color: #fff;
 }
+
 .calendar__right-arrow:before {
 	margin-right: -1.9px;
 	border-width: 5px 0 5px 5px;
@@ -119,9 +125,15 @@
 	cursor: pointer;
 	user-select: none;
 }
+
+.calendar__day_hidden {
+	visibility: hidden;
+}
+
 .calendar__day:nth-child(7n) {
 	margin-right: 0;
 }
+
 .calendar__day:hover {
 	background-color: rgb(73, 117, 206);
 	color: #fff;
