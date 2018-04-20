@@ -151,8 +151,10 @@ const Zone = {
 	 * @param {Number} zoneRadius
 	 * radius of the created zone
 	 */
-	generateCenterPoint: function (zoneRadius) {
+	generateCenterPoint: function (zoneRadius, zoneWidthStart, zoneWidthEnd, zoneHeightStart, zoneHeightEnd) {
 		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+		this.zoneCenterPoint.x = Math.floor(Math.random() * (zoneWidthEnd - zoneWidthStart) + zoneWidthStart);
+		this.zoneCenterPoint.y = Math.floor(Math.random() * (zoneHeightEnd - zoneHeightStart) + zoneHeightStart);
 	},
 
 	/**
@@ -162,7 +164,7 @@ const Zone = {
 	 * @param {Number} shrinkCoefficient
 	 * coefficient of zone shrinking
 	 */
-	generateZoneRadius: function (shrinkCoefficient) {
+	generateZoneRadius: function (shrinkCoefficient, zoneWidth, zoneHeight) {
 		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
 	},
 
