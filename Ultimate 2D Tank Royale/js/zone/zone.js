@@ -5,54 +5,65 @@ const Zone = {
 	//#region Fields declaration
 
 	/**
-	 * private static field
-	 *
-	 * Does the zone shrink now?
+	 * @property {boolean} _isShrinking @private @static
+	 * @description Does the zone shrink now?
 	 */
 	_isShrinking: false,
 
 	/**
-	 * private static field
-	 *
-	 * Coefficient of zone shrinking
+	 * @property {number} _shrinkCoefficient @private @static
+	 * @description Coefficient of zone shrinking
 	 */
 	_shrinkCoefficient: 2.0,
 
 	/**
-	 * private static field
-	 *
-	 * Value of the current zone radius
+	 * @property {ZoneShape} _finalZoneShape @private @static
+	 * @description Parameters of the final zone shape:
+	 * upper left point, lower right point, side
 	 */
-	_zoneRadius: 0,
+	_finalZoneShape: Object.create(ZoneShape).constructor(),
 
 	/**
-	 * private static field
-	 *
-	 * Coordinates of the zone center
+	 * @property {ZoneShape} _currentZoneShape @private @static
+	 * @description Parameters of the current zone shape:
+	 * upper left point, lower right point, side
 	 */
-	_zoneCenterPoint: {
-		x: 0,
-		y: 0
-	},
+	_currentZoneShape: Object.create(ZoneShape).constructor(),
 
-	/**
-	 * private static field
-	 *
-	 * Coordinates of the first point inside the zone
-	 */
-	_zoneUpperLeftPoint: {
-		x: 0,
-		y:0
-	},
+	// /**
+	//  * private static field
+	//  *
+	//  * Value of the current zone radius
+	//  */
+	// _zoneRadius: 0,
+
+	// /**
+	//  * private static field
+	//  *
+	//  * Coordinates of the zone center
+	//  */
+	// _zoneCenterPoint: {
+	// 	x: 0,
+	// 	y: 0
+	// },
+
+	// /**
+	//  * private static field
+	//  *
+	//  * Coordinates of the first point inside the zone
+	//  */
+	// _zoneUpperLeftPoint: {
+	// 	x: 0,
+	// 	y:0
+	// },
 
 	//#endregion
 
 	//#region Accessor functions declaration
 
 	/**
-	 * private static field
-	 *
-	 * Does the zone shrink now?
+	 * Accessor @static
+	 * @description Does the zone shrink now?
 	 */
 	get isShrinking() {
 		return this._isShrinking;
@@ -66,9 +77,8 @@ const Zone = {
 	},
 
 	/**
-	 * private static field
-	 *
-	 * Coefficient of zone shrinking
+	 * Accessor @static
+	 * @description Coefficient of zone shrinking
 	 */
 	get shrinkCoefficient() {
 		return this._shrinkCoefficient;
@@ -82,89 +92,129 @@ const Zone = {
 	},
 
 	/**
-	 * private static field
-	 *
-	 * Value of the current zone radius
+	 * Accessor @static
+	 * @description Parameters of the final zone shape:
+	 * upper left point, lower right point, side
 	 */
-	get zoneRadius() {
-		return this._zoneRadius;
+	get finalZoneShape() {
+		return this._finalZoneShape;
 	},
-	set zoneRadius(value) {
-		unlockObjectField(this, "_zoneRadius");
+	set finalZoneShape(value) {
+		unlockObjectField(this, "_finalZoneShape");
 
-		this._zoneRadius = value;
+		this._finalZoneShape = value;
 
-		lockObjectField(this, "_zoneRadius");
+		lockObjectField(this, "_finalZoneShape");
 	},
 
 	/**
-	 * private static field
-	 *
-	 * Coordinates of the zone center
+	 * Accessor @static
+	 * @description Parameters of the current zone shape:
+	 * upper left point, lower right point, side
 	 */
-	get zoneCenterPoint() {
-		return this._zoneCenterPoint;
+	get currentZoneShape() {
+		return this._currentZoneShape;
 	},
-	set zoneCenterPoint(value) {
-		unlockObjectField(this, "_zoneCenterPoint");
+	set currentZoneShape(value) {
+		unlockObjectField(this, "_currentZoneShape");
 
-		this._zoneCenterPoint = value;
+		this._currentZoneShape = value;
 
-		lockObjectField(this, "_zoneCenterPoint");
+		lockObjectField(this, "_currentZoneShape");
 	},
+	// /**
+	//  * private static field
+	//  *
+	//  * Value of the current zone radius
+	//  */
+	// get zoneRadius() {
+	// 	return this._zoneRadius;
+	// },
+	// set zoneRadius(value) {
+	// 	unlockObjectField(this, "_zoneRadius");
 
-	/**
-	 * private static field
-	 *
-	 * Coordinates of the first point inside the zone
-	 */
-	get zoneUpperLeftPoint() {
-		return this._zoneUpperLeftPoint;
-	},
-	set zoneUpperLeftPoint(value) {
-		unlockObjectField(this, "_zoneUpperLeftPoint");
+	// 	this._zoneRadius = value;
 
-		this._zoneUpperLeftPoint = value;
+	// 	lockObjectField(this, "_zoneRadius");
+	// },
 
-		lockObjectField(this, "_zoneUpperLeftPoint");
-	},
+	// /**
+	//  * private static field
+	//  *
+	//  * Coordinates of the zone center
+	//  */
+	// get zoneCenterPoint() {
+	// 	return this._zoneCenterPoint;
+	// },
+	// set zoneCenterPoint(value) {
+	// 	unlockObjectField(this, "_zoneCenterPoint");
+
+	// 	this._zoneCenterPoint = value;
+
+	// 	lockObjectField(this, "_zoneCenterPoint");
+	// },
+
+	// /**
+	//  * private static field
+	//  *
+	//  * Coordinates of the first point inside the zone
+	//  */
+	// get zoneUpperLeftPoint() {
+	// 	return this._zoneUpperLeftPoint;
+	// },
+	// set zoneUpperLeftPoint(value) {
+	// 	unlockObjectField(this, "_zoneUpperLeftPoint");
+
+	// 	this._zoneUpperLeftPoint = value;
+
+	// 	lockObjectField(this, "_zoneUpperLeftPoint");
+	// },
 
 	//#endregion
 
 	//#region Class functions
 
 	/**
-	 * static function
-	 *
-	 * Main function of the zone algorithm
-	 * @param {Array} location
-	 * game location for processing
+	 * @function @static
+	 * @param {array} location Game location for processing
+	 * @description Main function of the zone algorithm
 	 */
 	shrink: function (location) {
 		// Do this unreal shit! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
 	},
 
 	/**
-	 * static function
-	 *
-	 * Generate center point of the zone
-	 * @param {Number} zoneRadius
-	 * radius of the created zone
+	 * @function @static
+	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
+	 * @param {ZoneShape} currentZoneShape Current zone parameters
+	 * @description Calculate parameters of the final zone
 	 */
-	generateCenterPoint: function (zoneRadius, zoneWidthStart, zoneWidthEnd, zoneHeightStart, zoneHeightEnd) {
-		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
-		this.zoneCenterPoint.x = Math.floor(Math.random() * (zoneWidthEnd - zoneWidthStart) + zoneWidthStart);
-		this.zoneCenterPoint.y = Math.floor(Math.random() * (zoneHeightEnd - zoneHeightStart) + zoneHeightStart);
+	calculateFinalZoneShape: function (shrinkCoefficient, currentZoneShape) {
+		const finalZoneSide = currentZoneShape.side / shrinkCoefficient;
+		finalZoneSideRounded = Math.round(finalZoneSide);
+		finalZoneSide = finalZoneSideRounded <= 10 ? 10 : finalZoneSideRounded;
+
+		// Для случая если нужна центральная точка
+		// finalZoneSide = finalZoneSideRounded <= 10 ? 10 : finalZoneSideRounded % 2 !== 0 ? finalZoneSideRounded : finalZoneSideRounded - 1;
+
+		const minBoundX = currentZoneShape.x1;
+		const maxBoundX = currentZoneShape.x2 - finalZoneSide + 2;
+		const minBoundY = currentZoneShape.y1;
+		const maxBoundY = currentZoneShape.y2 - finalZoneSide + 2;
+
+		const finalZoneX1 = Math.floor(Math.random() * (maxBoundX - minBoundX) + minBoundX);
+		const finalZoneY1 = Math.floor(Math.random() * (maxBoundY - minBoundY) + minBoundY);
+
+		this.finalZoneShape.x1 = finalZoneX1;
+		this.finalZoneShape.y1 = finalZoneY1;
+		this.finalZoneShape.side = finalZoneSide;
+		this.finalZoneShape.calculateLowerRightPoint();
 	},
 
 	/**
-	 * static function
-	 *
-	 * Generate radius of the zone
-	 * @param {Number} shrinkCoefficient
-	 * coefficient of zone shrinking
+	 * !! Not used right now !!
 	 */
-	generateZoneRadius: function (shrinkCoefficient, zoneWidth, zoneHeight) {
+	drawZoneBorderline : function(location) {
 		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
 	},
 
@@ -173,10 +223,9 @@ const Zone = {
 	//#region Functions for making private fields
 
 	/**
-	 *
-	 * sets "writable" and "enumerable" attributes to "false"
-	 * @param {*} object
-	 * target object
+	 * @function
+	 * @param {*} object Target object
+	 * @description Sets "writable" and "enumerable" attributes to "false"
 	 */
 	lockAllFields: function(object) {
 		for (property in object) {
@@ -190,12 +239,10 @@ const Zone = {
 	},
 
 	/**
-	 *
-	 * sets "writable" attribute of field to "false"
-	 * @param {*} object
-	 * target object
-	 * @param {*} field
-	 * target field
+	 * @function
+	 * @param {*} object Target object
+	 * @param {*} field Target field
+	 * @description Sets "writable" attribute of field to "false"
 	 */
 	lockObjectField: function(object, field) {
 		Object.defineProperty(object, field, {
@@ -204,12 +251,10 @@ const Zone = {
 	},
 
 	/**
-	 *
-	 * sets "writable" attribute of field to "true"
-	 * @param {*} object
-	 * target object
-	 * @param {*} field
-	 * target field
+	 * @function
+	 * @param {*} object Target object
+	 * @param {*} field Target field
+	 * @description Sets "writable" attribute of field to "true"
 	 */
 	unlockObjectField: function(object, field) {
 		Object.defineProperty(object, field, {
