@@ -1,3 +1,6 @@
+/**
+ * @class @type {ZoneShape}
+ */
 const ZoneShape = {
 
 	/** @constructor

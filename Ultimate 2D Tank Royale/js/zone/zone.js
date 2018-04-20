@@ -1,5 +1,5 @@
 /**
- * Static class Zone
+ * @static @class @type {Zone}
  */
 const Zone = {
 	//#region Fields declaration
@@ -190,7 +190,7 @@ const Zone = {
 	 * @description Calculate parameters of the final zone
 	 */
 	calculateFinalZoneShape: function (shrinkCoefficient, currentZoneShape) {
-		const finalZoneSide = currentZoneShape.side / shrinkCoefficient;
+		let finalZoneSide = currentZoneShape.side / shrinkCoefficient;
 		finalZoneSideRounded = Math.round(finalZoneSide);
 		finalZoneSide = finalZoneSideRounded <= 10 ? 10 : finalZoneSideRounded;
 
