@@ -141,7 +141,7 @@ const Zone = {
 	 * game location for processing
 	 */
 	shrink: function (location) {
-		// Do this unreal shit!
+		// Do this unreal shit! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
 	},
 
 	/**
@@ -151,8 +151,19 @@ const Zone = {
 	 * @param {Number} zoneRadius
 	 * radius of the created zone
 	 */
-	getCenterPoint: function (zoneRadius) {
-		// Do it again!
+	generateCenterPoint: function (zoneRadius) {
+		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+	},
+
+	/**
+	 * static function
+	 *
+	 * Generate radius of the zone
+	 * @param {Number} shrinkCoefficient
+	 * coefficient of zone shrinking
+	 */
+	generateZoneRadius: function (shrinkCoefficient) {
+		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
 	},
 
 	//#endregion
