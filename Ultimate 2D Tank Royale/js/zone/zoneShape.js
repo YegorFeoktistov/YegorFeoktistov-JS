@@ -1,7 +1,7 @@
 /**
  * @class
  */
-const ZoneShape = {
+export const ZoneShape = {
 
 	/** @constructor
 	 * @param {number} x1 Upper left point x coordinate
