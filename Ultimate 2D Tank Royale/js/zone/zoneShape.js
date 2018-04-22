@@ -1,5 +1,5 @@
 /**
- * @class @type {ZoneShape}
+ * @class
  */
 const ZoneShape = {
 
