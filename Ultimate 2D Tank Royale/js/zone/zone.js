@@ -1,3 +1,14 @@
+/*
+Надо обмозговать:
+	-Для вертикальных и горизонтальных заполнений найти место, где вызывать перерасчет currentZoneShape()
+	-verticalStepCount и horizontalStepCount нужно хранить в поле Zone, т.к. каждый шаг - новый вызов метода shrink, а значит шаги сбрасываются
+	-в методе continueCurrentStage хорошенько подумать, не наделал ли я там лишних условий, мб достаточно проверки ratio на 0, тогда выбор способа заполнения верха и низа решиться сам
+	-возможно какие-то из блоков в continueCurrentStage нужно в отдельные маленькие методы вынести
+	-ПРОВЕРКА НА ДОСТИЖЕНИЕ ФИНАЛЬНОГО РАЗМЕРА ЗОНЫ, ДЕЙСТВИЯ ПРИ ДОСТИЖЕНИИ
+	-счетчик шагов вынести на уровень вышел в if-ах
+	-всё это говно нужно в ES6 перекидывать, да побыстрее
+	-мб есть нормальные ключевые слова static и private
+*/
 import { ZoneShape } from "./zoneShape";
 
 /**
@@ -274,6 +285,7 @@ const Zone = {
 	 * @function @static
 	 * @param {array} location Game location for processing
 	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
+	 * @param {number} lastZoneSide Value of the last zone side
 	 * @param {*} fillingObject Object to fill an area outside the zone
 	 * @description Main function of the zone algorithm
 	 */
@@ -327,44 +339,57 @@ const Zone = {
 
 	/**
 	 * @function @static
+	 * @param {array} location Game location for processing
 	 * @param {*} fillingObject Object to fill an area outside the zone
 	 * @description Fill an area outside the current zone
 	 */
-	continueCurrentStage: function(fillingObject) {
+	continueCurrentStage: function(location, fillingObject) {
 		const topStep;
 		const bottomStep;
 		const leftStep;
 		const rightStep;
 
-		const verticalStepCount;
-		const horizontalStepCount;
+		let verticalStepCount = 0;
+		let horizontalStepCount = 0;
 
 		// Vertical
 
-		const isTopSideReached = this.currentZoneShape.y1 === this.finalZoneShape.y1;
-		const isBottomSideReached = this.currentZoneShape.y2 === this.finalZoneShape.y2;
+		const isTopSideReached = (this.currentZoneShape.y1 === this.finalZoneShape.y1);
+		const isBottomSideReached = (this.currentZoneShape.y2 === this.finalZoneShape.y2);
 
 		if (!isTopSideReached && !isBottomSideReached) {
 			for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
-				const topDistance = Math.abs(this.finalZoneShape.y1 - this.currentZoneShape.y1);
-				const bottomDistance = Math.abs(this.currentZoneShape.y2 - this.finalZoneShape.y2);
+				if (this.topDistance > this.bottomDistance) {
+					verticalStepCount++;
 
-				if (topDistance > bottomDistance) {
+					location[i][this.currentZoneShape.y1] = fillingObject;
 
+					if (verticalStepCount === this.verticalDistancesRatio) {
+						location[i][this.currentZoneShape.y2] = fillingObject;
+						verticalStepCount = 0;
+					}
 				}
-				else if (topDistance < bottomDistance) {
+				else if (this.topDistance < this.bottomDistance) {
+					verticalStepCount++;
 
+					location[i][this.currentZoneShape.y2] = fillingObject;
+
+					if (verticalStepCount === this.verticalDistancesRatio) {
+						location[i][this.currentZoneShape.y1] = fillingObject;
+						verticalStepCount = 0;
+					}
 				}
 				else {
-
+					location[i][this.currentZoneShape.y1] = fillingObject;
+					location[i][this.currentZoneShape.y2] = fillingObject;
 				}
 			}
 		}
 		else if (isTopSideReached && !isBottomSideReached) {
-
+			location[i][this.currentZoneShape.y2] = fillingObject;
 		}
 		else if (!isTopSideReached && isBottomSideReached) {
-
+			location[i][this.currentZoneShape.y1] = fillingObject;
 		}
 
 		// Horizontal
@@ -388,7 +413,9 @@ const Zone = {
 		finalZoneSide = finalZoneSideRounded <= this.lastZoneSide ? this.lastZoneSide : finalZoneSideRounded;
 
 		// Для случая если нужна центральная точка
-		// finalZoneSide = finalZoneSideRounded <= this.lastZoneSide ? this.lastZoneSide : finalZoneSideRounded % 2 !== 0 ? finalZoneSideRounded : finalZoneSideRounded - 1;
+		// finalZoneSide = finalZoneSideRounded <= this.lastZoneSide
+		// ? this.lastZoneSide : finalZoneSideRounded % 2 !== 0
+		// ? finalZoneSideRounded : finalZoneSideRounded - 1;
 
 		const minBoundX = this.currentZoneShape.x1;
 		const maxBoundX = this.currentZoneShape.x2 - finalZoneSide + 2;
@@ -451,34 +478,37 @@ const Zone = {
 	},
 
 	/**
+	 * @function @static
 	 * @description Calculates the ratio between the vertical distances of zones
 	 */
 	calculateVerticalDistancesRatio: function() {
-		if (topDistance <= 0 || bottomDistance <= 0) {
+		if (this.topDistance <= 0 || this.bottomDistance <= 0) {
 			this.verticalDistancesRatio = 0;
 		}
 		else {
-			const max = Math.max(topDistance, bottomDistance);
-			const min = Math.min(topDistance, bottomDistance);
+			const max = Math.max(this.topDistance, this.bottomDistance);
+			const min = Math.min(this.topDistance, this.bottomDistance);
 			this.verticalDistancesRatio = Math.floor(max / min);
 		}
 	},
 
 	/**
+	 * @function @static
 	 * @description Calculates the ratio between the horizontal distances of zones
 	 */
 	calculateHorizontalDistancesRatio: function() {
-		if (leftDistance <= 0 || rightDistance <= 0) {
+		if (this.leftDistance <= 0 || this.rightDistance <= 0) {
 			this.horizontalDistancesRatio = 0;
 		}
 		else {
-			const max = Math.max(leftDistance, rightDistance);
-			const min = Math.min(leftDistance, rightDistance);
+			const max = Math.max(this.leftDistance, this.rightDistance);
+			const min = Math.min(this.leftDistance, this.rightDistance);
 			this.horizontalDistancesRatio = Math.floor(max / min);
 		}
 	},
 
 	/**
+	 * @function @static
 	 * @description Calculates distances between zones
 	 */
 	calculateDistances: function() {
