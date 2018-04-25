@@ -1,7 +1,7 @@
 /**
  * @class
  */
-export const ZoneShape = {
+const ZoneShape = {
 
 	/** @constructor
 	 * @param {number} x1 Upper left point x coordinate
@@ -33,11 +33,11 @@ export const ZoneShape = {
 		return this._x1;
 	},
 	set x1(value) {
-		unlockObjectField(this, "_x1");
+		this.unlockObjectField(this, "_x1");
 
 		this._x1 = value;
 
-		lockObjectField(this, "_x1");
+		this.lockObjectField(this, "_x1");
 	},
 
 	/**
@@ -48,11 +48,11 @@ export const ZoneShape = {
 		return this._y1;
 	},
 	set y1(value) {
-		unlockObjectField(this, "_y1");
+		this.unlockObjectField(this, "_y1");
 
 		this._y1 = value;
 
-		lockObjectField(this, "_y1");
+		this.lockObjectField(this, "_y1");
 	},
 
 	/**
@@ -63,11 +63,11 @@ export const ZoneShape = {
 		return this._x2;
 	},
 	set x2(value) {
-		unlockObjectField(this, "_x2");
+		this.unlockObjectField(this, "_x2");
 
 		this._x2 = value;
 
-		lockObjectField(this, "_x2");
+		this.lockObjectField(this, "_x2");
 	},
 
 	/**
@@ -78,11 +78,11 @@ export const ZoneShape = {
 		return this._y2;
 	},
 	set y2(value) {
-		unlockObjectField(this, "_y2");
+		this.unlockObjectField(this, "_y2");
 
 		this._y2 = value;
 
-		lockObjectField(this, "_y2");
+		this.lockObjectField(this, "_y2");
 	},
 
 	/**
@@ -93,11 +93,11 @@ export const ZoneShape = {
 		return this._side;
 	},
 	set side(value) {
-		unlockObjectField(this, "_side");
+		this.unlockObjectField(this, "_side");
 
 		this._side = value;
 
-		lockObjectField(this, "_side");
+		this.lockObjectField(this, "_side");
 	},
 
 	//#endregion

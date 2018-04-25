@@ -4,12 +4,55 @@
 	-ПРОВЕРКА НА ДОСТИЖЕНИЕ ФИНАЛЬНОГО РАЗМЕРА ЗОНЫ, ДЕЙСТВИЯ ПРИ ДОСТИЖЕНИИ (вроде не нужно, но пусть висит на всякий)
 	-всё это говно нужно в ES6 перекидывать, да побыстрее
 */
-import { ZoneShape } from "./zoneShape";
+// import { ZoneShape } from "./zoneShape";
 
 /**
  * @static @class
  */
 const Zone = {
+	//#region Constructor
+
+	/** @constructor
+	 * @this {Zone}
+	 * @description Constructor of the Zone class */
+	/* constructor: function (
+		isFirstStage = true,
+		isNewStage = true,
+		shrinkCoefficient = 2.0,
+		lastZoneSide = 10,
+		finalZoneShape = Object.create(ZoneShape).constructor(),
+		currentZoneShape = Object.create(ZoneShape).constructor(),
+		verticalDistancesRatio = 0,
+		horizontalDistancesRatio = 0,
+		topDistance = 0,
+		bottomDistance = 0,
+		leftDistance = 0,
+		rightDistance = 0,
+		verticalStepCount = 0,
+		horizontalStepCount = 0,
+	) {
+		this._isFirstStage = isFirstStage;
+		this._isNewStage = isNewStage;
+		this._shrinkCoefficient = shrinkCoefficient;
+		this._lastZoneSide = lastZoneSide;
+		this._finalZoneShape = finalZoneShape;
+		this._currentZoneShape = currentZoneShape;
+		this._verticalDistancesRatio = verticalDistancesRatio;
+		this._horizontalDistancesRatio = horizontalDistancesRatio;
+		this._topDistance = topDistance;
+		this._bottomDistance = bottomDistance;
+		this._leftDistance = leftDistance;
+		this._rightDistance = rightDistance;
+		this._verticalStepCount = verticalStepCount;
+		this._horizontalStepCount = horizontalStepCount;
+
+		this.lockAllFields(this);
+
+		return this;
+	}, */
+
+	//#endregion
+
 	//#region Fields declaration
 
 	/**
@@ -110,11 +153,11 @@ const Zone = {
 		return this._isFirstStage;
 	},
 	set isFirstStage(value) {
-		unlockObjectField(this, "_isFirstStage");
+		this.unlockObjectField(this, "_isFirstStage");
 
 		this._isFirstStage = value;
 
-		lockObjectField(this, "_isFirstStage");
+		this.lockObjectField(this, "_isFirstStage");
 	},
 
 	/**
@@ -125,11 +168,11 @@ const Zone = {
 		return this._isNewStage;
 	},
 	set isNewStage(value) {
-		unlockObjectField(this, "_isNewStage");
+		this.unlockObjectField(this, "_isNewStage");
 
 		this._isNewStage = value;
 
-		lockObjectField(this, "_isNewStage");
+		this.lockObjectField(this, "_isNewStage");
 	},
 
 	/**
@@ -140,11 +183,11 @@ const Zone = {
 		return this._shrinkCoefficient;
 	},
 	set shrinkCoefficient(value) {
-		unlockObjectField(this, "_shrinkCoefficient");
+		this.unlockObjectField(this, "_shrinkCoefficient");
 
 		this._shrinkCoefficient = value;
 
-		lockObjectField(this, "_shrinkCoefficient");
+		this.lockObjectField(this, "_shrinkCoefficient");
 	},
 
 	/**
@@ -155,11 +198,11 @@ const Zone = {
 		return this._lastZoneSide;
 	},
 	set lastZoneSide(value) {
-		unlockObjectField(this, "_lastZoneSide");
+		this.unlockObjectField(this, "_lastZoneSide");
 
 		this._lastZoneSide = value;
 
-		lockObjectField(this, "_lastZoneSide");
+		this.lockObjectField(this, "_lastZoneSide");
 	},
 
 	/**
@@ -171,11 +214,11 @@ const Zone = {
 		return this._finalZoneShape;
 	},
 	set finalZoneShape(value) {
-		unlockObjectField(this, "_finalZoneShape");
+		this.unlockObjectField(this, "_finalZoneShape");
 
 		this._finalZoneShape = value;
 
-		lockObjectField(this, "_finalZoneShape");
+		this.lockObjectField(this, "_finalZoneShape");
 	},
 
 	/**
@@ -187,11 +230,11 @@ const Zone = {
 		return this._currentZoneShape;
 	},
 	set currentZoneShape(value) {
-		unlockObjectField(this, "_currentZoneShape");
+		this.unlockObjectField(this, "_currentZoneShape");
 
 		this._currentZoneShape = value;
 
-		lockObjectField(this, "_currentZoneShape");
+		this.lockObjectField(this, "_currentZoneShape");
 	},
 
 	/**
@@ -202,11 +245,11 @@ const Zone = {
 		return this._verticalDistancesRatio;
 	},
 	set verticalDistancesRatio(value) {
-		unlockObjectField(this, "_verticalDistancesRatio");
+		this.unlockObjectField(this, "_verticalDistancesRatio");
 
 		this._verticalDistancesRatio = value;
 
-		lockObjectField(this, "_verticalDistancesRatio");
+		this.lockObjectField(this, "_verticalDistancesRatio");
 	},
 
 	/**
@@ -217,11 +260,11 @@ const Zone = {
 		return this._horizontalDistancesRatio;
 	},
 	set horizontalDistancesRatio(value) {
-		unlockObjectField(this, "_horizontalDistancesRatio");
+		this.unlockObjectField(this, "_horizontalDistancesRatio");
 
 		this._horizontalDistancesRatio = value;
 
-		lockObjectField(this, "_horizontalDistancesRatio");
+		this.lockObjectField(this, "_horizontalDistancesRatio");
 	},
 
 	/**
@@ -232,11 +275,11 @@ const Zone = {
 		return this._topDistance;
 	},
 	set topDistance(value) {
-		unlockObjectField(this, "_topDistance");
+		this.unlockObjectField(this, "_topDistance");
 
 		this._topDistance = value;
 
-		lockObjectField(this, "_topDistance");
+		this.lockObjectField(this, "_topDistance");
 	},
 
 	/**
@@ -247,11 +290,11 @@ const Zone = {
 		return this._bottomDistance;
 	},
 	set bottomDistance(value) {
-		unlockObjectField(this, "_bottomDistance");
+		this.unlockObjectField(this, "_bottomDistance");
 
 		this._bottomDistance = value;
 
-		lockObjectField(this, "_bottomDistance");
+		this.lockObjectField(this, "_bottomDistance");
 	},
 
 	/**
@@ -262,11 +305,11 @@ const Zone = {
 		return this._leftDistance;
 	},
 	set leftDistance(value) {
-		unlockObjectField(this, "_leftDistance");
+		this.unlockObjectField(this, "_leftDistance");
 
 		this._leftDistance = value;
 
-		lockObjectField(this, "_leftDistance");
+		this.lockObjectField(this, "_leftDistance");
 	},
 
 	/**
@@ -277,11 +320,11 @@ const Zone = {
 		return this._rightDistance;
 	},
 	set rightDistance(value) {
-		unlockObjectField(this, "_rightDistance");
+		this.unlockObjectField(this, "_rightDistance");
 
 		this._rightDistance = value;
 
-		lockObjectField(this, "_rightDistance");
+		this.lockObjectField(this, "_rightDistance");
 	},
 
 	/**
@@ -292,11 +335,11 @@ const Zone = {
 		return this._verticalStepCount;
 	},
 	set verticalStepCount(value) {
-		unlockObjectField(this, "_verticalStepCount");
+		this.unlockObjectField(this, "_verticalStepCount");
 
 		this._verticalStepCount = value;
 
-		lockObjectField(this, "_verticalStepCount");
+		this.lockObjectField(this, "_verticalStepCount");
 	},
 
 	/**
@@ -307,11 +350,11 @@ const Zone = {
 		return this._horizontalStepCount;
 	},
 	set horizontalStepCount(value) {
-		unlockObjectField(this, "_horizontalStepCount");
+		this.unlockObjectField(this, "_horizontalStepCount");
 
 		this._horizontalStepCount = value;
 
-		lockObjectField(this, "_horizontalStepCount");
+		this.lockObjectField(this, "_horizontalStepCount");
 	},
 
 	//#endregion
@@ -326,7 +369,7 @@ const Zone = {
 	 * @param {*} fillingObject Object to fill an area outside the zone
 	 * @description Main function of the zone algorithm
 	 */
-	shrink: function (location, shrinkCoefficient, lastZoneSide, fillingObject = null) {
+	shrink: function (location, shrinkCoefficient, lastZoneSide, fillingObject = null, borderFillingObject = 0) {
 		this.shrinkCoefficient = shrinkCoefficient;
 		this.lastZoneSide = lastZoneSide;
 
@@ -338,12 +381,12 @@ const Zone = {
 		// Verification of the beginning of the new stage
 
 		if (this.isNewStage) {
-			this.beginNewStage();
+			this.beginNewStage(location, borderFillingObject);
 		}
 
 		// Continuation of the current stage
 
-		this.continueCurrentStage();
+		this.continueCurrentStage(location, fillingObject);
 	},
 
 	/**
@@ -366,11 +409,12 @@ const Zone = {
 	 * @function @static
 	 * @description Finds new final zone shape
 	 */
-	beginNewStage: function() {
+	beginNewStage: function(location, borderFillingObject) {
 		this.calculateFinalZoneShape();
 		this.calculateDistances();
 		this.calculateVerticalDistancesRatio();
 		this.calculateHorizontalDistancesRatio();
+		this.drawZoneBorderline(location, borderFillingObject);
 
 		this.verticalStepCount = 0;
 		this.horizontalStepCount = 0;
@@ -479,6 +523,7 @@ const Zone = {
 
 		if (this.checkFinalZoneReached()) {
 			this.isNewStage = true;
+			this.clearBorder(location, cleanerObject = " ");
 		}
 	},
 
@@ -500,7 +545,7 @@ const Zone = {
 			if (this.topDistance > this.bottomDistance) {
 				shrinkSteps.topStep++;
 
-				for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
+				for (let i = this.currentZoneShape.x1; i <= this.currentZoneShape.x2; i++) {
 					location[i][this.currentZoneShape.y1] = fillingObject;
 
 					if (isCommonStep) {
@@ -516,7 +561,7 @@ const Zone = {
 			else if (this.topDistance < this.bottomDistance) {
 				shrinkSteps.bottomStep++;
 
-				for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
+				for (let i = this.currentZoneShape.x1; i <= this.currentZoneShape.x2; i++) {
 					location[i][this.currentZoneShape.y2] = fillingObject;
 
 					if (isCommonStep) {
@@ -530,7 +575,7 @@ const Zone = {
 				}
 			}
 			else {
-				for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
+				for (let i = this.currentZoneShape.x1; i <= this.currentZoneShape.x2; i++) {
 					location[i][this.currentZoneShape.y1] = fillingObject;
 					location[i][this.currentZoneShape.y2] = fillingObject;
 				}
@@ -543,7 +588,7 @@ const Zone = {
 		else if (isTopSideReached && !isBottomSideReached) {
 			this.verticalStepCount++;
 
-			for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
+			for (let i = this.currentZoneShape.x1; i <= this.currentZoneShape.x2; i++) {
 				location[i][this.currentZoneShape.y2] = fillingObject;
 			}
 
@@ -552,7 +597,7 @@ const Zone = {
 		else if (!isTopSideReached && isBottomSideReached) {
 			this.verticalStepCount++;
 
-			for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
+			for (let i = this.currentZoneShape.x1; i <= this.currentZoneShape.x2; i++) {
 				location[i][this.currentZoneShape.y1] = fillingObject;
 			}
 
@@ -578,7 +623,7 @@ const Zone = {
 			if (this.leftDistance > this.rightDistance) {
 				shrinkSteps.leftStep++;
 
-				for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
+				for (let i = this.currentZoneShape.y1; i <= this.currentZoneShape.y2; i++) {
 					location[this.currentZoneShape.x1][i] = fillingObject;
 
 					if (isCommonStep) {
@@ -594,7 +639,7 @@ const Zone = {
 			else if (this.leftDistance < this.rightDistance) {
 				shrinkSteps.rightStep++;
 
-				for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
+				for (let i = this.currentZoneShape.y1; i <= this.currentZoneShape.y2; i++) {
 					location[this.currentZoneShape.x2][i] = fillingObject;
 
 					if (isCommonStep) {
@@ -608,7 +653,7 @@ const Zone = {
 				}
 			}
 			else {
-				for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
+				for (let i = this.currentZoneShape.y1; i <= this.currentZoneShape.y2; i++) {
 					location[this.currentZoneShape.x1][i] = fillingObject;
 					location[this.currentZoneShape.x2][i] = fillingObject;
 				}
@@ -621,7 +666,7 @@ const Zone = {
 		else if (isLeftSideReached && !isRightSideReached) {
 			this.horizontalStepCount++;
 
-			for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
+			for (let i = this.currentZoneShape.y1; i <= this.currentZoneShape.y2; i++) {
 				location[this.currentZoneShape.x2][i] = fillingObject;
 			}
 
@@ -630,7 +675,7 @@ const Zone = {
 		else if (!isLeftSideReached && isRightSideReached) {
 			this.horizontalStepCount++;
 
-			for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
+			for (let i = this.currentZoneShape.y1; i <= this.currentZoneShape.y2; i++) {
 				location[this.currentZoneShape.x1][i] = fillingObject;
 			}
 
@@ -671,8 +716,27 @@ const Zone = {
 	/**
 	 * !! Not used right now !!
 	 */
-	drawZoneBorderline : function(location) {
+	drawZoneBorderline : function(location, borderFillingObject) {
 		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+		for (let i = this.finalZoneShape.x1; i <= this.finalZoneShape.x2; i++) {
+			location[i][this.finalZoneShape.y1] = borderFillingObject;
+			location[i][this.finalZoneShape.y2] = borderFillingObject;
+		}
+		for (let i = this.finalZoneShape.y1; i <= this.finalZoneShape.y2; i++) {
+			location[this.finalZoneShape.x1][i] = borderFillingObject;
+			location[this.finalZoneShape.x2][i] = borderFillingObject;
+		}
+	},
+
+	clearBorder: function(location, cleanerObject) {
+		for (let i = this.finalZoneShape.x1; i <= this.finalZoneShape.x2; i++) {
+			location[i][this.finalZoneShape.y1] = cleanerObject;
+			location[i][this.finalZoneShape.y2] = cleanerObject;
+		}
+		for (let i = this.finalZoneShape.y1; i <= this.finalZoneShape.y2; i++) {
+			location[this.finalZoneShape.x1][i] = cleanerObject;
+			location[this.finalZoneShape.x2][i] = cleanerObject;
+		}
 	},
 
 	//#endregion
