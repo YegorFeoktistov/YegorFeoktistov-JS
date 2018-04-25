@@ -1,9 +1,6 @@
 /*
 Надо обмозговать:
-	-счетчик шагов вынести на уровень вышел в if-ах И ИЗ ЦИКЛА!!!
-	-ОБНУЛЕНИЕ verticalStepCount ВЫНЕСТИ В ОТДЕЛЬНОЕ УСЛОВИЕ ВНЕ ЦИКЛА
 	-Для вертикальных и горизонтальных заполнений найти место, где вызывать перерасчет currentZoneShape()
-	-verticalStepCount и horizontalStepCount нужно хранить в статик полях Zone, т.к. каждый шаг - новый вызов метода shrink, а значит шаги сбрасываются
 	-в методе continueCurrentStage хорошенько подумать, не наделал ли я там лишних условий, мб достаточно проверки ratio на 0, тогда выбор способа заполнения верха и низа решиться сам
 	-возможно какие-то из блоков в continueCurrentStage нужно в отдельные маленькие методы вынести
 	-ПРОВЕРКА НА ДОСТИЖЕНИЕ ФИНАЛЬНОГО РАЗМЕРА ЗОНЫ, ДЕЙСТВИЯ ПРИ ДОСТИЖЕНИИ
@@ -386,37 +383,6 @@ const Zone = {
 
 	/**
 	 * @function @static
-	 * @param {array} location Game location for processing
-	 * @param {*} fillingObject Object to fill an area outside the zone
-	 * @description Fill an area outside the current zone
-	 */
-	continueCurrentStage: function(location, fillingObject) {
-		const topStep;
-		const bottomStep;
-		const leftStep;
-		const rightStep;
-
-		// Vertical
-
-		this.shrinkVertically(location, fillingObject);
-
-		// Horizontal
-
-		this.shrinkHorizontally(location, fillingObject);
-
-		// Update currentZoneShape
-
-		this.calculateCurrentZoneShape();
-
-		// Check if current zone reaches final zone
-
-		if (this.checkFinalZoneReached()) {
-			this.isNewStage = true;
-		}
-	},
-
-	/**
-	 * @function @static
 	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
 	 * @param {ZoneShape} currentZoneShape Current zone parameters
 	 * @description Calculate parameters of the final zone
@@ -447,47 +413,13 @@ const Zone = {
 
 	/**
 	 * @function @static
-	 *
-	 * @description Calculate parameters of the current zone
+	 * @description Calculates distances between zones
 	 */
-	calculateCurrentZoneShape: function (/* shrinkCoefficient, currentZoneShape */) {
-
-		// let finalZoneSide = currentZoneShape.side / shrinkCoefficient;
-		// finalZoneSideRounded = Math.round(finalZoneSide);
-		// finalZoneSide = finalZoneSideRounded <= 10 ? 10 : finalZoneSideRounded;
-
-		// // Для случая если нужна центральная точка
-		// // finalZoneSide = finalZoneSideRounded <= 10 ? 10 : finalZoneSideRounded % 2 !== 0 ? finalZoneSideRounded : finalZoneSideRounded - 1;
-
-		// const minBoundX = currentZoneShape.x1;
-		// const maxBoundX = currentZoneShape.x2 - finalZoneSide + 2;
-		// const minBoundY = currentZoneShape.y1;
-		// const maxBoundY = currentZoneShape.y2 - finalZoneSide + 2;
-
-		// const finalZoneX1 = Math.floor(Math.random() * (maxBoundX - minBoundX) + minBoundX);
-		// const finalZoneY1 = Math.floor(Math.random() * (maxBoundY - minBoundY) + minBoundY);
-
-		// this.finalZoneShape.x1 = finalZoneX1;
-		// this.finalZoneShape.y1 = finalZoneY1;
-		// this.finalZoneShape.side = finalZoneSide;
-		// this.finalZoneShape.calculateLowerRightPoint();
-	},
-
-	/**
-	 * @function @static
-	 * @description Check if the current zone reaches the final zone
-	 */
-	checkFinalZoneReached: function() {
-		if (
-			this.currentZoneShape.x1 === this.finalZoneShape.x1
-			&& this.currentZoneShape.y1 === this.finalZoneShape.y1
-			&& this.currentZoneShape.side === this.finalZoneShape.side
-		) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	calculateDistances: function() {
+		this.topDistance = Math.abs(this.finalZoneShape.y1 - this.currentZoneShape.y1);
+		this.bottomDistance = Math.abs(this.currentZoneShape.y2 - this.finalZoneShape.y2);
+		this.leftDistance = Math.abs(this.finalZoneShape.x1 - this.currentZoneShape.x1);
+		this.rightDistance = Math.abs(this.currentZoneShape.x2 - this.finalZoneShape.x2);
 	},
 
 	/**
@@ -522,22 +454,45 @@ const Zone = {
 
 	/**
 	 * @function @static
-	 * @description Calculates distances between zones
+	 * @param {array} location Game location for processing
+	 * @param {*} fillingObject Object to fill an area outside the zone
+	 * @description Fill an area outside the current zone
 	 */
-	calculateDistances: function() {
-		this.topDistance = Math.abs(this.finalZoneShape.y1 - this.currentZoneShape.y1);
-		this.bottomDistance = Math.abs(this.currentZoneShape.y2 - this.finalZoneShape.y2);
-		this.leftDistance = Math.abs(this.finalZoneShape.x1 - this.currentZoneShape.x1);
-		this.rightDistance = Math.abs(this.currentZoneShape.x2 - this.finalZoneShape.x2);
+	continueCurrentStage: function(location, fillingObject) {
+		const shrinkSteps = {
+			topStep: 0,
+			bottomStep: 0,
+			leftStep: 0,
+			rightStep: 0
+		};
+
+		// Vertical
+
+		this.shrinkVertically(location, fillingObject, shrinkSteps);
+
+		// Horizontal
+
+		this.shrinkHorizontally(location, fillingObject, shrinkSteps);
+
+		// Update currentZoneShape
+
+		this.calculateCurrentZoneShape(shrinkSteps);
+
+		// Check if current zone reaches final zone
+
+		if (this.checkFinalZoneReached()) {
+			this.isNewStage = true;
+		}
 	},
 
 	/**
 	 * @function @static
 	 * @param {array} location Game location for processing
 	 * @param {*} fillingObject Object to fill an area outside the zone
+	 * @param {object} shrinkSteps Values of shrinks for each side
 	 * @description Shrinks location vertically
 	 */
-	shrinkVertically: function (location, fillingObject) {
+	shrinkVertically: function (location, fillingObject, shrinkSteps) {
 		const isTopSideReached = (this.currentZoneShape.y1 === this.finalZoneShape.y1);
 		const isBottomSideReached = (this.currentZoneShape.y2 === this.finalZoneShape.y2);
 		const isCommonStep = (this.verticalStepCount === this.verticalDistancesRatio);
@@ -546,6 +501,8 @@ const Zone = {
 			this.verticalStepCount++;
 
 			if (this.topDistance > this.bottomDistance) {
+				shrinkSteps.topStep++;
+
 				for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
 					location[i][this.currentZoneShape.y1] = fillingObject;
 
@@ -554,9 +511,14 @@ const Zone = {
 					}
 				}
 
-				if (isCommonStep) this.verticalStepCount = 0;
+				if (isCommonStep) {
+					shrinkSteps.bottomStep++;
+					this.verticalStepCount = 0;
+				}
 			}
 			else if (this.topDistance < this.bottomDistance) {
+				shrinkSteps.bottomStep++;
+
 				for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
 					location[i][this.currentZoneShape.y2] = fillingObject;
 
@@ -565,7 +527,10 @@ const Zone = {
 					}
 				}
 
-				if (isCommonStep) this.verticalStepCount = 0;
+				if (isCommonStep) {
+					shrinkSteps.topStep++;
+					this.verticalStepCount = 0;
+				}
 			}
 			else {
 				for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
@@ -573,6 +538,8 @@ const Zone = {
 					location[i][this.currentZoneShape.y2] = fillingObject;
 				}
 
+				shrinkSteps.topStep++;
+				shrinkSteps.bottomStep++;
 				this.verticalStepCount = 0;
 			}
 		}
@@ -582,6 +549,8 @@ const Zone = {
 			for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
 				location[i][this.currentZoneShape.y2] = fillingObject;
 			}
+
+			shrinkSteps.bottomStep++;
 		}
 		else if (!isTopSideReached && isBottomSideReached) {
 			this.verticalStepCount++;
@@ -589,6 +558,8 @@ const Zone = {
 			for (let i = this.currentZoneShape.x1; i < this.currentZoneShape.side; i++) {
 				location[i][this.currentZoneShape.y1] = fillingObject;
 			}
+
+			shrinkSteps.topStep++;
 		}
 	},
 
@@ -596,9 +567,10 @@ const Zone = {
 	 * @function @static
 	 * @param {array} location Game location for processing
 	 * @param {*} fillingObject Object to fill an area outside the zone
+	 * @param {object} shrinkSteps Values of shrinks for each side
 	 * @description Shrinks location horizontally
 	 */
-	shrinkHorizontally: function(location, fillingObject) {
+	shrinkHorizontally: function(location, fillingObject, shrinkSteps) {
 		const isLeftSideReached = (this.currentZoneShape.x1 === this.finalZoneShape.x1);
 		const isRightSideReached = (this.currentZoneShape.x2 === this.finalZoneShape.x2);
 		const isCommonStep = (this.horizontalStepCount === this.horizontalDistancesRatio);
@@ -607,6 +579,8 @@ const Zone = {
 			this.horizontalStepCount++;
 
 			if (this.leftDistance > this.rightDistance) {
+				shrinkSteps.leftStep++;
+
 				for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
 					location[this.currentZoneShape.x1][i] = fillingObject;
 
@@ -615,9 +589,14 @@ const Zone = {
 					}
 				}
 
-				if (isCommonStep) this.horizontalStepCount = 0;
+				if (isCommonStep) {
+					shrinkSteps.rightStep++;
+					this.horizontalStepCount = 0;
+				}
 			}
 			else if (this.leftDistance < this.rightDistance) {
+				shrinkSteps.rightStep++;
+
 				for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
 					location[this.currentZoneShape.x2][i] = fillingObject;
 
@@ -626,7 +605,10 @@ const Zone = {
 					}
 				}
 
-				if (isCommonStep) this.horizontalStepCount = 0;
+				if (isCommonStep) {
+					shrinkSteps.leftStep++;
+					this.horizontalStepCount = 0;
+				}
 			}
 			else {
 				for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
@@ -634,6 +616,8 @@ const Zone = {
 					location[this.currentZoneShape.x2][i] = fillingObject;
 				}
 
+				shrinkSteps.leftStep++;
+				shrinkSteps.rightStep++;
 				this.horizontalStepCount = 0;
 			}
 		}
@@ -643,6 +627,8 @@ const Zone = {
 			for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
 				location[this.currentZoneShape.x2][i] = fillingObject;
 			}
+
+			shrinkSteps.rightStep++;
 		}
 		else if (!isLeftSideReached && isRightSideReached) {
 			this.horizontalStepCount++;
@@ -650,6 +636,38 @@ const Zone = {
 			for (let i = this.currentZoneShape.y1; i < this.currentZoneShape.side; i++) {
 				location[this.currentZoneShape.x1][i] = fillingObject;
 			}
+
+			shrinkSteps.leftStep++;
+		}
+	},
+
+	/**
+	 * @function @static
+	 * @param {object} shrinkSteps Values of shrinks for each side
+	 * @description Calculate parameters of the current zone
+	 */
+	calculateCurrentZoneShape: function (shrinkSteps) {
+		this.currentZoneShape.x1 += shrinkSteps.leftStep;
+		this.currentZoneShape.y1 += shrinkSteps.topStep;
+		this.currentZoneShape.x2 -= shrinkSteps.rightStep;
+		this.currentZoneShape.y2 -= shrinkSteps.bottomStep;
+		this.currentZoneShape.calculateSide();
+	},
+
+	/**
+	 * @function @static
+	 * @description Check if the current zone reaches the final zone
+	 */
+	checkFinalZoneReached: function() {
+		if (
+			this.currentZoneShape.x1 === this.finalZoneShape.x1
+			&& this.currentZoneShape.y1 === this.finalZoneShape.y1
+			&& this.currentZoneShape.side === this.finalZoneShape.side
+		) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	},
 
