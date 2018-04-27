@@ -1,9 +1,9 @@
 /*
 Надо обмозговать:
-	-ПРОВЕРКА НА ДОСТИЖЕНИЕ ФИНАЛЬНОГО РАЗМЕРА ЗОНЫ, ДЕЙСТВИЯ ПРИ ДОСТИЖЕНИИ (вроде не нужно, но пусть висит на всякий)
+	-Проверку на итоговый размер зоны оформить красивее. Пока что это костыль в методе shrinkVertically()
+	-В JSDocs не документировал параметр borderFillingObject у функций
 	-Подумать, стоит ли передавать какие-либо свойства в параметрах конструктора, чтобы юзер типо настраивать их мог. Если да, то какие именно. Задавать ли им значения по умолчанию? Какие параметры стоит хранить как поля объекта, а какие - только передавать в shrink(), но внутри не хранить.
 	-Попробовать сыграть от конструктора и создания экземпляра зоны
-	-Задокументировать новые функции, проверить все описания вообще
 	-Всё это говно нужно в ES6 перекидывать, да побыстрее
 	-Сделать сущность Point?
 	-Стоит ли делать так y1 = this.currentZoneShape.y1 в методах сжатия, в местах где цикл прописывается и в простых обращениях к ячейке локации. Стоит ли это того?
@@ -411,6 +411,7 @@ const Zone = {
 
 	/**
 	 * @function @static
+	 * @param {array} location Game location for processing
 	 * @description Finds new final zone shape
 	 */
 	beginNewStage: function(location, borderFillingObject) {
@@ -429,8 +430,6 @@ const Zone = {
 
 	/**
 	 * @function @static
-	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
-	 * @param {ZoneShape} currentZoneShape Current zone parameters
 	 * @description Calculate parameters of the final zone
 	 */
 	calculateFinalZoneShape: function () {
@@ -526,9 +525,7 @@ const Zone = {
 
 		// Check if current zone reaches final zone
 
-		if (this.checkFinalZoneReached()) {
-			this.isNewStage = true;
-		}
+		this.checkIsFinalZoneReached();
 	},
 
 	/**
@@ -606,6 +603,10 @@ const Zone = {
 			}
 
 			shrinkSteps.topStep++;
+		}
+
+		if (this.currentZoneShape.side === 1 && this.lastZoneSide < 1) {
+			location[this.currentZoneShape.x1][this.currentZoneShape.y1] = fillingObject;
 		}
 	},
 
@@ -704,24 +705,22 @@ const Zone = {
 	 * @function @static
 	 * @description Check if the current zone reaches the final zone
 	 */
-	checkFinalZoneReached: function() {
+	checkIsFinalZoneReached: function() {
 		if (
 			this.currentZoneShape.x1 === this.finalZoneShape.x1
 			&& this.currentZoneShape.y1 === this.finalZoneShape.y1
 			&& this.currentZoneShape.side === this.finalZoneShape.side
 		) {
-			return true;
-		}
-		else {
-			return false;
+			this.isNewStage = true;
 		}
 	},
 
 	/**
-	 * !! Not used right now !!
+	 * @function @static
+	 * @param {array} location Game location for processing
+	 * @description Fills border cells of the final zone with given object
 	 */
 	drawZoneBorderline : function(location, borderFillingObject) {
-		// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
 		for (let i = this.finalZoneShape.x1; i <= this.finalZoneShape.x2; i++) {
 			location[i][this.finalZoneShape.y1] = borderFillingObject;
 			location[i][this.finalZoneShape.y2] = borderFillingObject;
@@ -732,6 +731,11 @@ const Zone = {
 		}
 	},
 
+	/**
+	 * @function @static
+	 * @param {array} location Game location for processing
+	 * @description Removes the drawn border of the final zone
+	 */
 	clearBorder: function(location, cleanerObject) {
 		for (let i = this.finalZoneShape.x1; i <= this.finalZoneShape.x2; i++) {
 			location[i][this.finalZoneShape.y1] = cleanerObject;
