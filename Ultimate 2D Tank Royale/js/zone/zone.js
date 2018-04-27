@@ -1,8 +1,6 @@
 /*
 Надо обмозговать:
 	-Все еще пересмотреть способ сжатия единичной зоны, мб что-то можно сделать лучше
-	-Обращать внимание на кадр, где удаляется старая белая зоны и прорисовывается новая. Я точно видел преждевременный перерасчет
-	С точки зрения кода это невозможно, и скорее всего дело в пролагах таймаута, но все же, watch it!
 */
 
 /**
@@ -460,8 +458,6 @@ class Zone {
 			}
 		}
 		else if (isTopSideReached && !isBottomSideReached) {
-			this.verticalStepCount++;
-
 			for (let i = upperX; i <= lowerX; i++) {
 				location[i][lowerY] = fillingObject;
 			}
@@ -469,8 +465,6 @@ class Zone {
 			shrinkSteps.bottomStep++;
 		}
 		else if (!isTopSideReached && isBottomSideReached) {
-			this.verticalStepCount++;
-
 			for (let i = upperX; i <= lowerX; i++) {
 				location[i][upperY] = fillingObject;
 			}
@@ -543,8 +537,6 @@ class Zone {
 			}
 		}
 		else if (isLeftSideReached && !isRightSideReached) {
-			this.horizontalStepCount++;
-
 			for (let i = upperY; i <= lowerY; i++) {
 				location[lowerX][i] = fillingObject;
 			}
@@ -552,8 +544,6 @@ class Zone {
 			shrinkSteps.rightStep++;
 		}
 		else if (!isLeftSideReached && isRightSideReached) {
-			this.horizontalStepCount++;
-
 			for (let i = upperY; i <= lowerY; i++) {
 				location[upperX][i] = fillingObject;
 			}
@@ -597,6 +587,8 @@ class Zone {
 			this.currentZoneShape.upperLeftPoint.x === this.finalZoneShape.upperLeftPoint.x
 			&& this.currentZoneShape.upperLeftPoint.y === this.finalZoneShape.upperLeftPoint.y
 			&& this.currentZoneShape.side === this.finalZoneShape.side
+			&& this.currentZoneShape.lowerRightPoint.x === this.finalZoneShape.lowerRightPoint.x
+			&& this.currentZoneShape.lowerRightPoint.y === this.finalZoneShape.lowerRightPoint.y
 		) {
 			this.isNewStage = true;
 		}

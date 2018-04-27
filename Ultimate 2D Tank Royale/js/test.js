@@ -1,5 +1,3 @@
-// import { Zone } from "./zone/zone";
-
 const locationSide = 18;
 const shrinkCoefficient = 1.4;
 const lastZoneSide = 0;
