@@ -17,12 +17,12 @@ class App extends Component {
 	}
 
 	onSubmit = (e) => {
-		if (e.which === 13 || e.keyCode === 13) {
+		if ((e.which === 13 || e.keyCode === 13) && e.target.value !== "") {
 			e.preventDefault();
 			this.setState({
-				text: "",
 				textList: [...this.state.textList, this.state.text]
 			});
+			e.target.value = "";
 		}
 		else return;
 	};
