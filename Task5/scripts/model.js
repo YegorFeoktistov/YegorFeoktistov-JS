@@ -1,7 +1,11 @@
-const Model = {
-	monthShift: 0,
+function Model(currentDate) {
+	this.currentDate = currentDate;
+}
 
-	currentDate: new Date(),
+Model.prototype = {
+	constructor: Model,
+
+	monthShift: 0,
 
 	getCurrentDate: function() {
 		if (this.monthShift !== 0)

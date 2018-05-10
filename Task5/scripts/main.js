@@ -1,3 +1,3 @@
 document.addEventListener('DOMContentLoaded', function () {
-	Controller.initialize();
+	const datePicker = new DatePicker(".date-picker-container", new Date(), ENGLISH);
 });

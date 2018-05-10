@@ -1,46 +1,47 @@
-const View = {
-	daysOfWeek: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+function View(datePickerContainer, localization) {
+	this.datePickerContainer = datePickerContainer;
+	this.localization = localization;
+}
 
-	months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-
-	currentDateInfo: {},
+View.prototype = {
+	constructor: View,
 
 	renderDays: function() {
 		this.daysContainerElement = document.createElement("div");
-		this.daysContainerElement.className = "calendar__days-container";
+		this.daysContainerElement.className = "date-picker__days-container";
 	},
 
 	renderDaysOfWeek: function() {
 		this.daysOfWeekElement = document.createElement("div");
-		this.daysOfWeekElement.className = "calendar__days-of-week";
+		this.daysOfWeekElement.className = "date-picker__days-of-week";
 		this.daysOfWeekElementsArray = [];
 
-		for (let i = 0; i < this.daysOfWeek.length; i++) {
-			const day = this.daysOfWeek[i];
+		for (let i = 0; i < this.localization.DAYS_OF_WEEK.length; i++) {
+			const day = this.localization.DAYS_OF_WEEK[i];
 			this.daysOfWeekElementsArray[i] = document.createElement("span");
-			this.daysOfWeekElementsArray[i].className = "calendar__day-of-week";
+			this.daysOfWeekElementsArray[i].className = "date-picker__day-of-week";
 			this.daysOfWeekElement.appendChild(this.daysOfWeekElementsArray[i]);
 		}
 	},
 
 	renderMonthOfYear: function(navigationLinks) {
 		this.monthsOfYearElement = document.createElement("div");
-		this.monthsOfYearElement.className = "calendar__months";
+		this.monthsOfYearElement.className = "date-picker__months";
 
 		this.monthElement = document.createElement("span");
-		this.monthElement.className = "calendar__month-name";
+		this.monthElement.className = "date-picker__month-name";
 
 		this.yearElement = document.createElement("span");
-		this.yearElement.className = "calendar__year-number";
+		this.yearElement.className = "date-picker__year-number";
 
 		this.monthsOfYearContainerElement = document.createElement("div");
-		this.monthsOfYearContainerElement.className = "calendar__month-of-year-container";
+		this.monthsOfYearContainerElement.className = "date-picker__month-of-year-container";
 
 		this.leftArrow = document.createElement("span");
-		this.leftArrow.className = "calendar__left-arrow";
+		this.leftArrow.className = "date-picker__left-arrow";
 		this.leftArrow.addEventListener("click", navigationLinks.previousMonth);
 		this.rightArrow = document.createElement("span");
-		this.rightArrow.className = "calendar__right-arrow";
+		this.rightArrow.className = "date-picker__right-arrow";
 		this.rightArrow.addEventListener("click", navigationLinks.nextMonth);
 
 		this.monthsOfYearElement.appendChild(this.leftArrow);
@@ -51,52 +52,67 @@ const View = {
 	},
 
 	render: function(navigationLinks) {
-		this.wrapper = document.createElement("div");
-		this.wrapper.className = "calendar-wrapper";
+		this.container = document.querySelector(this.datePickerContainer);
 
-		this.calendar = document.createElement("div");
-		this.calendar.className = "calendar";
-		this.calendar.classList.add("calendar_border-style");
+		this.datePickerInput = document.createElement("input");
+		this.datePickerInput.setAttribute("type", "text");
+		this.datePickerInput.className = "date-picker-input";
 
-		this.calendarContent = document.createElement("div");
-		this.calendarContent.className = "calendar__content";
+
+		this.datePickerWrapper = document.createElement("div");
+		this.datePickerWrapper.className = "date-picker-wrapper";
+
+		this.datePicker = document.createElement("div");
+		this.datePicker.className = "date-picker";
+		this.datePicker.classList.add("date-picker_border-style");
+
+		this.datePickerContent = document.createElement("div");
+		this.datePickerContent.className = "date-picker__content";
 
 		this.renderMonthOfYear(navigationLinks);
 		this.renderDaysOfWeek();
 		this.renderDays();
 
-		this.calendarContent.appendChild(this.monthsOfYearElement);
-		this.calendarContent.appendChild(this.daysOfWeekElement);
-		this.calendarContent.appendChild(this.daysContainerElement);
+		this.datePickerContent.appendChild(this.monthsOfYearElement);
+		this.datePickerContent.appendChild(this.daysOfWeekElement);
+		this.datePickerContent.appendChild(this.daysContainerElement);
 
-		this.calendar.appendChild(this.calendarContent);
+		this.datePicker.appendChild(this.datePickerContent);
+		this.datePickerWrapper.appendChild(this.datePicker);
+		this.container.appendChild(this.datePickerInput);
+		this.container.appendChild(this.datePickerWrapper);
 
-		this.wrapper.appendChild(this.calendar);
-
-		document.body.appendChild(this.wrapper);
+		this.datePickerInput.addEventListener("click", (e) => {
+			if (this.datePicker.classList.contains("date-picker_visible")) {
+				this.hideDatePicker();
+			}
+			else {
+				this.showDatePicker();
+			}
+		})
 	},
 
 	fillData: function(customDate) {
 		for (let i = 0; i < this.daysOfWeekElementsArray.length; i++) {
-			this.daysOfWeekElementsArray[i].textContent = this.daysOfWeek[i];
+			this.daysOfWeekElementsArray[i].textContent = this.localization.DAYS_OF_WEEK[i];
 		}
 
-		this.monthElement.textContent = this.months[customDate.month];
+		this.monthElement.textContent = this.localization.MONTHS[customDate.month];
 		this.yearElement.textContent = customDate.year;
 
 		this.daysContainerElement.innerHTML = "";
 		const firstDayIndex = customDate.firstDayOfWeek === 0 ? 6 : customDate.firstDayOfWeek - 1;
 		for (let i = 0; i < customDate.totalDays + firstDayIndex; i++) {
 			const dayElement = document.createElement("span");
-			dayElement.className = "calendar__day";
+			dayElement.className = "date-picker__day";
 
 			if (i < firstDayIndex) {
-				dayElement.classList.add("calendar__day_hidden");
+				dayElement.classList.add("date-picker__day_hidden");
 				dayElement.textContent = 0;
 			}
 			else {
 				if (customDate.currentDate - 1 === i - firstDayIndex) {
-					dayElement.classList.add("calendar__day_current");
+					dayElement.classList.add("date-picker__day_current");
 					currentDateInfo = {
 						day: i - firstDayIndex + 1,
 						month: customDate.month,
@@ -104,23 +120,22 @@ const View = {
 					};
 				}
 				dayElement.textContent = i - firstDayIndex + 1;
-				dayElement.addEventListener("click", function (e) {
+				dayElement.addEventListener("click", (e) => {
 					const selectedDate = new Date(customDate.year, customDate.month, dayElement.textContent);
-					const currentDate = new Date(currentDateInfo.year, currentDateInfo.month, currentDateInfo.day);
-
-					const timelineMessage = selectedDate < currentDate
-					? "Hello there from the past, " : selectedDate > currentDate
-					? "Hello there from the future, " : "Hello there from now, ";
-
-					const message = "you've juct clicked on the "
-					+  dayElement.textContent + " of " + View.months[customDate.month]
-					+ ", " + customDate.year;
-
-					alert(timelineMessage + message);
+					this.datePickerInput.value = selectedDate.toLocaleDateString();
+					this.hideDatePicker();
 				});
 			}
 
 			this.daysContainerElement.appendChild(dayElement);
 		}
+	},
+
+	showDatePicker: function() {
+		this.datePicker.classList.add("date-picker_visible");
+	},
+
+	hideDatePicker: function() {
+		this.datePicker.classList.remove("date-picker_visible");
 	}
 };
