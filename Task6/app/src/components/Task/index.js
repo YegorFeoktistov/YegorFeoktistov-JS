@@ -15,8 +15,8 @@ export default class Task extends Component {
     return (
       <div className="task">
         <div className="task__content">
-          <div className="task__checkbox-section">
-            <input type="checkbox" className="task__checkbox-input" id={this.state.id} />
+          <div className="task__checkbox-section" onClick={this.onTaskCheck}>
+            <input type="checkbox" className="task__checkbox-input" id={this.state.id} defaultChecked={this.state.checked}/>
             <label htmlFor={this.state.id} className="task__checkmark"></label>
             <label htmlFor={this.state.id} className="task__checkbox-label">{this.state.text}</label>
           </div>
@@ -25,4 +25,14 @@ export default class Task extends Component {
       </div>
     );
   }
+
+  onTaskCheck = () => {
+    if (document.getElementById(this.state.id).checked) {
+      this.setState({
+        checked: true
+      })
+      if(window.confirm(`Delete task "${this.state.text}"?`))
+        this.props.onDelete.bind(null, this.state.index)();
+    }
+  };
 }
