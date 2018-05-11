@@ -1,15 +1,51 @@
 import React from "react";
 import Task from "../Task";
 import "./style.css";
-import getKey from "./../../keyGenerator";
 
 export default function TaskList(props) {
+  const calculateDestination = (e, length) => {
+    const taskCoef = 1 / length;
+    const dropCoef = (e.pageY - e.currentTarget.getBoundingClientRect().top) / e.currentTarget.offsetHeight;
+
+    const destination = Math.ceil(dropCoef / taskCoef) - 1;
+
+    return destination;
+  }
+
+  const onDragStart = (e, index) => {
+		e.dataTransfer.setData('text', index);
+		e.currentTarget.style.cursor = 'grabbing'
+	};
+
+	const allowDrop = e => {
+		e.preventDefault();
+	};
+
+	const onDrop = e => {
+		e.preventDefault();
+		const index = e.dataTransfer.getData('text');
+		const destination = calculateDestination(e, props.taskList.length);
+
+		props.onTaskMove(index, destination);
+	};
+
   return (
-    <ul className="task-list">
+    <ul className="task-list" onDrop={onDrop} onDragOver={allowDrop}>
       {
-        props.textList.map((value, index) => {
+        props.taskList.map((item, index) => {
           return (
-            <li key={getKey()} className="task-list__element"><Task index={index} text={value} onDelete={props.onDelete} /></li>
+            <li key={item.id}
+              className="task-list__element"
+              onDragStart={e => onDragStart(e, index)}
+              draggable>
+              <Task
+                index={item.index}
+                id={item.id}
+                text={item.text}
+                onDelete={props.onDelete}
+                onEditValueSubmit={props.onEditValueSubmit}
+              />
+            </li>
           );
         })
       }

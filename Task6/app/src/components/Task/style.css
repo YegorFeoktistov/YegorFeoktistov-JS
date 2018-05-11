@@ -12,17 +12,26 @@
 
 .task__checkbox-section {
 	display: block;
-	position: relative;
+  position: relative;
+  overflow: hidden;
 }
 
 .task__checkbox-label {
-	padding-left: 35px;
+	margin-left: 35px;
 	cursor: pointer;
 	font-size: 22px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+.task__text-input {
+  margin-left: 35px;
+	box-sizing: border-box;
+	padding: 2px;
+	border: 1px solid rgb(170, 168, 168);;
+	font-size: 16px;
 }
 
 .task__checkmark {
@@ -76,8 +85,22 @@
 	transform: rotate(45deg);
 }
 
+.task__control-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.task__edit-button {
+	padding: 5px 6px;
+	font-size: 16px;
+	line-height: 0.8;
+	color: #999;
+	border: 1px solid transparent;
+	cursor: pointer;
+}
+
 .task__delete-button {
-	align-self: center;
 	padding: 1px 4px;
 	font-size: 30px;
 	line-height: 0.8;
@@ -86,7 +109,7 @@
 	cursor: pointer;
 }
 
-.task__delete-button:hover {
+.task__delete-button:hover, .task__edit-button:hover {
 	background-color: #eee;
 	border-color: #ccc;
 }
