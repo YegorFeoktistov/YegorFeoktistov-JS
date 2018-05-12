@@ -3,7 +3,7 @@ import "./style.css";
 
 const ENTER_KEY_CODE = 13;
 
-export default class Task extends Component {
+export class Task extends Component {
   constructor(props) {
     super(props);
 

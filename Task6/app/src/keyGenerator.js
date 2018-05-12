@@ -1,2 +1,2 @@
 let key = 0;
-export default () => key++
+export const getKey = () => key++

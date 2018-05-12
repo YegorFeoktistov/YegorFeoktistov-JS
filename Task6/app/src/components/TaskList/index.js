@@ -1,8 +1,8 @@
 import React from "react";
-import Task from "../Task";
+import { Task } from "../Task";
 import "./style.css";
 
-export default function TaskList(props) {
+export function TaskList(props) {
   const onDragStart = (e, index) => {
     e.dataTransfer.setData('text', index);
     e.currentTarget.style.cursor = 'grabbing'

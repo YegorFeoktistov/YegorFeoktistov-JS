@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import TaskList from "../TaskList";
+import { TaskList } from "../TaskList";
 import "./style.css";
-import getKey from "./../../keyGenerator";
+import { getKey } from "../../keyGenerator";
 
 const ENTER_KEY_CODE = 13;
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
 
@@ -119,5 +119,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
