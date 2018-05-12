@@ -52,12 +52,9 @@ View.prototype = {
 	},
 
 	render: function(navigationLinks) {
-		this.container = document.querySelector(this.datePickerContainer);
-
 		this.datePickerInput = document.createElement("input");
 		this.datePickerInput.setAttribute("type", "text");
 		this.datePickerInput.className = "date-picker-input";
-
 
 		this.datePickerWrapper = document.createElement("div");
 		this.datePickerWrapper.className = "date-picker-wrapper";
@@ -79,8 +76,8 @@ View.prototype = {
 
 		this.datePicker.appendChild(this.datePickerContent);
 		this.datePickerWrapper.appendChild(this.datePicker);
-		this.container.appendChild(this.datePickerInput);
-		this.container.appendChild(this.datePickerWrapper);
+		this.datePickerContainer.appendChild(this.datePickerInput);
+    this.datePickerContainer.appendChild(this.datePickerWrapper);
 
 		this.datePickerInput.addEventListener("click", (e) => {
 			if (this.datePicker.classList.contains("date-picker_visible")) {

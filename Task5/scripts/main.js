@@ -1,3 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-	const datePicker = new DatePicker(".date-picker-container", new Date(), ENGLISH);
+  const container = document.querySelector(".date-picker-container");
+
+  const datePicker = new DatePicker();
+  datePicker.render(container, new Date(), ENGLISH);
 });

@@ -1,8 +1,4 @@
-function DatePicker(datePickerContainer, currentDate, localization = ENGLISH) {
-	this.viewComponent = new View(datePickerContainer, localization);
-	this.modelComponent = new Model(currentDate);
-
-	this.initialize(datePickerContainer, currentDate);
+function DatePicker() {
 }
 
 DatePicker.prototype = {
@@ -18,7 +14,10 @@ DatePicker.prototype = {
 		this.updateView();
 	},
 
-	initialize: function(datePickerContainer, currentDate) {
+	render: function(datePickerContainer, currentDate, localization = ENGLISH) {
+    this.viewComponent = new View(datePickerContainer, localization);
+    this.modelComponent = new Model(currentDate);
+
 		this.viewComponent.render({
 			previousMonth: this.getPreviousMonth.bind(this),
 			nextMonth: this.getNextMonth.bind(this)
