@@ -18,6 +18,10 @@ export class App extends Component {
     };
   }
 
+  componentDidMount() {
+    document.querySelector(".todo-list__text-input").focus();
+  }
+
   onInputChange = (e) => {
     this.setState({ inputText: e.target.value });
   }
