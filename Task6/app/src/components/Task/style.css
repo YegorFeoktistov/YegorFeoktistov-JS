@@ -32,7 +32,6 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
   user-select: none;
-  word-break: break-all;
 }
 
 .task__text-input {
@@ -55,7 +54,6 @@
 
 .task__checkbox-input {
 	background-color: #fff;
-	/* position: absolute; */
 	display: none;
 	cursor: pointer;
 }
