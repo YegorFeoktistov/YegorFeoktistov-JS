@@ -9,9 +9,12 @@ export class App extends Component {
   constructor(props) {
     super(props);
 
+    const parsedArray = JSON.parse(localStorage.getItem("taskList"));
+    const finalArray = parsedArray === null ? [] : parsedArray;
+
     this.state = {
       inputText: "",
-      taskList: []
+      taskList: finalArray
     };
   }
 
@@ -29,7 +32,8 @@ export class App extends Component {
 
       const task = {
         id: getKey(),
-        text: this.state.inputText
+        text: this.state.inputText,
+        checked: false
       };
 
       this.setState({
@@ -87,6 +91,21 @@ export class App extends Component {
     });
   };
 
+  onTaskCheckboxChange = (id) => {
+    const newArray = [...this.state.taskList];
+
+    newArray.forEach(item => {
+      if (item.id === id) {
+        item.checked = !item.checked;
+        return;
+      }
+    });
+
+    this.setState({
+      taskList: newArray
+    });
+  }
+
   moveTask = (index, destination) => {
 		const newArray = [...this.state.taskList];
 		newArray.splice(destination, 0, newArray.splice(index, 1)[0]);
@@ -96,6 +115,8 @@ export class App extends Component {
 	}
 
   render() {
+    localStorage.setItem("taskList", JSON.stringify(this.state.taskList));
+
     return (
       <div className="todo-list todo-list_shadow">
         <div className="todo-list__content">
@@ -112,6 +133,7 @@ export class App extends Component {
               onTaskDelete={this.onTaskDelete}
               onEditValueSubmit={this.onEditValueSubmit}
               onTaskMove={this.moveTask}
+              onTaskCheckboxChange={this.onTaskCheckboxChange}
             />
           </div>
         </div>

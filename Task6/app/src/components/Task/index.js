@@ -9,7 +9,6 @@ export class Task extends Component {
 
     this.state = {
       text: props.text,
-      checked: false,
       edit: false
     };
   }
@@ -39,16 +38,14 @@ export class Task extends Component {
   };
 
   onTaskCheck = () => {
-    if (!this.state.checked) { // this handler is called before onChange-event handler on checkbox , and "checked" value has not been changed yet
+    if (!this.props.checked) { // this handler is called before onChange-event handler on checkbox , and "checked" value has not been changed yet
       if(window.confirm(`You've completed task "${this.state.text}". Delete task?`))
         this.props.onTaskDelete(this.props.id);
     }
   };
 
   onCheckboxChange = () => {
-    this.setState({
-      checked: !this.state.checked
-    })
+    this.props.onTaskCheckboxChange(this.props.id);
   };
 
   onEditClick = () => {
@@ -92,7 +89,7 @@ export class Task extends Component {
               className="task__checkbox-input"
               id={htmlId}
               onChange={this.onCheckboxChange}
-              defaultChecked={this.state.checked}
+              defaultChecked={this.props.checked}
             />
             <label
               htmlFor={htmlId}

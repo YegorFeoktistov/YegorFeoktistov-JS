@@ -41,8 +41,10 @@ export function TaskList(props) {
               <Task
                 id={item.id}
                 text={item.text}
+                checked={item.checked}
                 onTaskDelete={props.onTaskDelete}
                 onEditValueSubmit={props.onEditValueSubmit}
+                onTaskCheckboxChange={props.onTaskCheckboxChange}
               />
             </li>
           );
