@@ -3,6 +3,8 @@ import TaskList from "../TaskList";
 import "./style.css";
 import getKey from "./../../keyGenerator";
 
+const ENTER_KEY_CODE = 13;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -13,12 +15,12 @@ class App extends Component {
     };
   }
 
-  onChange = (e) => {
+  onInputChange = (e) => {
     this.setState({ inputText: e.target.value });
   }
 
-  onSubmit = (e) => {
-    if ((e.which === 13 || e.keyCode === 13) && e.target.value !== "") {
+  onInputSubmit = (e) => {
+    if ((e.which === ENTER_KEY_CODE || e.keyCode === ENTER_KEY_CODE) && e.target.value !== "") {
       e.preventDefault();
 
       if (this.checkForExistingValue(e.target.value)) {
@@ -27,8 +29,7 @@ class App extends Component {
 
       const task = {
         id: getKey(),
-        text: this.state.inputText,
-        index: this.state.taskList.length
+        text: this.state.inputText
       };
 
       this.setState({
@@ -40,16 +41,22 @@ class App extends Component {
     else return;
   };
 
-  onEditValueSubmit = (value, index) => {
+  onEditValueSubmit = (value, id) => {
     if (this.checkForExistingValue(value)) {
       return false;
     }
     else {
       const newArray = [...this.state.taskList];
-      newArray[index].text = value;
+
+      newArray.forEach(item => {
+        if (item.id === id) {
+          item.text = value;
+          return;
+        }
+      });
 
       this.setState({
-        taskList: [...newArray]
+        taskList: newArray
       });
 
       return true;
@@ -66,18 +73,17 @@ class App extends Component {
       return false;
   };
 
-  onDelete = (index) => {
+  onTaskDelete = (id) => {
     const newArray = [...this.state.taskList];
-    newArray.splice(index, 1);
-    this.updateTasksIndexes(newArray);
-    this.setState({
-      taskList: [...newArray]
-    });
-  };
 
-  updateTasksIndexes = (taskList) => {
-    taskList.forEach((item, i) => {
-      item.index = i;
+    const deletedElement = newArray.find(item => {
+      return item.id === id
+    });
+
+    newArray.splice(newArray.indexOf(deletedElement), 1);
+
+    this.setState({
+      taskList: newArray
     });
   };
 
@@ -85,7 +91,7 @@ class App extends Component {
 		const newArray = [...this.state.taskList];
 		newArray.splice(destination, 0, newArray.splice(index, 1)[0]);
 		this.setState({
-      taskList: [...newArray]
+      taskList: newArray
     });
 	}
 
@@ -97,13 +103,13 @@ class App extends Component {
           <input
             type="text"
             className="todo-list__text-input"
-            onChange={this.onChange}
-            onKeyPress={this.onSubmit}
+            onChange={this.onInputChange}
+            onKeyPress={this.onInputSubmit}
           />
           <div className="todo-list__task-list">
             <TaskList
               taskList={this.state.taskList}
-              onDelete={this.onDelete}
+              onTaskDelete={this.onTaskDelete}
               onEditValueSubmit={this.onEditValueSubmit}
               onTaskMove={this.moveTask}
             />

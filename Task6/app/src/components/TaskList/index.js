@@ -3,6 +3,23 @@ import Task from "../Task";
 import "./style.css";
 
 export default function TaskList(props) {
+  const onDragStart = (e, index) => {
+    e.dataTransfer.setData('text', index);
+    e.currentTarget.style.cursor = 'grabbing'
+  };
+
+  const allowDrop = e => {
+    e.preventDefault();
+  };
+
+  const onDrop = e => {
+    e.preventDefault();
+    const index = e.dataTransfer.getData('text');
+    const destination = calculateDestination(e, props.taskList.length);
+
+    props.onTaskMove(index, destination);
+  };
+
   const calculateDestination = (e, length) => {
     const taskCoef = 1 / length;
     const dropCoef = (e.pageY - e.currentTarget.getBoundingClientRect().top) / e.currentTarget.offsetHeight;
@@ -11,23 +28,6 @@ export default function TaskList(props) {
 
     return destination;
   }
-
-  const onDragStart = (e, index) => {
-		e.dataTransfer.setData('text', index);
-		e.currentTarget.style.cursor = 'grabbing'
-	};
-
-	const allowDrop = e => {
-		e.preventDefault();
-	};
-
-	const onDrop = e => {
-		e.preventDefault();
-		const index = e.dataTransfer.getData('text');
-		const destination = calculateDestination(e, props.taskList.length);
-
-		props.onTaskMove(index, destination);
-	};
 
   return (
     <ul className="task-list" onDrop={onDrop} onDragOver={allowDrop}>
@@ -39,10 +39,9 @@ export default function TaskList(props) {
               onDragStart={e => onDragStart(e, index)}
               draggable>
               <Task
-                index={item.index}
                 id={item.id}
                 text={item.text}
-                onDelete={props.onDelete}
+                onTaskDelete={props.onTaskDelete}
                 onEditValueSubmit={props.onEditValueSubmit}
               />
             </li>

@@ -1,21 +1,22 @@
-/*
-  когда я передавал в onDelete index из state, ничего не работало, т.к. index почему то не менялся, хотя я в app делал updateIndexes и менял передаваемый state
-*/
-
 import React, { Component } from "react";
 import "./style.css";
+
+const ENTER_KEY_CODE = 13;
 
 export default class Task extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      index: props.index,
-      id: `task-checkbox-${props.id}`,
       text: props.text,
       checked: false,
       edit: false
     };
+  }
+
+  componentDidUpdate() {
+    if (this.state.edit)
+      document.querySelector(".task__text-input").focus();
   }
 
   onValueChange = (e) => {
@@ -23,10 +24,10 @@ export default class Task extends Component {
   };
 
   onValueSubmit = (e) => {
-    if ((e.which === 13 || e.keyCode === 13) && e.target.value !== "") {
+    if ((e.which === ENTER_KEY_CODE || e.keyCode === ENTER_KEY_CODE) && e.target.value !== "") {
       e.preventDefault();
 
-      if (this.props.onEditValueSubmit.bind(null, this.state.text, this.props.index)()) {
+      if (this.props.onEditValueSubmit(this.state.text, this.props.id)) {
         e.target.value = "";
 
         this.setState({
@@ -38,9 +39,9 @@ export default class Task extends Component {
   };
 
   onTaskCheck = () => {
-    if (!this.state.checked) { // this handler is called before onChange, and "checked" value has not been changed yet
+    if (!this.state.checked) { // this handler is called before onChange-event handler on checkbox , and "checked" value has not been changed yet
       if(window.confirm(`You've completed task "${this.state.text}". Delete task?`))
-        this.props.onDelete.bind(null, this.props.index)();
+        this.props.onTaskDelete(this.props.id);
     }
   };
 
@@ -59,6 +60,8 @@ export default class Task extends Component {
   };
 
   render() {
+    const htmlId = `task-checkbox-${this.props.id}`;
+
     let taskValue;
 
     if (this.state.edit) {
@@ -72,9 +75,10 @@ export default class Task extends Component {
     }
     else {
       taskValue = <label
-        htmlFor={this.state.id}
+        htmlFor={htmlId}
         className="task__checkbox-label"
-        onClick={this.onTaskCheck}>
+        onClick={this.onTaskCheck}
+      >
         {this.state.text}
       </label>;
     }
@@ -86,25 +90,30 @@ export default class Task extends Component {
             <input
               type="checkbox"
               className="task__checkbox-input"
-              id={this.state.id}
+              id={htmlId}
               onChange={this.onCheckboxChange}
               defaultChecked={this.state.checked}
             />
             <label
-              htmlFor={this.state.id}
+              htmlFor={htmlId}
               className="task__checkmark"
               onClick={this.onTaskCheck}>
             </label>
             {taskValue}
           </div>
           <div className="task__control-section">
-            <div className="task__edit-button" onClick={this.onEditClick}>
+            <div
+              className="task__edit-button"
+              htmlFor={htmlId}
+              onClick={this.onEditClick}
+            >
               <i className="fas fa-pencil-alt"></i>
             </div>
             <div
               htmlFor="task-checkbox"
               className="task__delete-button"
-              onClick={this.props.onDelete.bind(null, this.props.index)}>
+              onClick={() => this.props.onTaskDelete(this.props.id)}
+            >
               &times;
             </div>
           </div>
