@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { TaskList } from "../TaskList";
 import "./style.css";
-import { getKey } from "../../keyGenerator";
+import { KeyGenerator } from "../../services/keyGeneratorService";
+import { Storage } from "../../services/localStorageService";
 
 const ENTER_KEY_CODE = 13;
 
@@ -9,7 +10,7 @@ export class App extends Component {
   constructor(props) {
     super(props);
 
-    const parsedArray = JSON.parse(localStorage.getItem("taskList"));
+    const parsedArray = Storage.load("taskList");
     const finalArray = parsedArray === null ? [] : parsedArray;
 
     this.state = {
@@ -35,7 +36,7 @@ export class App extends Component {
       }
 
       const task = {
-        id: getKey(),
+        id: KeyGenerator.getKey(),
         text: this.state.inputText,
         checked: false
       };
@@ -119,7 +120,11 @@ export class App extends Component {
 	}
 
   render() {
-    localStorage.setItem("taskList", JSON.stringify(this.state.taskList));
+    Storage.save("taskList", this.state.taskList);
+
+    if (this.state.taskList.length === 0) {
+      KeyGenerator.resetKey();
+    }
 
     return (
       <div className="todo-list todo-list_shadow">
