@@ -3,7 +3,7 @@ import { ZoneShape } from "./zoneShape";
 
 /*
 Надо обмозговать:
-	-Все еще пересмотреть способ сжатия единичной зоны, мб что-то можно сделать лучше
+  -Все еще пересмотреть способ сжатия единичной зоны, мб что-то можно сделать лучше
 */
 
 /**
@@ -26,9 +26,9 @@ export class Zone {
 
   //#region Constructor
 
-	/** @constructor
-	 * @this {Zone}
-	 * @description Constructor of the Zone class */
+  /** @constructor
+   * @this {Zone}
+   * @description Constructor of the Zone class */
   public constructor() {
     this._isFirstStage = true;
     this._isNewStage = true;
@@ -48,10 +48,10 @@ export class Zone {
 
   //#region Accessor functions declaration
 
-	/**
-	 * Accessor
-	 * @description Is that a first stage of shrinking?
-	 */
+  /**
+   * Accessor
+   * @description Is that a first stage of shrinking?
+   */
   public get isFirstStage(): boolean {
     return this._isFirstStage;
   }
@@ -59,10 +59,10 @@ export class Zone {
     this._isFirstStage = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Is that a new stage of shrinking
-	 */
+  /**
+   * Accessor
+   * @description Is that a new stage of shrinking
+   */
   public get isNewStage(): boolean {
     return this._isNewStage;
   }
@@ -70,11 +70,11 @@ export class Zone {
     this._isNewStage = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Parameters of the final zone shape:
-	 * upper left point, lower right point, side
-	 */
+  /**
+   * Accessor
+   * @description Parameters of the final zone shape:
+   * upper left point, lower right point, side
+   */
   public get finalZoneShape(): ZoneShape {
     return this._finalZoneShape;
   }
@@ -82,11 +82,11 @@ export class Zone {
     this._finalZoneShape = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Parameters of the current zone shape:
-	 * upper left point, lower right point, side
-	 */
+  /**
+   * Accessor
+   * @description Parameters of the current zone shape:
+   * upper left point, lower right point, side
+   */
   public get currentZoneShape(): ZoneShape {
     return this._currentZoneShape;
   }
@@ -94,10 +94,10 @@ export class Zone {
     this._currentZoneShape = value;
   }
 
-	/**
-	 * Accessor
-	 * @description The ratio of the distances between the zones vertically
-	 */
+  /**
+   * Accessor
+   * @description The ratio of the distances between the zones vertically
+   */
   public get verticalDistancesRatio(): number {
     return this._verticalDistancesRatio;
   }
@@ -105,10 +105,10 @@ export class Zone {
     this._verticalDistancesRatio = value;
   }
 
-	/**
-	 * Accessor
-	 * @description The ratio of the distances between the zones horizontally
-	 */
+  /**
+   * Accessor
+   * @description The ratio of the distances between the zones horizontally
+   */
   public get horizontalDistancesRatio(): number {
     return this._horizontalDistancesRatio;
   }
@@ -116,10 +116,10 @@ export class Zone {
     this._horizontalDistancesRatio = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Value of the top distance between zones
-	 */
+  /**
+   * Accessor
+   * @description Value of the top distance between zones
+   */
   public get topDistance(): number {
     return this._topDistance;
   }
@@ -127,10 +127,10 @@ export class Zone {
     this._topDistance = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Value of the bottom distance between zones
-	 */
+  /**
+   * Accessor
+   * @description Value of the bottom distance between zones
+   */
   public get bottomDistance(): number {
     return this._bottomDistance;
   }
@@ -138,10 +138,10 @@ export class Zone {
     this._bottomDistance = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Value of the left distance between zones
-	 */
+  /**
+   * Accessor
+   * @description Value of the left distance between zones
+   */
   public get leftDistance(): number {
     return this._leftDistance;
   }
@@ -149,10 +149,10 @@ export class Zone {
     this._leftDistance = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Value of the right distance between zones
-	 */
+  /**
+   * Accessor
+   * @description Value of the right distance between zones
+   */
   public get rightDistance(): number {
     return this._rightDistance;
   }
@@ -160,10 +160,10 @@ export class Zone {
     this._rightDistance = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Value of the vertical shrinking steps
-	 */
+  /**
+   * Accessor
+   * @description Value of the vertical shrinking steps
+   */
   public get verticalStepCount(): number {
     return this._verticalStepCount;
   }
@@ -171,10 +171,10 @@ export class Zone {
     this._verticalStepCount = value;
   }
 
-	/**
-	 * Accessor
-	 * @description Value of the horizontal shrinking steps
-	 */
+  /**
+   * Accessor
+   * @description Value of the horizontal shrinking steps
+   */
   public get horizontalStepCount(): number {
     return this._horizontalStepCount;
   }
@@ -186,16 +186,16 @@ export class Zone {
 
   //#region Class functions
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
-	 * @param {number} lastZoneSide Value of the last zone side
-	 * @param {*} fillingObject Object to fill an area outside the zone
-	 * @param {*} borderFillingObject Object to fill a border of the zone
-	 * @param {*} cleanerObject Object to clean the border of the zone
-	 * @description Main function of the zone algorithm
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {number} shrinkCoefficient Coefficient of zone shrinking
+   * @param {number} lastZoneSide Value of the last zone side
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {*} borderFillingObject Object to fill a border of the zone
+   * @param {*} cleanerObject Object to clean the border of the zone
+   * @description Main function of the zone algorithm
+   */
   public shrink(location: Array<any>, shrinkCoefficient: number, lastZoneSide: number, fillingObject: any, borderFillingObject: any, cleanerObject: any): void {
     // Verification of the first stage
     if (this._isFirstStage) {
@@ -213,11 +213,11 @@ export class Zone {
     this.continueCurrentStage(location, fillingObject, lastZoneSide);
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @description Sets game location shape as current zone shape
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @description Sets game location shape as current zone shape
+   */
   private initializeFirstStage(location: Array<any>): void {
     this._currentZoneShape.upperLeftPoint.x = 0;
     this._currentZoneShape.upperLeftPoint.y = 0;
@@ -232,15 +232,15 @@ export class Zone {
     this._isNewStage = true;
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
-	 * @param {number} lastZoneSide Value of the last zone side
-	 * @param {*} borderFillingObject Object to fill a border of the zone
-	 * @param {*} cleanerObject Object to clean the border of the zone
-	 * @description Finds new final zone shape
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {number} shrinkCoefficient Coefficient of zone shrinking
+   * @param {number} lastZoneSide Value of the last zone side
+   * @param {*} borderFillingObject Object to fill a border of the zone
+   * @param {*} cleanerObject Object to clean the border of the zone
+   * @description Finds new final zone shape
+   */
   private beginNewStage(location: Array<any>, shrinkCoefficient: number, lastZoneSide: number, borderFillingObject: any, cleanerObject: any): void {
     this.clearBorder(location, cleanerObject);
     this.calculateFinalZoneShape(shrinkCoefficient, lastZoneSide);
@@ -255,12 +255,12 @@ export class Zone {
     this._isNewStage = false;
   }
 
-	/**
-	 * @function
-	 * @param {number} shrinkCoefficient Coefficient of zone shrinking
-	 * @param {number} lastZoneSide Value of the last zone side
-	 * @description Calculate parameters of the final zone
-	 */
+  /**
+   * @function
+   * @param {number} shrinkCoefficient Coefficient of zone shrinking
+   * @param {number} lastZoneSide Value of the last zone side
+   * @description Calculate parameters of the final zone
+   */
   private calculateFinalZoneShape(shrinkCoefficient: number, lastZoneSide: number): void {
     let finalZoneSide = this._currentZoneShape.side / shrinkCoefficient;
     const finalZoneSideRounded = Math.round(finalZoneSide);
@@ -285,10 +285,10 @@ export class Zone {
     this._finalZoneShape.calculateLowerRightPoint();
   }
 
-	/**
-	 * @function
-	 * @description Calculates distances between zones
-	 */
+  /**
+   * @function
+   * @description Calculates distances between zones
+   */
   private calculateDistances(): void {
     this._topDistance = Math.abs(this._finalZoneShape.upperLeftPoint.y - this._currentZoneShape.upperLeftPoint.y);
     this._bottomDistance = Math.abs(this._currentZoneShape.lowerRightPoint.y - this._finalZoneShape.lowerRightPoint.y);
@@ -296,10 +296,10 @@ export class Zone {
     this._rightDistance = Math.abs(this._currentZoneShape.lowerRightPoint.x - this._finalZoneShape.lowerRightPoint.x);
   }
 
-	/**
-	 * @function
-	 * @description Calculates the ratio between the vertical distances of zones
-	 */
+  /**
+   * @function
+   * @description Calculates the ratio between the vertical distances of zones
+   */
   private calculateVerticalDistancesRatio(): void {
     if (this._topDistance <= 0 || this._bottomDistance <= 0) {
       this._verticalDistancesRatio = 0;
@@ -311,10 +311,10 @@ export class Zone {
     }
   }
 
-	/**
-	 * @function
-	 * @description Calculates the ratio between the horizontal distances of zones
-	 */
+  /**
+   * @function
+   * @description Calculates the ratio between the horizontal distances of zones
+   */
   private calculateHorizontalDistancesRatio(): void {
     if (this._leftDistance <= 0 || this._rightDistance <= 0) {
       this._horizontalDistancesRatio = 0;
@@ -326,13 +326,13 @@ export class Zone {
     }
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {*} fillingObject Object to fill an area outside the zone
-	 * @param {number} lastZoneSide Value of the last zone side
-	 * @description Fill an area outside the current zone
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} lastZoneSide Value of the last zone side
+   * @description Fill an area outside the current zone
+   */
   private continueCurrentStage(location: Array<any>, fillingObject: any, lastZoneSide: number): void {
     const shrinkSteps = {
       topStep: 0,
@@ -362,13 +362,13 @@ export class Zone {
     this.checkIsFinalZoneReached();
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {*} fillingObject Object to fill an area outside the zone
-	 * @param {object} shrinkSteps Values of shrinks for each side
-	 * @description Shrinks location vertically
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {object} shrinkSteps Values of shrinks for each side
+   * @description Shrinks location vertically
+   */
   private shrinkVertically(location: Array<any>, fillingObject: any, shrinkSteps: any): void {
     const isTopSideReached = (this._currentZoneShape.upperLeftPoint.y === this._finalZoneShape.upperLeftPoint.y);
     const isBottomSideReached = (this._currentZoneShape.lowerRightPoint.y === this._finalZoneShape.lowerRightPoint.y);
@@ -441,13 +441,13 @@ export class Zone {
     }
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {*} fillingObject Object to fill an area outside the zone
-	 * @param {object} shrinkSteps Values of shrinks for each side
-	 * @description Shrinks location horizontally
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {object} shrinkSteps Values of shrinks for each side
+   * @description Shrinks location horizontally
+   */
   private shrinkHorizontally(location: Array<any>, fillingObject: any, shrinkSteps: any): void {
     const isLeftSideReached = (this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x);
     const isRightSideReached = (this._currentZoneShape.lowerRightPoint.x === this._finalZoneShape.lowerRightPoint.x);
@@ -520,24 +520,24 @@ export class Zone {
     }
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {*} fillingObject Object to fill an area outside the zone
-	 * @param {number} lastZoneSide Value of the last zone side
-	 * @description Shrinks zone when its size equals one
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} lastZoneSide Value of the last zone side
+   * @description Shrinks zone when its size equals one
+   */
   private shrinkSingleSizeZone(location: Array<any>, fillingObject: any, lastZoneSide: number): void {
     if (this._currentZoneShape.side === 1 && lastZoneSide < 1) {
       location[this.currentZoneShape.upperLeftPoint.x][this._currentZoneShape.upperLeftPoint.y] = fillingObject;
     }
   }
 
-	/**
-	 * @function
-	 * @param {object} shrinkSteps Values of shrinks for each side
-	 * @description Calculate parameters of the current zone
-	 */
+  /**
+   * @function
+   * @param {object} shrinkSteps Values of shrinks for each side
+   * @description Calculate parameters of the current zone
+   */
   private calculateCurrentZoneShape(shrinkSteps: any): void {
     this._currentZoneShape.upperLeftPoint.x += shrinkSteps.leftStep;
     this._currentZoneShape.upperLeftPoint.y += shrinkSteps.topStep;
@@ -546,10 +546,10 @@ export class Zone {
     this._currentZoneShape.calculateSide();
   }
 
-	/**
-	 * @function
-	 * @description Check if the current zone reaches the final zone
-	 */
+  /**
+   * @function
+   * @description Check if the current zone reaches the final zone
+   */
   private checkIsFinalZoneReached(): void {
     if (
       this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x
@@ -562,12 +562,12 @@ export class Zone {
     }
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {*} borderFillingObject Object to fill a border of the zone
-	 * @description Fills border cells of the final zone with given object
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} borderFillingObject Object to fill a border of the zone
+   * @description Fills border cells of the final zone with given object
+   */
   private drawZoneBorderline(location: Array<any>, borderFillingObject: any): void {
     for (let i = this._finalZoneShape.upperLeftPoint.x; i <= this._finalZoneShape.lowerRightPoint.x; i++) {
       location[i][this._finalZoneShape.upperLeftPoint.y] = borderFillingObject;
@@ -579,12 +579,12 @@ export class Zone {
     }
   }
 
-	/**
-	 * @function
-	 * @param {array} location Game location for processing
-	 * @param {*} cleanerObject Object to clean the border of the zone
-	 * @description Removes the drawn border of the final zone
-	 */
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} cleanerObject Object to clean the border of the zone
+   * @description Removes the drawn border of the final zone
+   */
   private clearBorder(location: Array<any>, cleanerObject: any): void {
     for (let i = this._finalZoneShape.upperLeftPoint.x; i <= this._finalZoneShape.lowerRightPoint.x; i++) {
       location[i][this._finalZoneShape.upperLeftPoint.y] = cleanerObject;
