@@ -198,13 +198,13 @@ export class Zone {
 	 */
   public shrink(location: Array<any>, shrinkCoefficient: number, lastZoneSide: number, fillingObject: any, borderFillingObject: any, cleanerObject: any): void {
     // Verification of the first stage
-    if (this.isFirstStage) {
+    if (this._isFirstStage) {
       this.initializeFirstStage(location);
     }
 
     // Verification of the beginning of the new stage
 
-    if (this.isNewStage) {
+    if (this._isNewStage) {
       this.beginNewStage(location, shrinkCoefficient, lastZoneSide, borderFillingObject, cleanerObject);
     }
 
@@ -219,17 +219,17 @@ export class Zone {
 	 * @description Sets game location shape as current zone shape
 	 */
   private initializeFirstStage(location: Array<any>): void {
-    this.currentZoneShape.upperLeftPoint.x = 0;
-    this.currentZoneShape.upperLeftPoint.y = 0;
-    this.currentZoneShape.lowerRightPoint.x = location.length - 1;
-    this.currentZoneShape.lowerRightPoint.y = location[0].length - 1;
+    this._currentZoneShape.upperLeftPoint.x = 0;
+    this._currentZoneShape.upperLeftPoint.y = 0;
+    this._currentZoneShape.lowerRightPoint.x = location.length - 1;
+    this._currentZoneShape.lowerRightPoint.y = location[0].length - 1;
 
-    const horizontalSide = this.currentZoneShape.getHorizontalSide();
-    const verticalSide = this.currentZoneShape.getVerticalSide();
-    this.currentZoneShape.side = Math.min(horizontalSide, verticalSide);
+    const horizontalSide = this._currentZoneShape.getHorizontalSide();
+    const verticalSide = this._currentZoneShape.getVerticalSide();
+    this._currentZoneShape.side = Math.min(horizontalSide, verticalSide);
 
-    this.isFirstStage = false;
-    this.isNewStage = true;
+    this._isFirstStage = false;
+    this._isNewStage = true;
   }
 
 	/**
@@ -249,10 +249,10 @@ export class Zone {
     this.calculateHorizontalDistancesRatio();
     this.drawZoneBorderline(location, borderFillingObject);
 
-    this.verticalStepCount = 0;
-    this.horizontalStepCount = 0;
+    this._verticalStepCount = 0;
+    this._horizontalStepCount = 0;
 
-    this.isNewStage = false;
+    this._isNewStage = false;
   }
 
 	/**
@@ -262,7 +262,7 @@ export class Zone {
 	 * @description Calculate parameters of the final zone
 	 */
   private calculateFinalZoneShape(shrinkCoefficient: number, lastZoneSide: number): void {
-    let finalZoneSide = this.currentZoneShape.side / shrinkCoefficient;
+    let finalZoneSide = this._currentZoneShape.side / shrinkCoefficient;
     const finalZoneSideRounded = Math.round(finalZoneSide);
     finalZoneSide = finalZoneSideRounded <= lastZoneSide ? lastZoneSide : finalZoneSideRounded;
 
@@ -271,18 +271,18 @@ export class Zone {
     // ? lastZoneSide : finalZoneSideRounded % 2 !== 0
     // ? finalZoneSideRounded : finalZoneSideRounded - 1;
 
-    const minBoundX = this.currentZoneShape.upperLeftPoint.x;
-    const maxBoundX = this.currentZoneShape.lowerRightPoint.x - finalZoneSide + 2;
-    const minBoundY = this.currentZoneShape.upperLeftPoint.y;
-    const maxBoundY = this.currentZoneShape.lowerRightPoint.y - finalZoneSide + 2;
+    const minBoundX = this._currentZoneShape.upperLeftPoint.x;
+    const maxBoundX = this._currentZoneShape.lowerRightPoint.x - finalZoneSide + 2;
+    const minBoundY = this._currentZoneShape.upperLeftPoint.y;
+    const maxBoundY = this._currentZoneShape.lowerRightPoint.y - finalZoneSide + 2;
 
     const finalZoneX1 = Math.floor(Math.random() * (maxBoundX - minBoundX) + minBoundX);
     const finalZoneY1 = Math.floor(Math.random() * (maxBoundY - minBoundY) + minBoundY);
 
-    this.finalZoneShape.upperLeftPoint.x = finalZoneX1;
-    this.finalZoneShape.upperLeftPoint.y = finalZoneY1;
-    this.finalZoneShape.side = finalZoneSide;
-    this.finalZoneShape.calculateLowerRightPoint();
+    this._finalZoneShape.upperLeftPoint.x = finalZoneX1;
+    this._finalZoneShape.upperLeftPoint.y = finalZoneY1;
+    this._finalZoneShape.side = finalZoneSide;
+    this._finalZoneShape.calculateLowerRightPoint();
   }
 
 	/**
@@ -290,10 +290,10 @@ export class Zone {
 	 * @description Calculates distances between zones
 	 */
   private calculateDistances(): void {
-    this.topDistance = Math.abs(this.finalZoneShape.upperLeftPoint.y - this.currentZoneShape.upperLeftPoint.y);
-    this.bottomDistance = Math.abs(this.currentZoneShape.lowerRightPoint.y - this.finalZoneShape.lowerRightPoint.y);
-    this.leftDistance = Math.abs(this.finalZoneShape.upperLeftPoint.x - this.currentZoneShape.upperLeftPoint.x);
-    this.rightDistance = Math.abs(this.currentZoneShape.lowerRightPoint.x - this.finalZoneShape.lowerRightPoint.x);
+    this._topDistance = Math.abs(this._finalZoneShape.upperLeftPoint.y - this._currentZoneShape.upperLeftPoint.y);
+    this._bottomDistance = Math.abs(this._currentZoneShape.lowerRightPoint.y - this._finalZoneShape.lowerRightPoint.y);
+    this._leftDistance = Math.abs(this._finalZoneShape.upperLeftPoint.x - this._currentZoneShape.upperLeftPoint.x);
+    this._rightDistance = Math.abs(this._currentZoneShape.lowerRightPoint.x - this._finalZoneShape.lowerRightPoint.x);
   }
 
 	/**
@@ -301,13 +301,13 @@ export class Zone {
 	 * @description Calculates the ratio between the vertical distances of zones
 	 */
   private calculateVerticalDistancesRatio(): void {
-    if (this.topDistance <= 0 || this.bottomDistance <= 0) {
-      this.verticalDistancesRatio = 0;
+    if (this._topDistance <= 0 || this._bottomDistance <= 0) {
+      this._verticalDistancesRatio = 0;
     }
     else {
-      const max = Math.max(this.topDistance, this.bottomDistance);
-      const min = Math.min(this.topDistance, this.bottomDistance);
-      this.verticalDistancesRatio = Math.floor(max / min);
+      const max = Math.max(this._topDistance, this._bottomDistance);
+      const min = Math.min(this._topDistance, this._bottomDistance);
+      this._verticalDistancesRatio = Math.floor(max / min);
     }
   }
 
@@ -316,13 +316,13 @@ export class Zone {
 	 * @description Calculates the ratio between the horizontal distances of zones
 	 */
   private calculateHorizontalDistancesRatio(): void {
-    if (this.leftDistance <= 0 || this.rightDistance <= 0) {
-      this.horizontalDistancesRatio = 0;
+    if (this._leftDistance <= 0 || this._rightDistance <= 0) {
+      this._horizontalDistancesRatio = 0;
     }
     else {
-      const max = Math.max(this.leftDistance, this.rightDistance);
-      const min = Math.min(this.leftDistance, this.rightDistance);
-      this.horizontalDistancesRatio = Math.floor(max / min);
+      const max = Math.max(this._leftDistance, this._rightDistance);
+      const min = Math.min(this._leftDistance, this._rightDistance);
+      this._horizontalDistancesRatio = Math.floor(max / min);
     }
   }
 
@@ -370,19 +370,19 @@ export class Zone {
 	 * @description Shrinks location vertically
 	 */
   private shrinkVertically(location: Array<any>, fillingObject: any, shrinkSteps: any): void {
-    const isTopSideReached = (this.currentZoneShape.upperLeftPoint.y === this.finalZoneShape.upperLeftPoint.y);
-    const isBottomSideReached = (this.currentZoneShape.lowerRightPoint.y === this.finalZoneShape.lowerRightPoint.y);
-    const isCommonStep = (this.verticalStepCount === this.verticalDistancesRatio);
+    const isTopSideReached = (this._currentZoneShape.upperLeftPoint.y === this._finalZoneShape.upperLeftPoint.y);
+    const isBottomSideReached = (this._currentZoneShape.lowerRightPoint.y === this._finalZoneShape.lowerRightPoint.y);
+    const isCommonStep = (this._verticalStepCount === this._verticalDistancesRatio);
 
-    const upperX = this.currentZoneShape.upperLeftPoint.x;
-    const upperY = this.currentZoneShape.upperLeftPoint.y;
-    const lowerX = this.currentZoneShape.lowerRightPoint.x;
-    const lowerY = this.currentZoneShape.lowerRightPoint.y;
+    const upperX = this._currentZoneShape.upperLeftPoint.x;
+    const upperY = this._currentZoneShape.upperLeftPoint.y;
+    const lowerX = this._currentZoneShape.lowerRightPoint.x;
+    const lowerY = this._currentZoneShape.lowerRightPoint.y;
 
     if (!isTopSideReached && !isBottomSideReached) {
-      this.verticalStepCount++;
+      this._verticalStepCount++;
 
-      if (this.topDistance > this.bottomDistance) {
+      if (this._topDistance > this._bottomDistance) {
         shrinkSteps.topStep++;
 
         for (let i = upperX; i <= lowerX; i++) {
@@ -395,10 +395,10 @@ export class Zone {
 
         if (isCommonStep) {
           shrinkSteps.bottomStep++;
-          this.verticalStepCount = 0;
+          this._verticalStepCount = 0;
         }
       }
-      else if (this.topDistance < this.bottomDistance) {
+      else if (this._topDistance < this._bottomDistance) {
         shrinkSteps.bottomStep++;
 
         for (let i = upperX; i <= lowerX; i++) {
@@ -411,7 +411,7 @@ export class Zone {
 
         if (isCommonStep) {
           shrinkSteps.topStep++;
-          this.verticalStepCount = 0;
+          this._verticalStepCount = 0;
         }
       }
       else {
@@ -422,7 +422,7 @@ export class Zone {
 
         shrinkSteps.topStep++;
         shrinkSteps.bottomStep++;
-        this.verticalStepCount = 0;
+        this._verticalStepCount = 0;
       }
     }
     else if (isTopSideReached && !isBottomSideReached) {
@@ -449,19 +449,19 @@ export class Zone {
 	 * @description Shrinks location horizontally
 	 */
   private shrinkHorizontally(location: Array<any>, fillingObject: any, shrinkSteps: any): void {
-    const isLeftSideReached = (this.currentZoneShape.upperLeftPoint.x === this.finalZoneShape.upperLeftPoint.x);
-    const isRightSideReached = (this.currentZoneShape.lowerRightPoint.x === this.finalZoneShape.lowerRightPoint.x);
-    const isCommonStep = (this.horizontalStepCount === this.horizontalDistancesRatio);
+    const isLeftSideReached = (this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x);
+    const isRightSideReached = (this._currentZoneShape.lowerRightPoint.x === this._finalZoneShape.lowerRightPoint.x);
+    const isCommonStep = (this._horizontalStepCount === this._horizontalDistancesRatio);
 
-    const upperX = this.currentZoneShape.upperLeftPoint.x;
-    const upperY = this.currentZoneShape.upperLeftPoint.y;
-    const lowerX = this.currentZoneShape.lowerRightPoint.x;
-    const lowerY = this.currentZoneShape.lowerRightPoint.y;
+    const upperX = this._currentZoneShape.upperLeftPoint.x;
+    const upperY = this._currentZoneShape.upperLeftPoint.y;
+    const lowerX = this._currentZoneShape.lowerRightPoint.x;
+    const lowerY = this._currentZoneShape.lowerRightPoint.y;
 
     if (!isLeftSideReached && !isRightSideReached) {
-      this.horizontalStepCount++;
+      this._horizontalStepCount++;
 
-      if (this.leftDistance > this.rightDistance) {
+      if (this._leftDistance > this._rightDistance) {
         shrinkSteps.leftStep++;
 
         for (let i = upperY; i <= lowerY; i++) {
@@ -474,10 +474,10 @@ export class Zone {
 
         if (isCommonStep) {
           shrinkSteps.rightStep++;
-          this.horizontalStepCount = 0;
+          this._horizontalStepCount = 0;
         }
       }
-      else if (this.leftDistance < this.rightDistance) {
+      else if (this._leftDistance < this._rightDistance) {
         shrinkSteps.rightStep++;
 
         for (let i = upperY; i <= lowerY; i++) {
@@ -490,7 +490,7 @@ export class Zone {
 
         if (isCommonStep) {
           shrinkSteps.leftStep++;
-          this.horizontalStepCount = 0;
+          this._horizontalStepCount = 0;
         }
       }
       else {
@@ -501,7 +501,7 @@ export class Zone {
 
         shrinkSteps.leftStep++;
         shrinkSteps.rightStep++;
-        this.horizontalStepCount = 0;
+        this._horizontalStepCount = 0;
       }
     }
     else if (isLeftSideReached && !isRightSideReached) {
@@ -528,8 +528,8 @@ export class Zone {
 	 * @description Shrinks zone when its size equals one
 	 */
   private shrinkSingleSizeZone(location: Array<any>, fillingObject: any, lastZoneSide: number): void {
-    if (this.currentZoneShape.side === 1 && lastZoneSide < 1) {
-      location[this.currentZoneShape.upperLeftPoint.x][this.currentZoneShape.upperLeftPoint.y] = fillingObject;
+    if (this._currentZoneShape.side === 1 && lastZoneSide < 1) {
+      location[this.currentZoneShape.upperLeftPoint.x][this._currentZoneShape.upperLeftPoint.y] = fillingObject;
     }
   }
 
@@ -539,11 +539,11 @@ export class Zone {
 	 * @description Calculate parameters of the current zone
 	 */
   private calculateCurrentZoneShape(shrinkSteps: any): void {
-    this.currentZoneShape.upperLeftPoint.x += shrinkSteps.leftStep;
-    this.currentZoneShape.upperLeftPoint.y += shrinkSteps.topStep;
-    this.currentZoneShape.lowerRightPoint.x -= shrinkSteps.rightStep;
-    this.currentZoneShape.lowerRightPoint.y -= shrinkSteps.bottomStep;
-    this.currentZoneShape.calculateSide();
+    this._currentZoneShape.upperLeftPoint.x += shrinkSteps.leftStep;
+    this._currentZoneShape.upperLeftPoint.y += shrinkSteps.topStep;
+    this._currentZoneShape.lowerRightPoint.x -= shrinkSteps.rightStep;
+    this._currentZoneShape.lowerRightPoint.y -= shrinkSteps.bottomStep;
+    this._currentZoneShape.calculateSide();
   }
 
 	/**
@@ -552,13 +552,13 @@ export class Zone {
 	 */
   private checkIsFinalZoneReached(): void {
     if (
-      this.currentZoneShape.upperLeftPoint.x === this.finalZoneShape.upperLeftPoint.x
-      && this.currentZoneShape.upperLeftPoint.y === this.finalZoneShape.upperLeftPoint.y
-      && this.currentZoneShape.side === this.finalZoneShape.side
-      && this.currentZoneShape.lowerRightPoint.x === this.finalZoneShape.lowerRightPoint.x
-      && this.currentZoneShape.lowerRightPoint.y === this.finalZoneShape.lowerRightPoint.y
+      this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x
+      && this._currentZoneShape.upperLeftPoint.y === this._finalZoneShape.upperLeftPoint.y
+      && this._currentZoneShape.side === this._finalZoneShape.side
+      && this._currentZoneShape.lowerRightPoint.x === this._finalZoneShape.lowerRightPoint.x
+      && this._currentZoneShape.lowerRightPoint.y === this._finalZoneShape.lowerRightPoint.y
     ) {
-      this.isNewStage = true;
+      this._isNewStage = true;
     }
   }
 
@@ -569,13 +569,13 @@ export class Zone {
 	 * @description Fills border cells of the final zone with given object
 	 */
   private drawZoneBorderline(location: Array<any>, borderFillingObject: any): void {
-    for (let i = this.finalZoneShape.upperLeftPoint.x; i <= this.finalZoneShape.lowerRightPoint.x; i++) {
-      location[i][this.finalZoneShape.upperLeftPoint.y] = borderFillingObject;
-      location[i][this.finalZoneShape.lowerRightPoint.y] = borderFillingObject;
+    for (let i = this._finalZoneShape.upperLeftPoint.x; i <= this._finalZoneShape.lowerRightPoint.x; i++) {
+      location[i][this._finalZoneShape.upperLeftPoint.y] = borderFillingObject;
+      location[i][this._finalZoneShape.lowerRightPoint.y] = borderFillingObject;
     }
-    for (let i = this.finalZoneShape.upperLeftPoint.y; i <= this.finalZoneShape.lowerRightPoint.y; i++) {
-      location[this.finalZoneShape.upperLeftPoint.x][i] = borderFillingObject;
-      location[this.finalZoneShape.lowerRightPoint.x][i] = borderFillingObject;
+    for (let i = this._finalZoneShape.upperLeftPoint.y; i <= this._finalZoneShape.lowerRightPoint.y; i++) {
+      location[this._finalZoneShape.upperLeftPoint.x][i] = borderFillingObject;
+      location[this._finalZoneShape.lowerRightPoint.x][i] = borderFillingObject;
     }
   }
 
@@ -586,13 +586,13 @@ export class Zone {
 	 * @description Removes the drawn border of the final zone
 	 */
   private clearBorder(location: Array<any>, cleanerObject: any): void {
-    for (let i = this.finalZoneShape.upperLeftPoint.x; i <= this.finalZoneShape.lowerRightPoint.x; i++) {
-      location[i][this.finalZoneShape.upperLeftPoint.y] = cleanerObject;
-      location[i][this.finalZoneShape.lowerRightPoint.y] = cleanerObject;
+    for (let i = this._finalZoneShape.upperLeftPoint.x; i <= this._finalZoneShape.lowerRightPoint.x; i++) {
+      location[i][this._finalZoneShape.upperLeftPoint.y] = cleanerObject;
+      location[i][this._finalZoneShape.lowerRightPoint.y] = cleanerObject;
     }
-    for (let i = this.finalZoneShape.upperLeftPoint.y; i <= this.finalZoneShape.lowerRightPoint.y; i++) {
-      location[this.finalZoneShape.upperLeftPoint.x][i] = cleanerObject;
-      location[this.finalZoneShape.lowerRightPoint.x][i] = cleanerObject;
+    for (let i = this._finalZoneShape.upperLeftPoint.y; i <= this._finalZoneShape.lowerRightPoint.y; i++) {
+      location[this._finalZoneShape.upperLeftPoint.x][i] = cleanerObject;
+      location[this._finalZoneShape.lowerRightPoint.x][i] = cleanerObject;
     }
   }
 

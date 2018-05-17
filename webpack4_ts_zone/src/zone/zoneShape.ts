@@ -69,8 +69,8 @@ export class ZoneShape {
 	 * @description Calculates lower right point coordinates
 	 */
   public calculateLowerRightPoint(): void {
-    this.lowerRightPoint.x = this.upperLeftPoint.x + this.side - 1;
-    this.lowerRightPoint.y = this.upperLeftPoint.y + this.side - 1;
+    this._lowerRightPoint.x = this._upperLeftPoint.x + this._side - 1;
+    this._lowerRightPoint.y = this._upperLeftPoint.y + this._side - 1;
   }
 
 	/**
@@ -78,16 +78,16 @@ export class ZoneShape {
 	 * @description Calculates side using upper left and lower right points
 	 */
   public calculateSide(): void {
-    this.side = this.lowerRightPoint.x - this.upperLeftPoint.x + 1;
+    this._side = this._lowerRightPoint.x - this._upperLeftPoint.x + 1;
   }
 
   public getVerticalSide(): number {
-    const verticalSide = this.lowerRightPoint.y - this.upperLeftPoint.y + 1;
+    const verticalSide = this._lowerRightPoint.y - this._upperLeftPoint.y + 1;
     return verticalSide;
   }
 
   public getHorizontalSide(): number {
-    const horizontalSide = this.lowerRightPoint.x - this.upperLeftPoint.x + 1;
+    const horizontalSide = this._lowerRightPoint.x - this._upperLeftPoint.x + 1;
     return horizontalSide;
   }
 
