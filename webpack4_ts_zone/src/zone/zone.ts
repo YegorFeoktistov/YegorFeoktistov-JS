@@ -29,7 +29,7 @@ export class Zone {
 	/** @constructor
 	 * @this {Zone}
 	 * @description Constructor of the Zone class */
-  constructor() {
+  public constructor() {
     this._isFirstStage = true;
     this._isNewStage = true;
     this._finalZoneShape = new ZoneShape(new Point(0, 0), 0, new Point(0, 0));
@@ -52,10 +52,10 @@ export class Zone {
 	 * Accessor
 	 * @description Is that a first stage of shrinking?
 	 */
-  get isFirstStage(): boolean {
+  public get isFirstStage(): boolean {
     return this._isFirstStage;
   }
-  set isFirstStage(value: boolean) {
+  public set isFirstStage(value: boolean) {
     this._isFirstStage = value;
   }
 
@@ -63,10 +63,10 @@ export class Zone {
 	 * Accessor
 	 * @description Is that a new stage of shrinking
 	 */
-  get isNewStage(): boolean {
+  public get isNewStage(): boolean {
     return this._isNewStage;
   }
-  set isNewStage(value: boolean) {
+  public set isNewStage(value: boolean) {
     this._isNewStage = value;
   }
 
@@ -75,10 +75,10 @@ export class Zone {
 	 * @description Parameters of the final zone shape:
 	 * upper left point, lower right point, side
 	 */
-  get finalZoneShape(): ZoneShape {
+  public get finalZoneShape(): ZoneShape {
     return this._finalZoneShape;
   }
-  set finalZoneShape(value: ZoneShape) {
+  public set finalZoneShape(value: ZoneShape) {
     this._finalZoneShape = value;
   }
 
@@ -87,10 +87,10 @@ export class Zone {
 	 * @description Parameters of the current zone shape:
 	 * upper left point, lower right point, side
 	 */
-  get currentZoneShape(): ZoneShape {
+  public get currentZoneShape(): ZoneShape {
     return this._currentZoneShape;
   }
-  set currentZoneShape(value: ZoneShape) {
+  public set currentZoneShape(value: ZoneShape) {
     this._currentZoneShape = value;
   }
 
@@ -98,10 +98,10 @@ export class Zone {
 	 * Accessor
 	 * @description The ratio of the distances between the zones vertically
 	 */
-  get verticalDistancesRatio(): number {
+  public get verticalDistancesRatio(): number {
     return this._verticalDistancesRatio;
   }
-  set verticalDistancesRatio(value: number) {
+  public set verticalDistancesRatio(value: number) {
     this._verticalDistancesRatio = value;
   }
 
@@ -109,10 +109,10 @@ export class Zone {
 	 * Accessor
 	 * @description The ratio of the distances between the zones horizontally
 	 */
-  get horizontalDistancesRatio(): number {
+  public get horizontalDistancesRatio(): number {
     return this._horizontalDistancesRatio;
   }
-  set horizontalDistancesRatio(value: number) {
+  public set horizontalDistancesRatio(value: number) {
     this._horizontalDistancesRatio = value;
   }
 
@@ -120,10 +120,10 @@ export class Zone {
 	 * Accessor
 	 * @description Value of the top distance between zones
 	 */
-  get topDistance(): number {
+  public get topDistance(): number {
     return this._topDistance;
   }
-  set topDistance(value: number) {
+  public set topDistance(value: number) {
     this._topDistance = value;
   }
 
@@ -131,10 +131,10 @@ export class Zone {
 	 * Accessor
 	 * @description Value of the bottom distance between zones
 	 */
-  get bottomDistance(): number {
+  public get bottomDistance(): number {
     return this._bottomDistance;
   }
-  set bottomDistance(value: number) {
+  public set bottomDistance(value: number) {
     this._bottomDistance = value;
   }
 
@@ -142,10 +142,10 @@ export class Zone {
 	 * Accessor
 	 * @description Value of the left distance between zones
 	 */
-  get leftDistance(): number {
+  public get leftDistance(): number {
     return this._leftDistance;
   }
-  set leftDistance(value: number) {
+  public set leftDistance(value: number) {
     this._leftDistance = value;
   }
 
@@ -153,10 +153,10 @@ export class Zone {
 	 * Accessor
 	 * @description Value of the right distance between zones
 	 */
-  get rightDistance(): number {
+  public get rightDistance(): number {
     return this._rightDistance;
   }
-  set rightDistance(value: number) {
+  public set rightDistance(value: number) {
     this._rightDistance = value;
   }
 
@@ -164,10 +164,10 @@ export class Zone {
 	 * Accessor
 	 * @description Value of the vertical shrinking steps
 	 */
-  get verticalStepCount(): number {
+  public get verticalStepCount(): number {
     return this._verticalStepCount;
   }
-  set verticalStepCount(value: number) {
+  public set verticalStepCount(value: number) {
     this._verticalStepCount = value;
   }
 
@@ -175,10 +175,10 @@ export class Zone {
 	 * Accessor
 	 * @description Value of the horizontal shrinking steps
 	 */
-  get horizontalStepCount(): number {
+  public get horizontalStepCount(): number {
     return this._horizontalStepCount;
   }
-  set horizontalStepCount(value: number) {
+  public set horizontalStepCount(value: number) {
     this._horizontalStepCount = value;
   }
 
@@ -196,7 +196,7 @@ export class Zone {
 	 * @param {*} cleanerObject Object to clean the border of the zone
 	 * @description Main function of the zone algorithm
 	 */
-  shrink(location: Array<any>, shrinkCoefficient: number, lastZoneSide: number, fillingObject: any, borderFillingObject: any, cleanerObject: any): void {
+  public shrink(location: Array<any>, shrinkCoefficient: number, lastZoneSide: number, fillingObject: any, borderFillingObject: any, cleanerObject: any): void {
     // Verification of the first stage
     if (this.isFirstStage) {
       this.initializeFirstStage(location);
@@ -223,7 +223,10 @@ export class Zone {
     this.currentZoneShape.upperLeftPoint.y = 0;
     this.currentZoneShape.lowerRightPoint.x = location.length - 1;
     this.currentZoneShape.lowerRightPoint.y = location[0].length - 1;
-    this.currentZoneShape.calculateSide();
+
+    const horizontalSide = this.currentZoneShape.getHorizontalSide();
+    const verticalSide = this.currentZoneShape.getVerticalSide();
+    this.currentZoneShape.side = Math.min(horizontalSide, verticalSide);
 
     this.isFirstStage = false;
     this.isNewStage = true;

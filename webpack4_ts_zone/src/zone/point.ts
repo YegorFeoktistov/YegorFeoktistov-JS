@@ -13,7 +13,7 @@ export class Point {
 	 * @param {number} y Y coordinate of a point
 	 * @this {Point}
 	 * @description Constructor of the Point class */
-  constructor(x: number, y: number) {
+  public constructor(x: number, y: number) {
     this._x = x;
     this._y = y;
   }
@@ -26,10 +26,10 @@ export class Point {
 	 * Accessor
 	 * @description X coordinate of a point
 	 */
-  get x(): number {
+  public get x(): number {
     return this._x;
   }
-  set x(value: number) {
+  public set x(value: number) {
     this._x = value;
   }
 
@@ -37,10 +37,10 @@ export class Point {
 	 * Accessor
 	 * @description Y coordinate of a point
 	 */
-  get y(): number {
+  public get y(): number {
     return this._y;
   }
-  set y(value: number) {
+  public set y(value: number) {
     this._y = value;
   }
 
