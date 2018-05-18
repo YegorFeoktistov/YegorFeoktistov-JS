@@ -11,6 +11,8 @@ import { ZoneShape } from "./zoneShape";
  * @description Represents shrinking zone in the game location
  */
 export class Zone {
+  //#region Class fields
+
   private _isFirstStage: boolean;
   private _isNewStage: boolean;
   private _finalZoneShape: ZoneShape;
@@ -23,6 +25,8 @@ export class Zone {
   private _rightDistance: number;
   private _verticalStepCount: number;
   private _horizontalStepCount: number;
+
+  //#endregion
 
   //#region Constructor
 
@@ -46,7 +50,7 @@ export class Zone {
 
   //#endregion
 
-  //#region Accessor functions declaration
+  //#region Accessor functions
 
   /**
    * Accessor
@@ -442,7 +446,7 @@ export class Zone {
     }
   }
 
-  private twoSidedVerticalLoop(
+  private unequalDistancesVerticalLoop(
     location: Array<any>,
     fillingObject: any,
     initialLoopValue: number,
@@ -465,16 +469,16 @@ export class Zone {
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
-    upperY: number,
-    lowerY: number
+    upperYIndex: number,
+    lowerYIndex: number
   ) {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[i][upperY] = fillingObject;
-      location[i][lowerY] = fillingObject;
+      location[i][upperYIndex] = fillingObject;
+      location[i][lowerYIndex] = fillingObject;
     }
   }
 
-  private oneSidedVerticalLoop(
+  private zeroDistanceVerticalLoop(
     location: Array<any>,
     fillingObject: any,
     initialLoopValue: number,
