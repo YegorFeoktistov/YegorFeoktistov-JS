@@ -224,6 +224,7 @@ export class Zone {
     this._currentZoneShape.lowerRightPoint.x = location.length - 1;
     this._currentZoneShape.lowerRightPoint.y = location[0].length - 1;
 
+    /* Appropriate getters of the battlefield object will be used to define side of the zone */
     const horizontalSide = this._currentZoneShape.getHorizontalSide();
     const verticalSide = this._currentZoneShape.getVerticalSide();
     this._currentZoneShape.side = Math.min(horizontalSide, verticalSide);

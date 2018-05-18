@@ -66,6 +66,15 @@ export class ZoneShape {
 
   /**
    * @function
+   * @description Calculates upper left point coordinates
+   */
+  public calculateUpperLeftPoint(): void {
+    this._upperLeftPoint.x = this._lowerRightPoint.x - this._side + 1;
+    this._upperLeftPoint.y = this._lowerRightPoint.y - this._side + 1;
+  }
+
+  /**
+   * @function
    * @description Calculates lower right point coordinates
    */
   public calculateLowerRightPoint(): void {
@@ -80,6 +89,9 @@ export class ZoneShape {
   public calculateSide(): void {
     this._side = this._lowerRightPoint.x - this._upperLeftPoint.x + 1;
   }
+
+  /* This 2 methods will be removed, because width and height of the battlefield
+     can be obtained using appropriate getters of the battlefield object */
 
   public getVerticalSide(): number {
     const verticalSide = this._lowerRightPoint.y - this._upperLeftPoint.y + 1;
