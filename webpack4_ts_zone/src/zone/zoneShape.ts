@@ -2,7 +2,7 @@ import { Point } from "./point";
 
 /**
  * @class
- * @description Represents rectangle shape of zone
+ * @description Represents square shape of zone
  */
 export class ZoneShape {
   private _upperLeftPoint: Point;
