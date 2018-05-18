@@ -442,6 +442,50 @@ export class Zone {
     }
   }
 
+  private twoSidedVerticalLoop(
+    location: Array<any>,
+    fillingObject: any,
+    initialLoopValue: number,
+    finalLoopValue: number,
+    mainYIndex: number,
+    commonStepYIndex: number,
+    isCommonStep: boolean
+  ) {
+    for (let i = initialLoopValue; i <= finalLoopValue; i++) {
+      location[i][mainYIndex] = fillingObject;
+
+      if (isCommonStep) {
+        location[i][commonStepYIndex] = fillingObject;
+      }
+    }
+  }
+
+  private equalDistancesVerticalLoop(
+    location: Array<any>,
+    fillingObject: any,
+    initialLoopValue: number,
+    finalLoopValue: number,
+    upperY: number,
+    lowerY: number
+  ) {
+    for (let i = initialLoopValue; i <= finalLoopValue; i++) {
+      location[i][upperY] = fillingObject;
+      location[i][lowerY] = fillingObject;
+    }
+  }
+
+  private oneSidedVerticalLoop(
+    location: Array<any>,
+    fillingObject: any,
+    initialLoopValue: number,
+    finalLoopValue: number,
+    sideYIndex: number
+  ) {
+    for (let i = initialLoopValue; i <= finalLoopValue; i++) {
+      location[i][sideYIndex] = fillingObject;
+    }
+  }
+
   /**
    * @function
    * @param {array} location Game location for processing
