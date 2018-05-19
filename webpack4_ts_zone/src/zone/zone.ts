@@ -398,6 +398,8 @@ export class Zone {
           }
         }
 
+        this.unequalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, upperY, lowerY, isCommonStep);
+
         if (isCommonStep) {
           shrinkSteps.bottomStep++;
           this._verticalStepCount = 0;
@@ -414,6 +416,8 @@ export class Zone {
           }
         }
 
+        this.unequalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, lowerY, upperY, isCommonStep);
+
         if (isCommonStep) {
           shrinkSteps.topStep++;
           this._verticalStepCount = 0;
@@ -425,6 +429,8 @@ export class Zone {
           location[i][lowerY] = fillingObject;
         }
 
+        this.equalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, upperY, lowerY);
+
         shrinkSteps.topStep++;
         shrinkSteps.bottomStep++;
         this._verticalStepCount = 0;
@@ -435,6 +441,8 @@ export class Zone {
         location[i][lowerY] = fillingObject;
       }
 
+      this.zeroDistanceVerticalLoop(location, fillingObject, upperX, lowerX, lowerY);
+
       shrinkSteps.bottomStep++;
     }
     else if (!isTopSideReached && isBottomSideReached) {
@@ -442,10 +450,23 @@ export class Zone {
         location[i][upperY] = fillingObject;
       }
 
+      this.zeroDistanceVerticalLoop(location, fillingObject, upperX, lowerX, upperY);
+
       shrinkSteps.topStep++;
     }
   }
 
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} initialLoopValue Initial counter value of the loop
+   * @param {number} finalLoopValue Final counter value of the loop
+   * @param {number} mainYIndex Y index of the main filling side
+   * @param {number} commonStepYIndex Y index of the opposite filling side
+   * @param {boolean} isCommonStep Value for tracking the common shrinking step
+   * @description Fills vertical sides of the zone if vertical distances are unequal
+   */
   private unequalDistancesVerticalLoop(
     location: Array<any>,
     fillingObject: any,
@@ -454,7 +475,7 @@ export class Zone {
     mainYIndex: number,
     commonStepYIndex: number,
     isCommonStep: boolean
-  ) {
+  ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
       location[i][mainYIndex] = fillingObject;
 
@@ -464,6 +485,16 @@ export class Zone {
     }
   }
 
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} initialLoopValue Initial counter value of the loop
+   * @param {number} finalLoopValue Final counter value of the loop
+   * @param {number} upperYIndex Y index of the upper filling side
+   * @param {number} lowerYIndex Y index of the lower filling side
+   * @description Fills vertical sides of the zone if vertical distances are equal
+   */
   private equalDistancesVerticalLoop(
     location: Array<any>,
     fillingObject: any,
@@ -471,20 +502,29 @@ export class Zone {
     finalLoopValue: number,
     upperYIndex: number,
     lowerYIndex: number
-  ) {
+  ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
       location[i][upperYIndex] = fillingObject;
       location[i][lowerYIndex] = fillingObject;
     }
   }
 
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} initialLoopValue Initial counter value of the loop
+   * @param {number} finalLoopValue Final counter value of the loop
+   * @param {number} sideYIndex Y index of the filling side
+   * @description Fills one vertical side of the zone
+   */
   private zeroDistanceVerticalLoop(
     location: Array<any>,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
     sideYIndex: number
-  ) {
+  ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
       location[i][sideYIndex] = fillingObject;
     }
