@@ -524,14 +524,6 @@ export class Zone {
       if (this._leftDistance > this._rightDistance) {
         shrinkSteps.leftStep++;
 
-        for (let i = upperY; i <= lowerY; i++) {
-          location[upperX][i] = fillingObject;
-
-          if (isCommonStep) {
-            location[lowerX][i] = fillingObject;
-          }
-        }
-
         this.unequalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, upperX, lowerX, isCommonStep);
 
         if (isCommonStep) {
@@ -542,14 +534,6 @@ export class Zone {
       else if (this._leftDistance < this._rightDistance) {
         shrinkSteps.rightStep++;
 
-        for (let i = upperY; i <= lowerY; i++) {
-          location[lowerX][i] = fillingObject;
-
-          if (isCommonStep) {
-            location[upperX][i] = fillingObject;
-          }
-        }
-
         this.unequalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, lowerX, upperX, isCommonStep);
 
         if (isCommonStep) {
@@ -558,11 +542,6 @@ export class Zone {
         }
       }
       else {
-        for (let i = upperY; i <= lowerY; i++) {
-          location[upperX][i] = fillingObject;
-          location[lowerX][i] = fillingObject;
-        }
-
         this.equalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, upperX, lowerX);
 
         shrinkSteps.leftStep++;
@@ -571,19 +550,11 @@ export class Zone {
       }
     }
     else if (isLeftSideReached && !isRightSideReached) {
-      for (let i = upperY; i <= lowerY; i++) {
-        location[lowerX][i] = fillingObject;
-      }
-
       this.zeroDistanceHorizontalLoop(location, fillingObject, upperY, lowerY, lowerX);
 
       shrinkSteps.rightStep++;
     }
     else if (!isLeftSideReached && isRightSideReached) {
-      for (let i = upperY; i <= lowerY; i++) {
-        location[upperX][i] = fillingObject;
-      }
-
       this.zeroDistanceHorizontalLoop(location, fillingObject, upperY, lowerY, upperX);
 
       shrinkSteps.leftStep++;
