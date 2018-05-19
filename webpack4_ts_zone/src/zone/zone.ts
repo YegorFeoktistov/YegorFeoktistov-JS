@@ -390,14 +390,6 @@ export class Zone {
       if (this._topDistance > this._bottomDistance) {
         shrinkSteps.topStep++;
 
-        for (let i = upperX; i <= lowerX; i++) {
-          location[i][upperY] = fillingObject;
-
-          if (isCommonStep) {
-            location[i][lowerY] = fillingObject;
-          }
-        }
-
         this.unequalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, upperY, lowerY, isCommonStep);
 
         if (isCommonStep) {
@@ -408,14 +400,6 @@ export class Zone {
       else if (this._topDistance < this._bottomDistance) {
         shrinkSteps.bottomStep++;
 
-        for (let i = upperX; i <= lowerX; i++) {
-          location[i][lowerY] = fillingObject;
-
-          if (isCommonStep) {
-            location[i][upperY] = fillingObject;
-          }
-        }
-
         this.unequalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, lowerY, upperY, isCommonStep);
 
         if (isCommonStep) {
@@ -424,11 +408,6 @@ export class Zone {
         }
       }
       else {
-        for (let i = upperX; i <= lowerX; i++) {
-          location[i][upperY] = fillingObject;
-          location[i][lowerY] = fillingObject;
-        }
-
         this.equalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, upperY, lowerY);
 
         shrinkSteps.topStep++;
@@ -437,19 +416,11 @@ export class Zone {
       }
     }
     else if (isTopSideReached && !isBottomSideReached) {
-      for (let i = upperX; i <= lowerX; i++) {
-        location[i][lowerY] = fillingObject;
-      }
-
       this.zeroDistanceVerticalLoop(location, fillingObject, upperX, lowerX, lowerY);
 
       shrinkSteps.bottomStep++;
     }
     else if (!isTopSideReached && isBottomSideReached) {
-      for (let i = upperX; i <= lowerX; i++) {
-        location[i][upperY] = fillingObject;
-      }
-
       this.zeroDistanceVerticalLoop(location, fillingObject, upperX, lowerX, upperY);
 
       shrinkSteps.topStep++;
@@ -491,8 +462,8 @@ export class Zone {
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
-   * @param {number} upperYIndex Y index of the upper filling side
-   * @param {number} lowerYIndex Y index of the lower filling side
+   * @param {number} upperYIndex Y index of the top filling side
+   * @param {number} lowerYIndex Y index of the bottom filling side
    * @description Fills vertical sides of the zone if vertical distances are equal
    */
   private equalDistancesVerticalLoop(
@@ -561,6 +532,8 @@ export class Zone {
           }
         }
 
+        this.unequalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, upperX, lowerX, isCommonStep);
+
         if (isCommonStep) {
           shrinkSteps.rightStep++;
           this._horizontalStepCount = 0;
@@ -577,6 +550,8 @@ export class Zone {
           }
         }
 
+        this.unequalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, lowerX, upperX, isCommonStep);
+
         if (isCommonStep) {
           shrinkSteps.leftStep++;
           this._horizontalStepCount = 0;
@@ -588,6 +563,8 @@ export class Zone {
           location[lowerX][i] = fillingObject;
         }
 
+        this.equalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, upperX, lowerX);
+
         shrinkSteps.leftStep++;
         shrinkSteps.rightStep++;
         this._horizontalStepCount = 0;
@@ -598,6 +575,8 @@ export class Zone {
         location[lowerX][i] = fillingObject;
       }
 
+      this.zeroDistanceHorizontalLoop(location, fillingObject, upperY, lowerY, lowerX);
+
       shrinkSteps.rightStep++;
     }
     else if (!isLeftSideReached && isRightSideReached) {
@@ -605,7 +584,83 @@ export class Zone {
         location[upperX][i] = fillingObject;
       }
 
+      this.zeroDistanceHorizontalLoop(location, fillingObject, upperY, lowerY, upperX);
+
       shrinkSteps.leftStep++;
+    }
+  }
+
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} initialLoopValue Initial counter value of the loop
+   * @param {number} finalLoopValue Final counter value of the loop
+   * @param {number} mainXIndex X index of the main filling side
+   * @param {number} commonStepXIndex X index of the opposite filling side
+   * @param {boolean} isCommonStep Value for tracking the common shrinking step
+   * @description Fills horizontal sides of the zone if horizontal distances are unequal
+   */
+  private unequalDistancesHorizontalLoop(
+    location: Array<any>,
+    fillingObject: any,
+    initialLoopValue: number,
+    finalLoopValue: number,
+    mainXIndex: number,
+    commonStepXIndex: number,
+    isCommonStep: boolean
+  ): void {
+    for (let i = initialLoopValue; i <= finalLoopValue; i++) {
+      location[mainXIndex][i] = fillingObject;
+
+      if (isCommonStep) {
+        location[commonStepXIndex][i] = fillingObject;
+      }
+    }
+  }
+
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} initialLoopValue Initial counter value of the loop
+   * @param {number} finalLoopValue Final counter value of the loop
+   * @param {number} upperXIndex X index of the left filling side
+   * @param {number} lowerXIndex X index of the right filling side
+   * @description Fills horizontal sides of the zone if horizontal distances are equal
+   */
+  private equalDistancesHorizontalLoop(
+    location: Array<any>,
+    fillingObject: any,
+    initialLoopValue: number,
+    finalLoopValue: number,
+    upperXIndex: number,
+    lowerXIndex: number
+  ): void {
+    for (let i = initialLoopValue; i <= finalLoopValue; i++) {
+      location[upperXIndex][i] = fillingObject;
+      location[lowerXIndex][i] = fillingObject;
+    }
+  }
+
+  /**
+   * @function
+   * @param {array} location Game location for processing
+   * @param {*} fillingObject Object to fill an area outside the zone
+   * @param {number} initialLoopValue Initial counter value of the loop
+   * @param {number} finalLoopValue Final counter value of the loop
+   * @param {number} sideXIndex X index of the filling side
+   * @description Fills one horizontal side of the zone
+   */
+  private zeroDistanceHorizontalLoop(
+    location: Array<any>,
+    fillingObject: any,
+    initialLoopValue: number,
+    finalLoopValue: number,
+    sideXIndex: number
+  ): void {
+    for (let i = initialLoopValue; i <= finalLoopValue; i++) {
+      location[sideXIndex][i] = fillingObject;
     }
   }
 
