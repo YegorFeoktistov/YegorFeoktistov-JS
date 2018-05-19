@@ -8,7 +8,6 @@ export class ZoneShape {
   //#region Class fields
 
   private _upperLeftPoint: Point;
-  // private _side: number;
   private _lowerRightPoint: Point;
   private _width: number;
   private _height: number;
@@ -19,18 +18,16 @@ export class ZoneShape {
 
   /** @constructor
    * @param {Point} upperLeftPoint Upper left point of zone shape
-   * @param {number} side Side value
    * @param {Point} lowerRightPoint Lower right point of zone shape
    * @param {number} width Width value
    * @param {number} height Height value
    * @this {ZoneShape}
    * @description Constructor of the ZoneShape class */
-  public constructor(upperLeftPoint: Point, /* side: number, */ lowerRightPoint: Point/* , width: number, height: number */) {
-    this._upperLeftPoint = upperLeftPoint;
-    // this._side = side;
-    this._lowerRightPoint = lowerRightPoint;
-    // this._width = width;
-    // this._height = height;
+  public constructor() {
+    this._upperLeftPoint = new Point(0, 0);
+    this._lowerRightPoint = new Point(0, 0);
+    this._width = 0;
+    this._height = 0;
   }
 
   //#endregion
@@ -47,17 +44,6 @@ export class ZoneShape {
   public set upperLeftPoint(value: Point) {
     this._upperLeftPoint = value;
   }
-
-  // /**
-  //  * Accessor
-  //  * @description Side value
-  //  */
-  // public get side(): number {
-  //   return this._side;
-  // }
-  // public set side(value: number) {
-  //   this._side = value;
-  // }
 
   /**
    * Accessor
@@ -113,14 +99,6 @@ export class ZoneShape {
     this._lowerRightPoint.x = this._upperLeftPoint.x + this._width - 1;
     this._lowerRightPoint.y = this._upperLeftPoint.y + this._height - 1;
   }
-
-  // /**
-  //  * @function
-  //  * @description Calculates side using upper left and lower right points
-  //  */
-  // public calculateSide(): void {
-  //   this._side = this._lowerRightPoint.x - this._upperLeftPoint.x + 1;
-  // }
 
   /**
    * @function

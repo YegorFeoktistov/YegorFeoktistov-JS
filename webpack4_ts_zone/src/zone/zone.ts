@@ -37,8 +37,8 @@ export class Zone {
   public constructor() {
     this._isFirstStage = true;
     this._isNewStage = true;
-    this._finalZoneShape = new ZoneShape(new Point(0, 0), new Point(0, 0));
-    this._currentZoneShape = new ZoneShape(new Point(0, 0), new Point(0, 0));
+    this._finalZoneShape = new ZoneShape();
+    this._currentZoneShape = new ZoneShape();
     this._verticalDistancesRatio = 0;
     this._horizontalDistancesRatio = 0;
     this._topDistance = 0;
