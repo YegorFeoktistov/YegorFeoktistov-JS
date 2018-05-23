@@ -27,6 +27,8 @@ export class Zone {
   private _rightDistance: number;
   private _verticalStepCount: number;
   private _horizontalStepCount: number;
+  private _shrinkCoefficient: number;
+  private _lastZoneSide: number;
 
   //#endregion
 
@@ -35,7 +37,7 @@ export class Zone {
   /** @constructor
    * @this {Zone}
    * @description Constructor of the Zone class */
-  public constructor() {
+  public constructor(shrinkCoefficient: number, lastZoneSide: number) {
     this._isFirstStage = true;
     this._isNewStage = true;
     this._finalZoneShape = new ZoneShape();
@@ -48,11 +50,45 @@ export class Zone {
     this._rightDistance = 0;
     this._verticalStepCount = 0;
     this._horizontalStepCount = 0;
+    this.shrinkCoefficient = shrinkCoefficient;
+    this.lastZoneSide = lastZoneSide;
   }
 
   //#endregion
 
   //#region Accessor functions
+
+  /**
+   * Accessor
+   * @description ********************
+   */
+  public get shrinkCoefficient(): number {
+    return this._shrinkCoefficient;
+  }
+  public set shrinkCoefficient(value: number) {
+    if (value <= 0) {
+      throw new Error("Invalid shrinking coefficient. The value should be greater then 0.");
+    }
+    else {
+      this._shrinkCoefficient = value;
+    }
+  }
+
+  /**
+   * Accessor
+   * @description ********************
+   */
+  public get lastZoneSide(): number {
+    return this._lastZoneSide;
+  }
+  public set lastZoneSide(value: number) {
+    if (value < 0) {
+      throw new Error("Invalid last zone side value. The value should be not less than 0.");
+    }
+    else {
+      this._lastZoneSide = Math.floor(value);
+    }
+  }
 
   /**
    * Accessor
@@ -206,8 +242,6 @@ export class Zone {
   public shrink(
     location: Array<any>,
     /* battlefield: Battlefield, */
-    shrinkCoefficient: number,
-    lastZoneSide: number,
     fillingObject: any,
     borderFillingObject: any,
     cleanerObject: any
@@ -220,12 +254,12 @@ export class Zone {
     // Verification of the beginning of the new stage
 
     if (this._isNewStage) {
-      this.beginNewStage(location, shrinkCoefficient, lastZoneSide, borderFillingObject, cleanerObject);
+      this.beginNewStage(location, borderFillingObject, cleanerObject);
     }
 
     // Continuation of the current stage
 
-    this.continueCurrentStage(location, fillingObject, lastZoneSide);
+    this.continueCurrentStage(location, fillingObject);
   }
 
   /**
@@ -235,12 +269,17 @@ export class Zone {
    * @description Sets game location shape as current zone shape
    */
   private initializeFirstStage(location: Array<any>/* , battlefield: Battlefield */): void {
-    this._currentZoneShape.upperLeftPoint.x = 0;
-    this._currentZoneShape.upperLeftPoint.y = 0;
-    this._currentZoneShape.lowerRightPoint.x = location.length - 1;
-    this._currentZoneShape.lowerRightPoint.y = location[0].length - 1;
+    // this._currentZoneShape.upperLeftPoint.x = 0;
+    // this._currentZoneShape.upperLeftPoint.y = 0;
+    // this._currentZoneShape.lowerRightPoint.x = location.length - 1;
+    // this._currentZoneShape.lowerRightPoint.y = location[0].length - 1;
 
-    this._currentZoneShape.calculateSides();
+    // this._currentZoneShape.calculateSides();
+
+    const upperLeftPoint = new Point(0, 0);
+    const lowerRightPoint = new Point(location.length - 1, location[0].length - 1);
+
+    this._currentZoneShape.defineShape(upperLeftPoint, lowerRightPoint);
 
     /* Appropriate getters of the battlefield object will be used to define side of the zone */
     // const horizontalSide = this._currentZoneShape.getHorizontalSide();
@@ -271,9 +310,9 @@ export class Zone {
    * @param {*} cleanerObject Object to clean the border of the zone
    * @description Finds new final zone shape
    */
-  private beginNewStage(location: Array<any>, /* battlefield: Battlefield, */ shrinkCoefficient: number, lastZoneSide: number, borderFillingObject: any, cleanerObject: any): void {
+  private beginNewStage(location: Array<any>, /* battlefield: Battlefield, */ borderFillingObject: any, cleanerObject: any): void {
     this.clearBorder(location, cleanerObject);
-    this.calculateFinalZoneShape(shrinkCoefficient, lastZoneSide);
+    this.calculateFinalZoneShape();
     this.calculateDistances();
     this.calculateVerticalDistancesRatio();
     this.calculateHorizontalDistancesRatio();
@@ -309,12 +348,12 @@ export class Zone {
    * @param {number} lastZoneSide Value of the last zone side
    * @description Calculate parameters of the final zone
    */
-  private calculateFinalZoneShape(shrinkCoefficient: number, lastZoneSide: number): void {
+  private calculateFinalZoneShape(): void {
     const currentMinimalSide = this._currentZoneShape.getMinimalSide();
 
-    let finalZoneSide = currentMinimalSide / shrinkCoefficient;
+    let finalZoneSide = currentMinimalSide / this._shrinkCoefficient;
     const finalZoneSideRounded = Math.round(finalZoneSide);
-    finalZoneSide = finalZoneSideRounded <= lastZoneSide ? lastZoneSide : finalZoneSideRounded;
+    finalZoneSide = finalZoneSideRounded <= this._lastZoneSide ? this._lastZoneSide : finalZoneSideRounded;
 
     const minBoundX = this._currentZoneShape.upperLeftPoint.x;
     const maxBoundX = this._currentZoneShape.lowerRightPoint.x - finalZoneSide + 2;
@@ -324,11 +363,19 @@ export class Zone {
     const finalZoneX1 = Math.floor(Math.random() * (maxBoundX - minBoundX) + minBoundX);
     const finalZoneY1 = Math.floor(Math.random() * (maxBoundY - minBoundY) + minBoundY);
 
-    this._finalZoneShape.upperLeftPoint.x = finalZoneX1;
-    this._finalZoneShape.upperLeftPoint.y = finalZoneY1;
-    this._finalZoneShape.width = finalZoneSide;
-    this._finalZoneShape.height = finalZoneSide;
-    this._finalZoneShape.calculateLowerRightPoint();
+    // this._finalZoneShape.upperLeftPoint.x = finalZoneX1;
+    // this._finalZoneShape.upperLeftPoint.y = finalZoneY1;
+    // this._finalZoneShape.width = finalZoneSide;
+    // this._finalZoneShape.height = finalZoneSide;
+    // this._finalZoneShape.calculateLowerRightPoint();
+
+    const upperLeftPoint = new Point(finalZoneX1, finalZoneY1);
+    const lowerRightPoint = new Point(
+      finalZoneX1 + finalZoneSide - 1,
+      finalZoneY1 + finalZoneSide - 1
+    );
+
+    this._finalZoneShape.defineShape(upperLeftPoint, lowerRightPoint);
   }
 
   /**
@@ -396,7 +443,7 @@ export class Zone {
    * @param {number} lastZoneSide Value of the last zone side
    * @description Fill an area outside the current zone
    */
-  private continueCurrentStage(location: Array<any>, fillingObject: any, lastZoneSide: number): void {
+  private continueCurrentStage(location: Array<any>, fillingObject: any): void {
     const shrinkSteps = {
       topStep: 0,
       bottomStep: 0,
@@ -414,7 +461,7 @@ export class Zone {
 
     // Shrink single size zone
 
-    this.shrinkSingleSizeZone(location, fillingObject, lastZoneSide);
+    this.shrinkSingleSizeZone(location, fillingObject);
 
     // Update currentZoneShape
 
@@ -554,9 +601,16 @@ export class Zone {
    * @param {number} lastZoneSide Value of the last zone side
    * @description Shrinks zone when its size equals one
    */
-  private shrinkSingleSizeZone(location: Array<any>, fillingObject: any, lastZoneSide: number): void {
-    if (this._currentZoneShape.width === 1 && this._currentZoneShape.height === 1 && lastZoneSide < 1) {
-      location[this.currentZoneShape.upperLeftPoint.x][this._currentZoneShape.upperLeftPoint.y] = fillingObject;
+  private shrinkSingleSizeZone(location: Array<any>, fillingObject: any): void {
+    if (
+      this._currentZoneShape.getWidth() === 1 &&
+      this._currentZoneShape.getHeight() === 1 &&
+      this._lastZoneSide < 1
+    ) {
+      location
+      [this.currentZoneShape.upperLeftPoint.x]
+      [this._currentZoneShape.upperLeftPoint.y]
+      = fillingObject;
     }
   }
 
@@ -570,7 +624,6 @@ export class Zone {
     this._currentZoneShape.upperLeftPoint.y += shrinkSteps.topStep;
     this._currentZoneShape.lowerRightPoint.x -= shrinkSteps.rightStep;
     this._currentZoneShape.lowerRightPoint.y -= shrinkSteps.bottomStep;
-    this._currentZoneShape.calculateSides();
   }
 
   /**
@@ -579,12 +632,10 @@ export class Zone {
    */
   private checkIsFinalZoneReached(): void {
     if (
-      this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x
-      && this._currentZoneShape.upperLeftPoint.y === this._finalZoneShape.upperLeftPoint.y
-      && this._currentZoneShape.lowerRightPoint.x === this._finalZoneShape.lowerRightPoint.x
-      && this._currentZoneShape.lowerRightPoint.y === this._finalZoneShape.lowerRightPoint.y
-      && this._currentZoneShape.width === this._finalZoneShape.width
-      && this._currentZoneShape.height === this._finalZoneShape.height
+      this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x &&
+      this._currentZoneShape.upperLeftPoint.y === this._finalZoneShape.upperLeftPoint.y &&
+      this._currentZoneShape.lowerRightPoint.x === this._finalZoneShape.lowerRightPoint.x &&
+      this._currentZoneShape.lowerRightPoint.y === this._finalZoneShape.lowerRightPoint.y
     ) {
       this._isNewStage = true;
     }

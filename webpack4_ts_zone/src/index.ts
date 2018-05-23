@@ -18,13 +18,13 @@ for (let i = 0; i < locationSide; i++) {
   }
 }
 
-const zone = new Zone();
+const zone = new Zone(shrinkCoefficient, lastZoneSide);
 
 for (let i = 0; i < 19; i++) {
   (function (gameLocation) {
     setTimeout(function () {
       console.clear();
-      zone.shrink(gameLocation, shrinkCoefficient, lastZoneSide, fillingObject, borderFillingObject, cleanerObject);
+      zone.shrink(gameLocation, fillingObject, borderFillingObject, cleanerObject);
       console.table(gameLocation);
     }, i * 1000);
   })(gameLocation);
