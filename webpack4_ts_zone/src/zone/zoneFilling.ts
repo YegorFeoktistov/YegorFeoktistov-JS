@@ -1,7 +1,9 @@
+import { Battlefield } from "./battlefield";
+
 /**
  * @class
  * @static
- * @description Fills the game location with shrinking zone
+ * @description Fills the game battlefield with shrinking zone
  */
 export class ZoneFilling {
   /**
@@ -13,7 +15,7 @@ export class ZoneFilling {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
@@ -23,7 +25,7 @@ export class ZoneFilling {
    * @description Fills vertical sides of the zone if vertical distances are unequal
    */
   public static unequalDistancesVerticalLoop(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
@@ -32,17 +34,17 @@ export class ZoneFilling {
     isCommonStep: boolean
   ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[i][mainYIndex] = fillingObject;
+      battlefield.location[i][mainYIndex] = fillingObject;
 
       if (isCommonStep) {
-        location[i][commonStepYIndex] = fillingObject;
+        battlefield.location[i][commonStepYIndex] = fillingObject;
       }
     }
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
@@ -51,7 +53,7 @@ export class ZoneFilling {
    * @description Fills vertical sides of the zone if vertical distances are equal
    */
   public static equalDistancesVerticalLoop(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
@@ -59,14 +61,14 @@ export class ZoneFilling {
     lowerYIndex: number
   ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[i][upperYIndex] = fillingObject;
-      location[i][lowerYIndex] = fillingObject;
+      battlefield.location[i][upperYIndex] = fillingObject;
+      battlefield.location[i][lowerYIndex] = fillingObject;
     }
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
@@ -74,20 +76,20 @@ export class ZoneFilling {
    * @description Fills one vertical side of the zone
    */
   public static zeroDistanceVerticalLoop(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
     sideYIndex: number
   ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[i][sideYIndex] = fillingObject;
+      battlefield.location[i][sideYIndex] = fillingObject;
     }
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
@@ -97,7 +99,7 @@ export class ZoneFilling {
    * @description Fills horizontal sides of the zone if horizontal distances are unequal
    */
   public static unequalDistancesHorizontalLoop(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
@@ -106,17 +108,17 @@ export class ZoneFilling {
     isCommonStep: boolean
   ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[mainXIndex][i] = fillingObject;
+      battlefield.location[mainXIndex][i] = fillingObject;
 
       if (isCommonStep) {
-        location[commonStepXIndex][i] = fillingObject;
+        battlefield.location[commonStepXIndex][i] = fillingObject;
       }
     }
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
@@ -125,7 +127,7 @@ export class ZoneFilling {
    * @description Fills horizontal sides of the zone if horizontal distances are equal
    */
   public static equalDistancesHorizontalLoop(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
@@ -133,14 +135,14 @@ export class ZoneFilling {
     lowerXIndex: number
   ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[upperXIndex][i] = fillingObject;
-      location[lowerXIndex][i] = fillingObject;
+      battlefield.location[upperXIndex][i] = fillingObject;
+      battlefield.location[lowerXIndex][i] = fillingObject;
     }
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {number} initialLoopValue Initial counter value of the loop
    * @param {number} finalLoopValue Final counter value of the loop
@@ -148,14 +150,14 @@ export class ZoneFilling {
    * @description Fills one horizontal side of the zone
    */
   public static zeroDistanceHorizontalLoop(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     initialLoopValue: number,
     finalLoopValue: number,
     sideXIndex: number
   ): void {
     for (let i = initialLoopValue; i <= finalLoopValue; i++) {
-      location[sideXIndex][i] = fillingObject;
+      battlefield.location[sideXIndex][i] = fillingObject;
     }
   }
 }

@@ -1,3 +1,4 @@
+import { Battlefield } from "./battlefield";
 import { Point } from './point';
 import { ShrinkSteps } from './shrinkSteps';
 import { ZoneFilling } from './zoneFilling';
@@ -13,7 +14,7 @@ import { ZoneShape } from './zoneShape';
 
 /**
  * @class
- * @description Represents shrinking zone in the game location
+ * @description Represents shrinking zone in the game battlefield
  */
 export class Zone {
   //#region Class fields
@@ -129,42 +130,42 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {*} borderFillingObject Object to fill a border of the zone
    * @param {*} cleanerObject Object to clean the border of the zone
    * @description Main function of the zone algorithm
    */
   public shrink(
-    location: Array<any>,
+    battlefield: Battlefield,
     fillingObject: any,
     borderFillingObject: any,
     cleanerObject: any
   ): void {
     // verification of the first stage
     if (this._isFirstStage) {
-      this.initializeFirstStage(location);
+      this.initializeFirstStage(battlefield);
     }
 
     // verification of the beginning of the new stage
 
     if (this._isNewStage) {
-      this.beginNewStage(location, borderFillingObject, cleanerObject);
+      this.beginNewStage(battlefield, borderFillingObject, cleanerObject);
     }
 
     // continuation of the current stage
 
-    this.continueCurrentStage(location, fillingObject);
+    this.continueCurrentStage(battlefield, fillingObject);
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
-   * @description Sets game location shape as current zone shape
+   * @param {Battlefield} battlefield Game battlefield for processing
+   * @description Sets game battlefield shape as current zone shape
    */
-  private initializeFirstStage(location: Array<any>): void {
-    const upperLeftPoint = new Point(0, 0);
-    const lowerRightPoint = new Point(location.length - 1, location[0].length - 1);
+  private initializeFirstStage(battlefield: Battlefield): void {
+    const upperLeftPoint = new Point(battlefield.startX, battlefield.startY);
+    const lowerRightPoint = new Point(battlefield.finishX, battlefield.finishY);
 
     this._currentZoneShape.defineShape(upperLeftPoint, lowerRightPoint);
 
@@ -174,22 +175,22 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} borderFillingObject Object to fill a border of the zone
    * @param {*} cleanerObject Object to clean the border of the zone
    * @description Finds new final zone shape
    */
   private beginNewStage(
-    location: Array<any>,
+    battlefield: Battlefield,
     borderFillingObject: any,
     cleanerObject: any
   ): void {
-    this.clearBorder(location, cleanerObject);
+    this.clearBorder(battlefield, cleanerObject);
     this.calculateFinalZoneShape();
     this.calculateDistances();
     this.calculateVerticalDistancesRatio();
     this.calculateHorizontalDistancesRatio();
-    this.drawZoneBorderline(location, borderFillingObject);
+    this.drawZoneBorderline(battlefield, borderFillingObject);
 
     this._verticalStepCount = 0;
     this._horizontalStepCount = 0;
@@ -199,18 +200,18 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} cleanerObject Object to clean the border of the zone
    * @description Removes the drawn border of the final zone
    */
-  private clearBorder(location: Array<any>, cleanerObject: any): void {
+  private clearBorder(battlefield: Battlefield, cleanerObject: any): void {
     for (let i = this._finalZoneShape.upperLeftPoint.x; i <= this._finalZoneShape.lowerRightPoint.x; i++) {
-      location[i][this._finalZoneShape.upperLeftPoint.y] = cleanerObject;
-      location[i][this._finalZoneShape.lowerRightPoint.y] = cleanerObject;
+      battlefield.location[i][this._finalZoneShape.upperLeftPoint.y] = cleanerObject;
+      battlefield.location[i][this._finalZoneShape.lowerRightPoint.y] = cleanerObject;
     }
     for (let i = this._finalZoneShape.upperLeftPoint.y; i <= this._finalZoneShape.lowerRightPoint.y; i++) {
-      location[this._finalZoneShape.upperLeftPoint.x][i] = cleanerObject;
-      location[this._finalZoneShape.lowerRightPoint.x][i] = cleanerObject;
+      battlefield.location[this._finalZoneShape.upperLeftPoint.x][i] = cleanerObject;
+      battlefield.location[this._finalZoneShape.lowerRightPoint.x][i] = cleanerObject;
     }
   }
 
@@ -283,28 +284,28 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} borderFillingObject Object to fill a border of the zone
    * @description Fills border cells of the final zone with given object
    */
-  private drawZoneBorderline(location: Array<any>, borderFillingObject: any): void {
+  private drawZoneBorderline(battlefield: Battlefield, borderFillingObject: any): void {
     for (let i = this._finalZoneShape.upperLeftPoint.x; i <= this._finalZoneShape.lowerRightPoint.x; i++) {
-      location[i][this._finalZoneShape.upperLeftPoint.y] = borderFillingObject;
-      location[i][this._finalZoneShape.lowerRightPoint.y] = borderFillingObject;
+      battlefield.location[i][this._finalZoneShape.upperLeftPoint.y] = borderFillingObject;
+      battlefield.location[i][this._finalZoneShape.lowerRightPoint.y] = borderFillingObject;
     }
     for (let i = this._finalZoneShape.upperLeftPoint.y; i <= this._finalZoneShape.lowerRightPoint.y; i++) {
-      location[this._finalZoneShape.upperLeftPoint.x][i] = borderFillingObject;
-      location[this._finalZoneShape.lowerRightPoint.x][i] = borderFillingObject;
+      battlefield.location[this._finalZoneShape.upperLeftPoint.x][i] = borderFillingObject;
+      battlefield.location[this._finalZoneShape.lowerRightPoint.x][i] = borderFillingObject;
     }
   }
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @description Fill an area outside the current zone
    */
-  private continueCurrentStage(location: Array<any>, fillingObject: any): void {
+  private continueCurrentStage(battlefield: Battlefield, fillingObject: any): void {
     const shrinkSteps = {
       topStep: 0,
       bottomStep: 0,
@@ -314,15 +315,15 @@ export class Zone {
 
     // vertical
 
-    this.shrinkVertically(location, fillingObject, shrinkSteps);
+    this.shrinkVertically(battlefield, fillingObject, shrinkSteps);
 
     // horizontal
 
-    this.shrinkHorizontally(location, fillingObject, shrinkSteps);
+    this.shrinkHorizontally(battlefield, fillingObject, shrinkSteps);
 
     // shrink single size zone
 
-    this.shrinkSingleSizeZone(location, fillingObject);
+    this.shrinkSingleSizeZone(battlefield, fillingObject);
 
     // update currentZoneShape
 
@@ -335,12 +336,12 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {object} shrinkSteps Values of shrinks for each side
-   * @description Shrinks location vertically
+   * @description Shrinks battlefield vertically
    */
-  private shrinkVertically(location: Array<any>, fillingObject: any, shrinkSteps: ShrinkSteps): void {
+  private shrinkVertically(battlefield: Battlefield, fillingObject: any, shrinkSteps: ShrinkSteps): void {
     const isTopSideReached = (this._currentZoneShape.upperLeftPoint.y === this._finalZoneShape.upperLeftPoint.y);
     const isBottomSideReached = (this._currentZoneShape.lowerRightPoint.y === this._finalZoneShape.lowerRightPoint.y);
 
@@ -357,7 +358,7 @@ export class Zone {
       if (this._topDistance > this._bottomDistance) {
         shrinkSteps.topStep++;
 
-        ZoneFilling.unequalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, upperY, lowerY, isCommonStep);
+        ZoneFilling.unequalDistancesVerticalLoop(battlefield, fillingObject, upperX, lowerX, upperY, lowerY, isCommonStep);
 
         if (isCommonStep) {
           shrinkSteps.bottomStep++;
@@ -366,25 +367,25 @@ export class Zone {
       } else if (this._topDistance < this._bottomDistance) {
         shrinkSteps.bottomStep++;
 
-        ZoneFilling.unequalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, lowerY, upperY, isCommonStep);
+        ZoneFilling.unequalDistancesVerticalLoop(battlefield, fillingObject, upperX, lowerX, lowerY, upperY, isCommonStep);
 
         if (isCommonStep) {
           shrinkSteps.topStep++;
           this._verticalStepCount = 0;
         }
       } else {
-        ZoneFilling.equalDistancesVerticalLoop(location, fillingObject, upperX, lowerX, upperY, lowerY);
+        ZoneFilling.equalDistancesVerticalLoop(battlefield, fillingObject, upperX, lowerX, upperY, lowerY);
 
         shrinkSteps.topStep++;
         shrinkSteps.bottomStep++;
         this._verticalStepCount = 0;
       }
     } else if (isTopSideReached && !isBottomSideReached) {
-      ZoneFilling.zeroDistanceVerticalLoop(location, fillingObject, upperX, lowerX, lowerY);
+      ZoneFilling.zeroDistanceVerticalLoop(battlefield, fillingObject, upperX, lowerX, lowerY);
 
       shrinkSteps.bottomStep++;
     } else if (!isTopSideReached && isBottomSideReached) {
-      ZoneFilling.zeroDistanceVerticalLoop(location, fillingObject, upperX, lowerX, upperY);
+      ZoneFilling.zeroDistanceVerticalLoop(battlefield, fillingObject, upperX, lowerX, upperY);
 
       shrinkSteps.topStep++;
     }
@@ -392,12 +393,12 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @param {object} shrinkSteps Values of shrinks for each side
-   * @description Shrinks location horizontally
+   * @description Shrinks battlefield horizontally
    */
-  private shrinkHorizontally(location: Array<any>, fillingObject: any, shrinkSteps: ShrinkSteps): void {
+  private shrinkHorizontally(battlefield: Battlefield, fillingObject: any, shrinkSteps: ShrinkSteps): void {
     const isLeftSideReached = (this._currentZoneShape.upperLeftPoint.x === this._finalZoneShape.upperLeftPoint.x);
     const isRightSideReached = (this._currentZoneShape.lowerRightPoint.x === this._finalZoneShape.lowerRightPoint.x);
 
@@ -414,7 +415,7 @@ export class Zone {
       if (this._leftDistance > this._rightDistance) {
         shrinkSteps.leftStep++;
 
-        ZoneFilling.unequalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, upperX, lowerX, isCommonStep);
+        ZoneFilling.unequalDistancesHorizontalLoop(battlefield, fillingObject, upperY, lowerY, upperX, lowerX, isCommonStep);
 
         if (isCommonStep) {
           shrinkSteps.rightStep++;
@@ -423,25 +424,25 @@ export class Zone {
       } else if (this._leftDistance < this._rightDistance) {
         shrinkSteps.rightStep++;
 
-        ZoneFilling.unequalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, lowerX, upperX, isCommonStep);
+        ZoneFilling.unequalDistancesHorizontalLoop(battlefield, fillingObject, upperY, lowerY, lowerX, upperX, isCommonStep);
 
         if (isCommonStep) {
           shrinkSteps.leftStep++;
           this._horizontalStepCount = 0;
         }
       } else {
-        ZoneFilling.equalDistancesHorizontalLoop(location, fillingObject, upperY, lowerY, upperX, lowerX);
+        ZoneFilling.equalDistancesHorizontalLoop(battlefield, fillingObject, upperY, lowerY, upperX, lowerX);
 
         shrinkSteps.leftStep++;
         shrinkSteps.rightStep++;
         this._horizontalStepCount = 0;
       }
     } else if (isLeftSideReached && !isRightSideReached) {
-      ZoneFilling.zeroDistanceHorizontalLoop(location, fillingObject, upperY, lowerY, lowerX);
+      ZoneFilling.zeroDistanceHorizontalLoop(battlefield, fillingObject, upperY, lowerY, lowerX);
 
       shrinkSteps.rightStep++;
     } else if (!isLeftSideReached && isRightSideReached) {
-      ZoneFilling.zeroDistanceHorizontalLoop(location, fillingObject, upperY, lowerY, upperX);
+      ZoneFilling.zeroDistanceHorizontalLoop(battlefield, fillingObject, upperY, lowerY, upperX);
 
       shrinkSteps.leftStep++;
     }
@@ -449,17 +450,17 @@ export class Zone {
 
   /**
    * @method
-   * @param {array} location Game location for processing
+   * @param {Battlefield} battlefield Game battlefield for processing
    * @param {*} fillingObject Object to fill an area outside the zone
    * @description Shrinks zone when its size equals one
    */
-  private shrinkSingleSizeZone(location: Array<any>, fillingObject: any): void {
+  private shrinkSingleSizeZone(battlefield: Battlefield, fillingObject: any): void {
     if (
       this._currentZoneShape.getWidth() === 1 &&
       this._currentZoneShape.getHeight() === 1 &&
       this._lastZoneSide < 1
     ) {
-      location
+      battlefield.location
       [this.currentZoneShape.upperLeftPoint.x]
       [this._currentZoneShape.upperLeftPoint.y]
       = fillingObject;

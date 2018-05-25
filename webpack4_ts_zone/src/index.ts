@@ -1,7 +1,10 @@
+import { Battlefield } from "./zone/battlefield";
 import { Zone } from "./zone/zone";
 
-const locationSide = 18;
-const shrinkCoefficient = 1.4;
+const battlefield = new Battlefield(18, 18);
+
+const locationSide = battlefield.width;
+const shrinkCoefficient = 2;
 const lastZoneSide = 0;
 const fillingObject = "∎";
 const borderFillingObject = 0;
@@ -18,14 +21,16 @@ for (let i = 0; i < locationSide; i++) {
   }
 }
 
+battlefield.location = gameLocation;
+
 const zone = new Zone(shrinkCoefficient, lastZoneSide);
 
 for (let i = 0; i < 19; i++) {
-  (function (gameLocation) {
+  (function (Battlefield) {
     setTimeout(function () {
       console.clear();
-      zone.shrink(gameLocation, fillingObject, borderFillingObject, cleanerObject);
-      console.table(gameLocation);
+      zone.shrink(battlefield, fillingObject, borderFillingObject, cleanerObject);
+      console.table(battlefield.location);
     }, i * 1000);
   })(gameLocation);
 }
