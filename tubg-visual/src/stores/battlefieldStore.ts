@@ -1,15 +1,19 @@
-import { TankStore } from './tankStore';
-import { computed, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { Battlefield } from '../classes/battlefield';
 import { Point } from "../zone/point";
 import { Zone } from "../zone/zone";
 import { ZoneShape } from '../zone/zoneShape';
+import { BulletStore } from './bulletStore';
+import { TankStore } from './tankStore';
 
 const SCALE_COEF = 20;
 
 class BattlefieldStore {
   @observable
   public tankStoreList: Array<TankStore> = [];
+  @observable
+  public bulletStoreList: Array<BulletStore> = [];
+
   @observable
   private livingZone: ZoneShape;
   @observable
@@ -31,8 +35,9 @@ class BattlefieldStore {
       new Point(battlefield.startX, battlefield.startY),
       new Point(battlefield.finishX, battlefield.finishY)
     )
-
-    this.init(battlefield, zone);
+    setTimeout(() => {
+      this.init(battlefield, zone);
+    }, 2000);
   }
 
   @computed
@@ -73,6 +78,10 @@ class BattlefieldStore {
         top: `${top}px`,
         left: `${left}px`
       };
+    } else {
+      return {
+        display: `hidden`
+      };
     }
   };
 
@@ -88,19 +97,21 @@ class BattlefieldStore {
     return height;
   }
 
+  @action
   public setBattlefieldSize(width: number, height: number): void {
     this.bfWidth = width * SCALE_COEF;
     this.bfHeight = height * SCALE_COEF;
   }
 
+  @action
   public setSimulationData(
     tankStoreList: Array<TankStore>,
-    /* bulletStoreList: Array<BulletStore>, */
+    bulletStoreList: Array<BulletStore>,
     livingZone: ZoneShape,
     finalZone: ZoneShape
   ): void {
     this.tankStoreList = tankStoreList;
-    // this.bulletStoreList = bulletStoreList;
+    this.bulletStoreList = bulletStoreList;
     this.livingZone = livingZone;
     this.finalZone = finalZone;
   }
@@ -108,6 +119,7 @@ class BattlefieldStore {
   // дальше пошли методы для симуляции, к стору и компоненту отношения не имеют
   private init(battlefield: Battlefield, zone: Zone): void {
     this.genTanks();
+    this.genBullets();
 
     for (let i = 0; i < battlefield.width; i++) {
       setTimeout(() => {
@@ -140,6 +152,29 @@ class BattlefieldStore {
 
     const tank7 = new TankStore(getID(), 13, 30, 1, 0);
     this.tankStoreList.push(tank7);
+  }
+
+  private genBullets(): void {
+    const bullet1 = new BulletStore(getID(), 5, 1, 0);
+    this.bulletStoreList.push(bullet1);
+
+    const bullet2 = new BulletStore(getID(), 10, 5, 90);
+    this.bulletStoreList.push(bullet2);
+
+    const bullet3 = new BulletStore(getID(), 15, 10, 180);
+    this.bulletStoreList.push(bullet3);
+
+    const bullet4 = new BulletStore(getID(), 20, 15, 270);
+    this.bulletStoreList.push(bullet4);
+
+    const bullet5 = new BulletStore(getID(), 25, 20, 0);
+    this.bulletStoreList.push(bullet5);
+
+    const bullet6 = new BulletStore(getID(), 16, 25, 0);
+    this.bulletStoreList.push(bullet6);
+
+    const bullet7 = new BulletStore(getID(), 21, 30, 0);
+    this.bulletStoreList.push(bullet7);
   }
 }
 

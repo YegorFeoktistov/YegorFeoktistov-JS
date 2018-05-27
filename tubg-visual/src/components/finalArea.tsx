@@ -1,11 +1,11 @@
 import { inject, observer } from "mobx-react";
 import * as React from 'react';
-import { IDefaultProps } from "./reactInterfaces";
+import { IBattlefieldProps } from "./reactInterfaces";
 import "./style.css";
 
 @inject('bfStore')
 @observer
-export class FinalArea extends React.Component<IDefaultProps, {}> {
+export class FinalArea extends React.Component<IBattlefieldProps, {}> {
   public render() {
     const { bfStore } = this.props;
 
