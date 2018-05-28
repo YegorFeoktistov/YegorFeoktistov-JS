@@ -35,9 +35,8 @@ class BattlefieldStore {
       new Point(battlefield.startX, battlefield.startY),
       new Point(battlefield.finishX, battlefield.finishY)
     )
-    setTimeout(() => {
-      this.init(battlefield, zone);
-    }, 2000);
+
+    this.init(battlefield, zone);
   }
 
   @computed
@@ -46,7 +45,7 @@ class BattlefieldStore {
       width: `${this.bfWidth}px`,
       height: `${this.bfHeight}px`
     };
-  };
+  }
 
   @computed
   public get livingAreaStyle() {
@@ -62,7 +61,7 @@ class BattlefieldStore {
       left: `${left}px`,
       backgroundPosition: `-${left}px -${top}px`
     };
-  };
+  }
 
   @computed
   public get finalAreaStyle() {
@@ -83,7 +82,7 @@ class BattlefieldStore {
         display: `hidden`
       };
     }
-  };
+  }
 
   private getWidth(zone: ZoneShape): number {
     const width = (zone.lowerRightPoint.x - zone.upperLeftPoint.x + 1) * SCALE_COEF;
@@ -127,7 +126,7 @@ class BattlefieldStore {
 
         this.livingZone = zone.currentZoneShape;
         this.finalZone = zone.finalZoneShape;
-      }, i * 2000);
+      }, i * 500);
     }
   }
 

@@ -29,9 +29,9 @@ export class BulletStore {
       height: `${SCALE_COEF}px`,
       top: `${top}px`,
       left: `${left}px`,
-      transform: `rotate(${this.direction + 180}deg)`
+      transform: `rotate(${this.direction}deg)`
     };
-  };
+  }
 }
 
 export type BulletStoreType = BulletStore;

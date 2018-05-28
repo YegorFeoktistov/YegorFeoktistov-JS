@@ -26,7 +26,7 @@ export class TankStore {
   public get tankStyle() {
     const top = this.y * SCALE_COEF;
     const left = this.x * SCALE_COEF;
-    const angle = this.health <= 0 ? 0 : this.direction + 90;
+    const angle = this.health <= 0 ? 0 : this.direction;
 
     return {
       width: `${SCALE_COEF}px`,
@@ -35,7 +35,7 @@ export class TankStore {
       left: `${left}px`,
       transform: `rotate(${angle}deg)`
     };
-  };
+  }
 
   public getDeadClassName(): string {
     if (this.health <= 0) {
