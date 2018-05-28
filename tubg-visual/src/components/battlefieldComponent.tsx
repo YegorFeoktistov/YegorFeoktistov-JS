@@ -7,7 +7,6 @@ import { IBattlefieldProps } from "./reactInterfaces";
 import "./style.css";
 import { TankComponent } from "./tankComponent";
 
-
 @inject('bfStore')
 @observer
 export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}> {

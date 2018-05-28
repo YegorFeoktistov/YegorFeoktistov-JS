@@ -1,6 +1,5 @@
 import { computed, observable } from "mobx";
-
-const SCALE_COEF = 20;
+import { SCALE_COEF } from "./battlefieldStore";
 
 export class TankStore {
   @observable

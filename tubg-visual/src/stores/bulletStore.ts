@@ -1,6 +1,5 @@
 import { action, computed, observable } from "mobx";
-
-const SCALE_COEF = 20;
+import { SCALE_COEF } from "./battlefieldStore";
 
 export class BulletStore {
   @observable
@@ -31,14 +30,6 @@ export class BulletStore {
       left: `${left}px`,
       transform: `rotate(${this.direction}deg)`
     };
-  }
-
-  @action
-  public setDate(id: number, x: number, y: number, direction: number) {
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.direction = direction;
   }
 }
 
