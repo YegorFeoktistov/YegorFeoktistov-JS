@@ -35,13 +35,6 @@ export class TankStore {
       transform: `rotate(${angle}deg)`
     };
   }
-
-  public getDeadClassName(): string {
-    if (this.health <= 0) {
-      return "tank_dead";
-    }
-    return "";
-  }
 }
 
 export type TankStoreType = TankStore;

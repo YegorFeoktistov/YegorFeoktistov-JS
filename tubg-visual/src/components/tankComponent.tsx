@@ -8,8 +8,12 @@ export class TankComponent extends React.Component<ITankComponentProps, {}> {
   public render() {
     const { tankStore } = this.props;
 
+    const tankDeadClassName: string = (tankStore.health <= 0) ? " tank_dead" : "";
+
+    console.log(`-- tank ${tankStore.id}`);
+
     return (
-      <div style={tankStore.tankStyle} className={"tank" + " " + tankStore.getDeadClassName()} />
+      <div style={tankStore.tankStyle} className={"tank" + tankDeadClassName} />
     );
   }
 }

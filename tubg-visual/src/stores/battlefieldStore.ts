@@ -37,7 +37,7 @@ class BattlefieldStore {
     setTimeout(() => {
       this.init(battlefield, zone);
 
-    }, 2000);
+    }, 1000);
   }
 
   @computed
@@ -80,7 +80,7 @@ class BattlefieldStore {
       };
     } else {
       return {
-        display: `hidden`
+        display: `none`
       };
     }
   }
@@ -101,6 +101,7 @@ class BattlefieldStore {
   public setBattlefieldSize(width: number, height: number): void {
     this.bfWidth = width * SCALE_COEF;
     this.bfHeight = height * SCALE_COEF;
+
     this.livingZone = new ZoneShape(
       new Point(0, 0),
       new Point(width - 1, height - 1)
@@ -135,17 +136,19 @@ class BattlefieldStore {
         }
         if (i === 3) {
           bulletList[0].x += 2;
-          tankList[2].direction += 90;
+          tankList[2].health = 0;
         }
         if (i === 6) {
           bulletList.push(new Bullet(getID(), 1, 30, 270));
           bulletList.splice(0,1);
+          bulletList[1].x += 2;
+          bulletList[2].x += 2;
           tankList[1].x += 2;
           tankList[3].x += 2;
         }
 
         this.setSimulationData(tankList, bulletList, zone.currentZoneShape, zone.finalZoneShape);
-      }, i * 500);
+      }, i * 1000);
     }
   }
 }
