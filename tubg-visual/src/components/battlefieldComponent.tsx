@@ -22,12 +22,21 @@ export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}>
     });
 
     return (
-      <div className="bf" style={bfStore.battlefieldStyle} >
-        <div className="dead-area" />
-        <LivingArea />
-        <FinalArea />
-        {tanks}
-        {bullets}
+      <div className="bf-container">
+        <div
+          className="bf"
+          style={bfStore.battlefieldStyle}
+          onWheel={bfStore.onWheel}
+          onMouseDown={bfStore.onMouseDown}
+          onMouseUp={bfStore.onMouseUp}
+          onMouseMove={bfStore.onMouseMove}
+        >
+          <div className="dead-area" />
+          <LivingArea />
+          <FinalArea />
+          {tanks}
+          {bullets}
+        </div>
       </div>
     )
   }

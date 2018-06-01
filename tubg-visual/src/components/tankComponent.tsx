@@ -10,8 +10,6 @@ export class TankComponent extends React.Component<ITankComponentProps, {}> {
 
     const tankDeadClassName: string = (tankStore.health <= 0) ? " tank_dead" : "";
 
-    console.log(`-- tank ${tankStore.id}`);
-
     return (
       <div style={tankStore.tankStyle} className={"tank" + tankDeadClassName} />
     );

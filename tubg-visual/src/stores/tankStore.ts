@@ -1,5 +1,5 @@
 import { computed, observable } from "mobx";
-import { SCALE_COEF } from "./battlefieldStore";
+import { SCALE_COEF, TRANSITION } from "./battlefieldStore";
 
 export class TankStore {
   @observable
@@ -23,8 +23,8 @@ export class TankStore {
 
   @computed
   public get tankStyle() {
-    const top = this.y * SCALE_COEF;
-    const left = this.x * SCALE_COEF;
+    const top = this.y * SCALE_COEF.get();
+    const left = this.x * SCALE_COEF.get();
     const angle = this.health <= 0 ? 0 : this.direction;
 
     return {
@@ -32,7 +32,8 @@ export class TankStore {
       height: `${SCALE_COEF}px`,
       top: `${top}px`,
       left: `${left}px`,
-      transform: `rotate(${angle}deg)`
+      transform: `rotate(${angle}deg)`,
+      transition: `${TRANSITION.get()}s`
     };
   }
 }

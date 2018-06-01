@@ -9,7 +9,12 @@ import { BulletStore } from './bulletStore';
 import { parseBullets, parseTanks } from "./storeParserFuctions";
 import { TankStore } from './tankStore';
 
-export const SCALE_COEF = 20;
+
+const MIN_SCALE = 20;
+const MAX_SCALE = 40;
+
+export let SCALE_COEF = observable.box(MIN_SCALE);
+export let TRANSITION = observable.box(1);
 
 class BattlefieldStore {
   @observable
@@ -25,6 +30,15 @@ class BattlefieldStore {
   private bfWidth: number;
   @observable
   private bfHeight: number;
+  @observable
+  private isDraggable: boolean = false;
+  @observable
+  private bfTop: number = 0;
+  @observable
+  private bfLeft: number = 0;
+
+  private offset = [0, 0];
+  private mousePosition = {x: 0, y: 0};
 
   public constructor() {
     // я тут просто запускаю тестовую симуляцию
@@ -43,8 +57,10 @@ class BattlefieldStore {
   @computed
   public get battlefieldStyle() {
     return {
-      width: `${this.bfWidth}px`,
-      height: `${this.bfHeight}px`
+      width: `${this.bfWidth * SCALE_COEF.get()}px`,
+      height: `${this.bfHeight * SCALE_COEF.get()}px`,
+      top: `${this.bfTop}px`,
+      left: `${this.bfLeft}px`
     };
   }
 
@@ -52,15 +68,16 @@ class BattlefieldStore {
   public get livingAreaStyle() {
     const width = this.getWidth(this.livingZone);
     const height = this.getHeight(this.livingZone);
-    const top = this.livingZone.upperLeftPoint.y * SCALE_COEF;
-    const left = this.livingZone.upperLeftPoint.x * SCALE_COEF;
+    const top = this.livingZone.upperLeftPoint.y * SCALE_COEF.get();
+    const left = this.livingZone.upperLeftPoint.x * SCALE_COEF.get();
 
     return {
       width: `${width}px`,
       height: `${height}px`,
       top: `${top}px`,
       left: `${left}px`,
-      backgroundPosition: `-${left}px -${top}px`
+      backgroundPosition: `-${left}px -${top}px`,
+      transition: `${TRANSITION.get()}s`
     };
   }
 
@@ -69,14 +86,15 @@ class BattlefieldStore {
     if (this.finalZone) {
       const width = this.getWidth(this.finalZone);
       const height = this.getHeight(this.finalZone);
-      const top = this.finalZone.upperLeftPoint.y * SCALE_COEF;
-      const left = this.finalZone.upperLeftPoint.x * SCALE_COEF;
+      const top = this.finalZone.upperLeftPoint.y * SCALE_COEF.get();
+      const left = this.finalZone.upperLeftPoint.x * SCALE_COEF.get();
 
       return {
         width: `${width}px`,
         height: `${height}px`,
         top: `${top}px`,
-        left: `${left}px`
+        left: `${left}px`,
+        transition: `${TRANSITION.get()}s`
       };
     } else {
       return {
@@ -86,21 +104,85 @@ class BattlefieldStore {
   }
 
   private getWidth(zone: ZoneShape): number {
-    const width = (zone.lowerRightPoint.x - zone.upperLeftPoint.x + 1) * SCALE_COEF;
+    const width = (zone.lowerRightPoint.x - zone.upperLeftPoint.x + 1) * SCALE_COEF.get();
 
     return width;
   }
 
   private getHeight(zone: ZoneShape): number {
-    const height = (zone.lowerRightPoint.y - zone.upperLeftPoint.y + 1) * SCALE_COEF;
+    const height = (zone.lowerRightPoint.y - zone.upperLeftPoint.y + 1) * SCALE_COEF.get();
 
     return height;
   }
 
   @action
+  public onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    this.isDraggable = true;
+    this.offset = [
+      e.currentTarget.offsetLeft - e.clientX,
+      e.currentTarget.offsetTop - e.clientY
+    ];
+  }
+
+  @action
+  public onMouseUp = () => {
+    this.isDraggable = false;
+  }
+
+  @action
+  public onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (this.isDraggable) {
+
+      this.mousePosition = {
+        x: e.clientX,
+        y: e.clientY
+      };
+
+      if (document.body.clientWidth < (this.bfWidth * SCALE_COEF.get())) {
+        const leftVal = (this.mousePosition.x + this.offset[0]);
+
+        this.bfLeft = leftVal <=
+          0 ?
+          leftVal >=
+          (document.body.clientWidth - this.bfWidth * SCALE_COEF.get()) ?
+          leftVal :
+          (document.body.clientWidth - this.bfWidth * SCALE_COEF.get()) :
+          0;
+      } else {
+        this.bfLeft = 0;
+      }
+
+      if (document.body.clientHeight < (this.bfHeight * SCALE_COEF.get())) {
+        const topVal = (this.mousePosition.y + this.offset[1]);
+
+        this.bfTop = topVal <=
+          0 ?
+          topVal >=
+          (document.body.clientHeight - this.bfHeight * SCALE_COEF.get()) ?
+          topVal :
+          (document.body.clientHeight - this.bfHeight * SCALE_COEF.get()) :
+          0;
+      } else {
+        this.bfTop = 0;
+      }
+    }
+  }
+
+  @action
+  public onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    TRANSITION.set(0);
+    if (e.deltaY < 0 && (SCALE_COEF.get() < MAX_SCALE)) {
+      SCALE_COEF.set(SCALE_COEF.get() + 1);
+    } else if (e.deltaY > 0 && (SCALE_COEF.get() > MIN_SCALE)) {
+      SCALE_COEF.set(SCALE_COEF.get() - 1);
+    }
+  }
+
+  @action
   public setBattlefieldSize(width: number, height: number): void {
-    this.bfWidth = width * SCALE_COEF;
-    this.bfHeight = height * SCALE_COEF;
+    this.bfWidth = width;
+    this.bfHeight = height;
 
     this.livingZone = new ZoneShape(
       new Point(0, 0),
@@ -115,6 +197,7 @@ class BattlefieldStore {
     livingZone?: ZoneShape,
     finalZone?: ZoneShape
   ): void {
+    TRANSITION.set(1);
     parseTanks(tankList, this.tankStoreList);
     parseBullets(bulletList, this.bulletStoreList);
 
