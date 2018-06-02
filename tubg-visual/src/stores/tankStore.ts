@@ -28,12 +28,12 @@ export class TankStore {
     const angle = this.health <= 0 ? 0 : this.direction;
 
     return {
-      width: `${SCALE_COEF}px`,
-      height: `${SCALE_COEF}px`,
-      top: `${top}px`,
-      left: `${left}px`,
-      transform: `rotate(${angle}deg)`,
-      transition: `${TRANSITION.get()}s`
+      width: SCALE_COEF,
+      height: SCALE_COEF,
+      top: top,
+      left: left,
+      transform: angle,
+      transition: TRANSITION.get()
     };
   }
 }

@@ -8,8 +8,17 @@ export class BulletComponent extends React.Component<IBulletComponentProps, {}> 
   public render() {
     const { bulletStore } = this.props;
 
+    const bulletStyle = {
+      width: `${bulletStore.bulletStyle.width}px`,
+      height: `${bulletStore.bulletStyle.height}px`,
+      top: `${bulletStore.bulletStyle.top}px`,
+      left: `${bulletStore.bulletStyle.left}px`,
+      transform: `rotate(${bulletStore.bulletStyle.transform}deg)`,
+      transition: `${bulletStore.bulletStyle.transition}s`
+    }
+
     return (
-      <div style={bulletStore.bulletStyle} className="bullet" />
+      <div style={bulletStyle} className="bullet" />
     );
   }
 }

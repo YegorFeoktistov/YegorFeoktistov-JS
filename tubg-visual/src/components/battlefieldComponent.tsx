@@ -30,6 +30,13 @@ export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}>
   public render() {
     const { bfStore } = this.props;
 
+    const battlefieldStyle = {
+      width: `${bfStore.battlefieldStyle.width}px`,
+      height: `${bfStore.battlefieldStyle.height}px`,
+      top: `${bfStore.battlefieldStyle.top}px`,
+      left: `${bfStore.battlefieldStyle.left}px`
+    };
+
     const tanks = bfStore.tankStoreList.map((tankStore) => {
       return <TankComponent key={tankStore.id} tankStore={tankStore} />
     });
@@ -42,7 +49,7 @@ export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}>
       <div className="bf-container">
         <div
           className="bf"
-          style={bfStore.battlefieldStyle}
+          style={battlefieldStyle}
           onWheel={bfStore.onWheel}
           onMouseDown={bfStore.onMouseDown}
           onMouseUp={bfStore.onMouseUp}

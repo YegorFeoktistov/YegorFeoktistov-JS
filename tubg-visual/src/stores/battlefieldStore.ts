@@ -54,12 +54,14 @@ class BattlefieldStore {
 
   @computed
   public get battlefieldStyle() {
-    return {
-      width: `${this.bfWidth * SCALE_COEF.get()}px`,
-      height: `${this.bfHeight * SCALE_COEF.get()}px`,
-      top: `${this.bfTop}px`,
-      left: `${this.bfLeft}px`
+    const style =  {
+      width: this.bfWidth * SCALE_COEF.get(),
+      height: this.bfHeight * SCALE_COEF.get(),
+      top: this.bfTop,
+      left: this.bfLeft
     };
+
+    return style;
   }
 
   @computed
@@ -69,14 +71,15 @@ class BattlefieldStore {
     const top = this.livingZone.upperLeftPoint.y * SCALE_COEF.get();
     const left = this.livingZone.upperLeftPoint.x * SCALE_COEF.get();
 
-    return {
-      width: `${width}px`,
-      height: `${height}px`,
-      top: `${top}px`,
-      left: `${left}px`,
-      backgroundPosition: `-${left}px -${top}px`,
-      transition: `${TRANSITION.get()}s`
+    const style = {
+      width: width,
+      height: height,
+      top: top,
+      left: left,
+      transition: TRANSITION.get()
     };
+
+    return style;
   }
 
   @computed
@@ -87,17 +90,17 @@ class BattlefieldStore {
       const top = this.finalZone.upperLeftPoint.y * SCALE_COEF.get();
       const left = this.finalZone.upperLeftPoint.x * SCALE_COEF.get();
 
-      return {
-        width: `${width}px`,
-        height: `${height}px`,
-        top: `${top}px`,
-        left: `${left}px`,
-        transition: `${TRANSITION.get()}s`
+      const style = {
+        width: width,
+        height: height,
+        top: top,
+        left: left,
+        transition: TRANSITION.get()
       };
+
+      return style;
     } else {
-      return {
-        display: `none`
-      };
+      return null;
     }
   }
 

@@ -24,12 +24,12 @@ export class BulletStore {
     const left = this.x * SCALE_COEF.get();
 
     return {
-      width: `${SCALE_COEF}px`,
-      height: `${SCALE_COEF}px`,
-      top: `${top}px`,
-      left: `${left}px`,
-      transform: `rotate(${this.direction}deg)`,
-      transition: `${TRANSITION.get()}s`
+      width: SCALE_COEF,
+      height: SCALE_COEF,
+      top: top,
+      left: left,
+      transform: this.direction,
+      transition: TRANSITION.get()
     };
   }
 }
