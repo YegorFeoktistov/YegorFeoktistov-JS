@@ -1,8 +1,6 @@
 import { action, computed, observable } from "mobx";
-import { Battlefield } from '../classes/battlefield';
 import { Tank } from '../classes/tank';
 import { Point } from "../zone/point";
-import { Zone } from "../zone/zone";
 import { ZoneShape } from '../zone/zoneShape';
 import { Bullet } from './../classes/bullet';
 import { BulletStore } from './bulletStore';
@@ -43,15 +41,15 @@ class BattlefieldStore {
   public constructor() {
     // я тут просто запускаю тестовую симуляцию
 
-    const battlefield = new Battlefield(50, 50);
-    const zone = new Zone(2, 0)
+    // const battlefield = new Battlefield(50, 50);
+    // const zone = new Zone(2, 0)
 
-    this.setBattlefieldSize(battlefield.width, battlefield.height);
+    // this.setBattlefieldSize(battlefield.width, battlefield.height);
 
-    setTimeout(() => {
-      this.init(battlefield, zone);
+    // setTimeout(() => {
+    //   this.init(battlefield, zone);
 
-    }, 1000);
+    // }, 1000);
   }
 
   @computed
@@ -66,8 +64,8 @@ class BattlefieldStore {
 
   @computed
   public get livingAreaStyle() {
-    const width = this.getWidth(this.livingZone);
-    const height = this.getHeight(this.livingZone);
+    const width = this.getZoneWidth(this.livingZone);
+    const height = this.getZoneHeight(this.livingZone);
     const top = this.livingZone.upperLeftPoint.y * SCALE_COEF.get();
     const left = this.livingZone.upperLeftPoint.x * SCALE_COEF.get();
 
@@ -84,8 +82,8 @@ class BattlefieldStore {
   @computed
   public get finalAreaStyle() {
     if (this.finalZone) {
-      const width = this.getWidth(this.finalZone);
-      const height = this.getHeight(this.finalZone);
+      const width = this.getZoneWidth(this.finalZone);
+      const height = this.getZoneHeight(this.finalZone);
       const top = this.finalZone.upperLeftPoint.y * SCALE_COEF.get();
       const left = this.finalZone.upperLeftPoint.x * SCALE_COEF.get();
 
@@ -103,13 +101,13 @@ class BattlefieldStore {
     }
   }
 
-  private getWidth(zone: ZoneShape): number {
+  private getZoneWidth(zone: ZoneShape): number {
     const width = (zone.lowerRightPoint.x - zone.upperLeftPoint.x + 1) * SCALE_COEF.get();
 
     return width;
   }
 
-  private getHeight(zone: ZoneShape): number {
+  private getZoneHeight(zone: ZoneShape): number {
     const height = (zone.lowerRightPoint.y - zone.upperLeftPoint.y + 1) * SCALE_COEF.get();
 
     return height;
@@ -206,71 +204,37 @@ class BattlefieldStore {
   }
 
   // дальше пошли методы для симуляции, к стору и компоненту отношения не имеют
-  private init(battlefield: Battlefield, zone: Zone): void {
+  // private init(battlefield: Battlefield, zone: Zone): void {
 
-    for (let i = 0; i < battlefield.width; i++) {
-      setTimeout(() => {
-        zone.shrink(battlefield);
+  //   for (let i = 0; i < battlefield.width; i++) {
+  //     setTimeout(() => {
+  //       zone.shrink(battlefield);
 
-        if (i === 1) {
-          bulletList.splice(1,1);
-          bulletList.splice(3,1);
-          tankList[0].x += 2;
-        }
-        if (i === 3) {
-          bulletList[0].x += 2;
-          tankList[2].health = 0;
-        }
-        if (i === 6) {
-          bulletList.push(new Bullet(getID(), 1, 30, 270));
-          bulletList.splice(0,1);
-          bulletList[1].x += 2;
-          bulletList[2].x += 2;
-          tankList[1].x += 2;
-          tankList[3].x += 2;
-        }
+  //       if (i === 1) {
+  //         bulletList.splice(1,1);
+  //         bulletList.splice(3,1);
+  //         tankList[0].x += 2;
+  //       }
+  //       if (i === 3) {
+  //         bulletList[0].x += 2;
+  //         tankList[2].health = 0;
+  //       }
+  //       if (i === 6) {
+  //         bulletList.push(new Bullet(getID(), 1, 30, 270));
+  //         bulletList.splice(0,1);
+  //         bulletList[1].x += 2;
+  //         bulletList[2].x += 2;
+  //         tankList[1].x += 2;
+  //         tankList[3].x += 2;
+  //       }
 
-        this.setSimulationData(tankList, bulletList, zone.currentZoneShape, zone.finalZoneShape);
-      }, i * 1000);
-    }
-  }
+  //       this.setSimulationData(tankList, bulletList, zone.currentZoneShape, zone.finalZoneShape);
+  //     }, i * 1000);
+  //   }
+  // }
 }
 
 // генерю id и key
-let uniqueId = 0;
-const getID = () => uniqueId++;
-
-const bulletList = [
-  new Bullet(getID(), 5, 1, 0),
-
-  new Bullet(getID(), 10, 5, 90),
-
-  new Bullet(getID(), 15, 10, 180),
-
-  new Bullet(getID(), 20, 15, 270),
-
-  new Bullet(getID(), 25, 20, 0),
-
-  new Bullet(getID(), 16, 25, 0),
-
-  new Bullet(getID(), 21, 30, 0)
-];
-
-const tankList = [
-  new Tank(getID(), 1, 1, 1, 0),
-
-  new Tank(getID(), 3, 5, 1, 90),
-
-  new Tank(getID(), 5, 10, 1, 180),
-
-  new Tank(getID(), 7, 15, 1, 270),
-
-  new Tank(getID(), 9, 20, 0, 0),
-
-  new Tank(getID(), 11, 25, 0, 0),
-
-  new Tank(getID(), 13, 30, 1, 0)
-];
 
 export type BattlefieldStoreType = BattlefieldStore;
 
@@ -278,5 +242,5 @@ export const bfStore = new BattlefieldStore();
 
 // чтобы из консоли можно было менять значения в сторе
 (<any>window).bfStore = bfStore;
-(<any>window).bulletList = bulletList;
-(<any>window).tankList = tankList;
+// (<any>window).bulletList = bulletList;
+// (<any>window).tankList = tankList;

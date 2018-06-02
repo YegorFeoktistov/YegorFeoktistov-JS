@@ -6,10 +6,27 @@ import { LivingArea } from "./livingArea";
 import { IBattlefieldProps } from "./reactInterfaces";
 import "./style.css";
 import { TankComponent } from "./tankComponent";
+import { Simulation } from "../stores/simulation";
+import { action } from "mobx";
 
 @inject('bfStore')
 @observer
 export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}> {
+  private simulation: Simulation;
+
+  public constructor(props: IBattlefieldProps) {
+    super(props);
+
+    const { bfStore } = props;
+    bfStore.setBattlefieldSize(50, 50);
+
+    this.simulation = new Simulation();
+  }
+
+  public componentDidMount() {
+    this.simulation.start();
+  }
+
   public render() {
     const { bfStore } = this.props;
 
@@ -37,6 +54,19 @@ export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}>
           {tanks}
           {bullets}
         </div>
+        <label className="range-label">
+          <p className="range-label__text">
+            Change speed
+          </p>
+          <input
+            className="slider"
+            type="range"
+            min="10"
+            max="2000"
+            defaultValue="1000"
+            step="1"
+          />
+        </label>
       </div>
     )
   }
