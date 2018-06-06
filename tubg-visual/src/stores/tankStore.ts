@@ -26,6 +26,7 @@ export class TankStore {
     const top = this.y * SCALE_COEF.get();
     const left = this.x * SCALE_COEF.get();
     const angle = this.health <= 0 ? 0 : this.direction;
+    // const transition = this.health <= 0 ? 0 : TRANSITION.get();
 
     return {
       width: SCALE_COEF,

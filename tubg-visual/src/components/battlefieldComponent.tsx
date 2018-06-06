@@ -3,7 +3,7 @@ import * as React from 'react';
 import { BulletComponent } from "./bulletComponent";
 import { FinalArea } from "./finalArea";
 import { LivingArea } from "./livingArea";
-import { IBattlefieldProps } from "./reactInterfaces";
+import { IBattlefieldProps } from "./propsInterfaces";
 import "./style.css";
 import { TankComponent } from "./tankComponent";
 import { Simulation } from "../stores/simulation";
@@ -21,6 +21,9 @@ export class BattlefieldComponent extends React.Component<IBattlefieldProps, {}>
     bfStore.setBattlefieldSize(50, 50);
 
     this.simulation = new Simulation();
+    this.simulation.customEvent.subscribe((data) => {
+      bfStore.setSimulationData(data.tankList, data.bulletList, data.currentZoneShape, data.finalZoneShape);
+    });
   }
 
   public componentDidMount() {

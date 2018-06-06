@@ -1,6 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from 'react';
-import { IBattlefieldProps } from "./reactInterfaces";
+import { IBattlefieldProps } from "./propsInterfaces";
 import "./style.css";
 
 @inject('bfStore')

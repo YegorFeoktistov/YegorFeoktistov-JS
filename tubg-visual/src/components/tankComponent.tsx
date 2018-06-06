@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
-import { ITankComponentProps } from "./reactInterfaces";
+import { ITankComponentProps } from "./propsInterfaces";
 import "./style.css";
 
 @observer
@@ -9,6 +9,7 @@ export class TankComponent extends React.Component<ITankComponentProps, {}> {
     const { tankStore } = this.props;
 
     const tankDeadClassName: string = (tankStore.health <= 0) ? " tank_dead" : "";
+    console.log(`--tank ${tankStore.id}`);
 
     const tankStyle = {
       width: `${tankStore.tankStyle.width}px`,

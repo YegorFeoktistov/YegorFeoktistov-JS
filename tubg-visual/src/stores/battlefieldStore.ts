@@ -39,17 +39,6 @@ class BattlefieldStore {
   private mousePosition = {x: 0, y: 0};
 
   public constructor() {
-    // я тут просто запускаю тестовую симуляцию
-
-    // const battlefield = new Battlefield(50, 50);
-    // const zone = new Zone(2, 0)
-
-    // this.setBattlefieldSize(battlefield.width, battlefield.height);
-
-    // setTimeout(() => {
-    //   this.init(battlefield, zone);
-
-    // }, 1000);
   }
 
   @computed
@@ -205,45 +194,13 @@ class BattlefieldStore {
     this.livingZone = livingZone;
     this.finalZone = finalZone;
   }
-
-  // дальше пошли методы для симуляции, к стору и компоненту отношения не имеют
-  // private init(battlefield: Battlefield, zone: Zone): void {
-
-  //   for (let i = 0; i < battlefield.width; i++) {
-  //     setTimeout(() => {
-  //       zone.shrink(battlefield);
-
-  //       if (i === 1) {
-  //         bulletList.splice(1,1);
-  //         bulletList.splice(3,1);
-  //         tankList[0].x += 2;
-  //       }
-  //       if (i === 3) {
-  //         bulletList[0].x += 2;
-  //         tankList[2].health = 0;
-  //       }
-  //       if (i === 6) {
-  //         bulletList.push(new Bullet(getID(), 1, 30, 270));
-  //         bulletList.splice(0,1);
-  //         bulletList[1].x += 2;
-  //         bulletList[2].x += 2;
-  //         tankList[1].x += 2;
-  //         tankList[3].x += 2;
-  //       }
-
-  //       this.setSimulationData(tankList, bulletList, zone.currentZoneShape, zone.finalZoneShape);
-  //     }, i * 1000);
-  //   }
-  // }
 }
 
 // генерю id и key
 
+export const bfStore = new BattlefieldStore();
 export type BattlefieldStoreType = BattlefieldStore;
 
-export const bfStore = new BattlefieldStore();
 
 // чтобы из консоли можно было менять значения в сторе
 (<any>window).bfStore = bfStore;
-// (<any>window).bulletList = bulletList;
-// (<any>window).tankList = tankList;

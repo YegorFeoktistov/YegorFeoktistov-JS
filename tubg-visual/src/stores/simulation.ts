@@ -1,12 +1,35 @@
+import { ZoneShape } from './../zone/zoneShape';
 import { Bullet } from "../classes/bullet";
 import { Tank } from "../classes/tank";
 import { Zone } from "../zone/zone";
 import { Battlefield } from "../classes/battlefield";
 import { bfStore } from "./battlefieldStore";
+import { Observable, Subject } from "rxjs";
+
+class Data {
+  public tankList: Tank[];
+  public bulletList: Bullet[];
+  public currentZoneShape: ZoneShape;
+  public finalZoneShape: ZoneShape;
+
+  constructor(
+    tankList: Tank[],
+    bulletList: Bullet[],
+    currentZoneShape: ZoneShape,
+    finalZoneShape: ZoneShape
+  ) {
+    this.tankList = tankList;
+    this.bulletList = bulletList;
+    this.currentZoneShape = currentZoneShape;
+    this.finalZoneShape = finalZoneShape;
+  }
+}
+
 
 export class Simulation {
   public battlefield: Battlefield;
   public zone: Zone;
+  public customEvent: Subject<Data>;
 
   public bulletList: Array<Bullet> = [
     /* new Bullet(getID(), 5, 1, 0),
@@ -44,6 +67,7 @@ export class Simulation {
   public constructor() {
     this.battlefield = new Battlefield(50, 50);
     this.zone = new Zone(2, 0);
+    this.customEvent = new Subject<Data>();
   }
 
   public start() {
@@ -83,6 +107,11 @@ export class Simulation {
         if (i > 1) {
           if (i === 2) {
             this.bulletList.push(new Bullet(getID(), 12, 11, 0));
+            this.tankList[0].direction += 90;
+          }
+
+          if (i > 2 && this.tankList[0].health > 0) {
+            this.tankList[0].y++;
           }
 
           if (this.bulletList[0] && i > 2) {
@@ -99,9 +128,18 @@ export class Simulation {
           if (this.bulletList[0] && this.bulletList[0].x === 17) {
             this.bulletList.splice(0, 1);
           }
+          if (
+            this.tankList[0].x < zone.currentZoneShape.upperLeftPoint.x ||
+            this.tankList[0].x > zone.currentZoneShape.lowerRightPoint.x ||
+            this.tankList[0].y < zone.currentZoneShape.upperLeftPoint.y ||
+            this.tankList[0].y > zone.currentZoneShape.lowerRightPoint.y
+          ) {
+            this.tankList[0].health = 0;
+          }
         }
 
-        bfStore.setSimulationData(this.tankList, this.bulletList, zone.currentZoneShape, zone.finalZoneShape);
+        this.customEvent.next(new Data(this.tankList, this.bulletList, zone.currentZoneShape, zone.finalZoneShape));
+        // bfStore.setSimulationData(this.tankList, this.bulletList, zone.currentZoneShape, zone.finalZoneShape);
       }, i * 1000);
     }
   }
